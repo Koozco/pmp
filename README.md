@@ -1,1 +1,1 @@
-# pmp
+# Python Multiwinner Package

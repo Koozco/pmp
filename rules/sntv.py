@@ -18,12 +18,23 @@ class Sntv(Rule):
     def __clean_scores(self):
         return {candidate: 0 for candidate in self.candidates}
 
-    def find_committee(self):
+    def compute_score(self, candidate):
+        score = 0
+        for pref in self.preferences:
+            score += 1 if pref.order[0] == candidate else 0
+        return score
+
+    def compute_candidate_scores(self):
         self.scores = self.__clean_scores()
         for pref in self.preferences:
             pref_winner = pref.order[0]
             self.scores[pref_winner] += 1
 
+    def find_committee(self):
+        self.compute_candidate_scores()
         winners = sorted(self.scores, key=lambda x: self.scores[x], reverse=True)
         committee = [w for w in winners[:self.k]]
         return committee
+
+    def copy_rule(self):
+        return Sntv(self.k, self.candidates, self.preferences)

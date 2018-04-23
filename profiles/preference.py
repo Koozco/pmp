@@ -10,10 +10,10 @@ class Preference:
         """Compare candidates."""
         raise NotImplementedError()
 
-    def better(self, candidate):
+    def worse_candidates_count(self, candidate):
         """Candidate's rank - from how many candidates the candidate is better."""
         raise NotImplementedError()
 
-    def worse(self, candidate):
+    def better_candidates_count(self, candidate):
         """Candidate's rank - from how many candidates the candidate is worse."""
         raise NotImplementedError()

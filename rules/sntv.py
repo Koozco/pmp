@@ -15,9 +15,6 @@ class Sntv(Rule):
         weights[0] = 1
         return weights
 
-    def __clean_scores(self):
-        return {candidate: 0 for candidate in self.candidates}
-
     def compute_score(self, candidate):
         score = 0
         for pref in self.preferences:

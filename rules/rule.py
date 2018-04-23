@@ -7,6 +7,9 @@ class Rule:
         self.preferences = list(preferences)
         self.algorithm = None
 
+    def __clean_scores(self):
+        return {candidate: 0 for candidate in self.candidates}
+
     def find_committee(self):
         raise NotImplementedError()
 

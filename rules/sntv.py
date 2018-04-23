@@ -1,11 +1,11 @@
-from .rule import Rule
+from .weakly_separable import WeaklySeparable
 
 
-class Sntv(Rule):
+class SNTV(WeaklySeparable):
     """Single non-transferable vote scoring rule."""
 
     def __init__(self, committee_size, candidates, preferences):
-        Rule.__init__(self, committee_size, candidates, preferences)
+        WeaklySeparable.__init__(self, committee_size, candidates, preferences)
         self.weights = self.__sntv_weights(len(candidates))
         self.scores = self.__clean_scores()
 
@@ -37,4 +37,4 @@ class Sntv(Rule):
         return committee
 
     def copy_rule(self):
-        return Sntv(self.k, self.candidates, self.preferences)
+        return SNTV(self.k, self.candidates, self.preferences)

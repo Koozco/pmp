@@ -1,6 +1,6 @@
 class Algorithm:
     def __init__(self, rule):
-        self.rule = rule.copy_rule()
+        self.rule = rule
 
     def find_committee(self):
         """Find committee referring to rule attributes as self.rule.*"""

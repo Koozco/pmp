@@ -30,5 +30,5 @@ class SNTV(WeaklySeparable):
             pref_winner = pref.order[0]
             self.scores[pref_winner] += 1
 
-    def copy_rule(self, candidates):
-        return SNTV(self.k, candidates)
+    def copy_rule(self):
+        return SNTV(self.k, self.candidates)

@@ -6,7 +6,7 @@ class Borda(WeaklySeparable):
 
     def __init__(self, committee_size, candidates):
         WeaklySeparable.__init__(self, committee_size, candidates)
-        self.weights = self.__borda_weights(committee_size)
+        self.weights = self.__borda_weights(len(candidates))
 
     @staticmethod
     def __borda_weights(size):
@@ -26,5 +26,5 @@ class Borda(WeaklySeparable):
             for i in range(0, len(self.candidates)):
                 self.scores[pref.order[i]] += self.weights[i]
 
-    def copy_rule(self, candidates):
-        return Borda(self.k, candidates)
+    def copy_rule(self):
+        return Borda(self.k, self.candidates)

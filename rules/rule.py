@@ -14,6 +14,6 @@ class Rule:
     def compute_score(self, candidate, preferences):
         raise NotImplementedError()
 
-    def copy_rule(self, candidates):
+    def copy_rule(self):
         """Create identical scoring rule."""
         raise NotImplementedError()

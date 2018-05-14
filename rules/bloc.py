@@ -26,5 +26,5 @@ class Bloc(WeaklySeparable):
             for i in range(0, self.k):
                 self.scores[pref.order[i]] += self.weights[i]
 
-    def copy_rule(self, candidates):
-        return Bloc(self.k, candidates)
+    def copy_rule(self):
+        return Bloc(self.k, self.candidates)

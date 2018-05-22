@@ -4,23 +4,17 @@ from .weakly_separable import WeaklySeparable
 class SNTV(WeaklySeparable):
     """Single non-transferable vote scoring rule."""
 
-    def __init__(self, committee_size):
-        WeaklySeparable.__init__(self, committee_size)
+    def __init__(self, k):
+        WeaklySeparable.__init__(self, k, [1])
 
-    def __clean_scores(self, candidates):
-        self.scores = {candidate: 0 for candidate in candidates}
-
-    def compute_score(self, candidate, candidates, preferences):
+    def compute_score(self, candidate, profile):
         score = 0
-        for pref in preferences:
+        for pref in profile.preferences:
             score += 1 if pref.order[0] == candidate else 0
         return score
 
-    def compute_candidate_scores(self, candidates, preferences):
-        self.__clean_scores(candidates)
-        for pref in preferences:
+    def compute_candidate_scores(self, profile):
+        profile.clean_scores()
+        for pref in profile.preferences:
             pref_winner = pref.order[0]
-            self.scores[pref_winner] += 1
-
-    def copy_rule(self):
-        return SNTV(self.k)
+            profile.scores[pref_winner] += 1

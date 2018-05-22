@@ -1,19 +1,12 @@
 class Rule:
     """Scoring rule."""
 
-    def __init__(self):
-        self.algorithm = None
-
-    def find_committee(self, profile, k, candidates, preferences):
+    def find_committee(self, profile):
         raise NotImplementedError()
 
-    def compute_candidate_scores(self, candidates, preferences):
+    def compute_candidate_scores(self, profile):
         """Fill self.scores hash"""
         raise NotImplementedError()
 
-    def compute_score(self, candidate, candidates, preferences):
-        raise NotImplementedError()
-
-    def copy_rule(self):
-        """Create identical scoring rule."""
+    def compute_score(self, candidate, profile):
         raise NotImplementedError()

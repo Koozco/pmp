@@ -5,9 +5,11 @@ sys.path.append(os.path.join(".."))
 
 from preferences.ordinal import Ordinal
 from preferences.profile import Profile
+from rules.weakly_separable import WeaklySeparable
 from rules.borda import Borda
 from rules.bloc import Bloc
 from rules.sntv import SNTV
+from algorithms.greedy import greedy
 
 k = 3
 candidates = [i for i in range(0, 5)]
@@ -20,12 +22,26 @@ orders = [
 preferences = [Ordinal(i) for i in orders]
 p = Profile(candidates, preferences=preferences)
 
-borda = Borda(k)
-bloc = Bloc(k)
+# w = WeaklySeparable(3, [2, 1])
+# print(w.find_committee(p))
+# print(p.scores)
+#
+# bloc = Bloc(k)
+# print(bloc.find_committee(p))
+# print(p.scores)
+
 sntv = SNTV(k)
+print(sntv.find_committee(p))
+print(p.scores)
 
+borda = Borda(k)
+print(borda.find_committee(p))
+print(p.scores)
 
+new_sntv = greedy(SNTV, k)
+print(new_sntv.find_committee(p))
+print(p.scores)
 
-x = rule.find_committee(p, k)
-x2 = greedy.set_algorithm().find_committee(p, k)
-print(x, x2)
+new_borda = greedy(Borda, k)
+print(new_borda.find_committee(p))
+print(p.scores)

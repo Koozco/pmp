@@ -18,11 +18,14 @@ orders = [
 ]
 
 preferences = [Ordinal(i) for i in orders]
-p = Profile(candidates)
+p = Profile(candidates, preferences=preferences)
 
-rule = Borda(k)
-# rule = Bloc(k)
-# rule = SNTV(k)
+borda = Borda(k)
+bloc = Bloc(k)
+sntv = SNTV(k)
 
-x = rule.find_committee(p, k, candidates, preferences)
-print(x)
+
+
+x = rule.find_committee(p, k)
+x2 = greedy.set_algorithm().find_committee(p, k)
+print(x, x2)

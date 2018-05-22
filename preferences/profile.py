@@ -1,10 +1,12 @@
 class Profile:
     """Profile of voters' preferences"""
 
-    def __init__(self, candidates):
+    def __init__(self, candidates, preferences=None):
+        if preferences is None:
+            preferences = []
         self.candidates = candidates
         self.num_cand = len(candidates)
-        self.preferences = []
+        self.preferences = preferences
 
     def add_preference(self, preference):
         preference.is_valid(self.num_cand)
@@ -18,4 +20,3 @@ class Profile:
     def __str__(self):
         return 'Profile with %d votes and %d candidates: ' % (len(self.preferences), self.num_cand) + ', '.join(
             map(str, self.preferences))
-

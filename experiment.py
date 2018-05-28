@@ -1,10 +1,11 @@
-from os import system
 import os
-from sys import *
+from os import system
 from random import *
-from subprocess import call
+from sys import *
+
 from PIL import Image
-from demo import pref2d2
+
+import pref2d2
 
 # used for 2D
 C = []
@@ -101,8 +102,8 @@ def saveData(name):
             f.write("{} {} {}".format(p[0], p[1], p[2]))
         f.close()
 
-        pref2d2.pref(str(name + ".in"), str(name + ".out"))
-        # system("python pref2d2.py <%s.in >%s.out" % (name, name))
+        # pref2d2.pref(str(name + ".in"), str(name + ".out"))
+        system("python pref2d2.py <%s.in >%s.out" % (name, name))
 
     else:
         dir_path = os.path.join("..", "out")

@@ -12,29 +12,33 @@ from random import choice
 import sys
 import os
 
-from core import *
+# from core import *
 
 # from rule_pr import *
 
+sys.path.append(os.path.join(".."))
+from rules.borda import Borda
+from preferences.profile import Profile
 
 
 
 
 # import rule packages
-for file in os.listdir("."):
-    if file.startswith("rule_") and file.endswith(".py"):
-        debug("RULES: %s" % file[:-3])
-        exec("from %s import *" % (file[:-3]))
-
-# irrespectively, import core rule packages
-from rule_weakly_separable import *
-from rule_proportional import *
+# for file in os.listdir("."):
+#     if file.startswith("rule_") and file.endswith(".py"):
+#         debug("RULES: %s" % file[:-3])
+#         exec("from %s import *" % (file[:-3]))
+#
+# # irrespectively, import core rule packages
+# from rule_weakly_separable import *
+# from rule_proportional import *
 
 try:
     import numpy as np
     import ilp
 except:
-    debug("No numeric libraries! Do not use ILP")
+    # debug("No numeric libraries! Do not use ILP")
+    pass
 
 
 # read in the data in our format
@@ -74,7 +78,7 @@ def readData(f, k):
 #
 
 def printWinners(W, C, k):
-    debug("printwinners")
+    # debug("printwinners") #KB
     for i in W:
         print(C[i])
 
@@ -86,17 +90,19 @@ if __name__ == "__main__":
 
     seed()
 
-    R = kborda
+    # R = kborda
     k = 1
+
+    R = Borda
 
     if len(argv) >= 2 and argv[1].endswith("help"):
         print("This script computes election results\n")
         print("Invocation:")
         print("  python winner.py rule k <ordinal_election.out\n")
         print("Available rules:")
-        for (rule, description) in RULES: # TODO: what is "RULES"?
-            l = 10
-            print("%s - %s" % (rule + " " * (l - len(rule)), description))
+        # for (rule, description) in RULES: # TODO: what is "RULES"?
+        #     l = 10
+        #     print("%s - %s" % (rule + " " * (l - len(rule)), description))
         exit()
 
     if len(argv) >= 2:
@@ -107,7 +113,14 @@ if __name__ == "__main__":
 
     (m, n, C, V) = readData(data_in, k)
 
-    W = R(V, k)
+    # TODO: What is in V?
+    # TODO: make profile and find_commitee
+    candidates = []
+    preferences = []
+
+    # W = R(V, k) #KB
+    profile = Profile(candidates, preferences)
+    W = R().find_committee(k, profile)
 
     printWinners(W, C, k)
 

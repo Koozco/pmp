@@ -7,17 +7,14 @@ class RuleBuilder:
     def __init__(self):
         self.rule_class = None
         self.algorithm = None
-        self.k = None
 
     def build(self):
         if self.rule_class is None:
             raise Exception("Rule is not set.")
         if self.algorithm is None:
             raise Exception("Algorithm is not set.")
-        if self.k is None:
-            raise Exception("K is not set.")
 
-        rule = self.rule_class(self.k)
+        rule = self.rule_class()
         rule.find_committee = MethodType(self.algorithm, rule)
         return rule
 
@@ -33,11 +30,4 @@ class RuleBuilder:
             raise Exception("Algorithm must be callable.")
 
         self.algorithm = algorithm_function
-        return self
-
-    def set_k(self, k):
-        if not isinstance(k, int):
-            raise Exception("K must be integer.")
-
-        self.k = k
         return self

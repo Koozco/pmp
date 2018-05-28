@@ -19,6 +19,10 @@ orders = [
     [2, 3, 0, 1, 4]
 ]
 
+# !
+# Rozstrzyganie remisów: leksykograficznie, yolorandom, ALL
+# !
+
 preferences = [Ordinal(i) for i in orders]
 p = Profile(candidates, preferences=preferences)
 
@@ -30,18 +34,18 @@ p = Profile(candidates, preferences=preferences)
 # print(bloc.find_committee(p))
 # print(p.scores)
 
-sntv = SNTV(k)
-print(sntv.find_committee(p))
+sntv = SNTV()
+print(sntv.find_committee(k, p))
 print(p.scores)
 
-borda = Borda(k)
-print(borda.find_committee(p))
+borda = Borda()
+print(borda.find_committee(k, p))
 print(p.scores)
 
-new_sntv = greedy(SNTV, k)
-print(new_sntv.find_committee(p))
+new_sntv = greedy(SNTV)
+print(new_sntv.find_committee(k, p))
 print(p.scores)
 
-new_borda = greedy(Borda, k)
-print(new_borda.find_committee(p))
+new_borda = greedy(Borda)
+print(new_borda.find_committee(k, p))
 print(p.scores)

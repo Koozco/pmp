@@ -4,17 +4,14 @@ from .weakly_separable import WeaklySeparable
 class Borda(WeaklySeparable):
     """Borda vote scoring rule."""
 
-    def __init__(self, k):
-        WeaklySeparable.__init__(self, k)
-
-    def find_committee(self, profile):
+    def find_committee(self, k, profile):
         self.weights = self._borda_weights(len(profile.candidates))
-        committee = WeaklySeparable.find_committee(self, profile)
+        committee = WeaklySeparable.find_committee(self, k, profile)
         return committee
 
-    def compute_score(self, candidate, profile):
+    def compute_score(self, candidate, k, profile):
         self.weights = self._borda_weights(len(profile.candidates))
-        score = WeaklySeparable.compute_score(self, candidate, profile)
+        score = WeaklySeparable.compute_score(self, candidate, k, profile)
         return score
 
     def _borda_weights(self, size):

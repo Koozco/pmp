@@ -2,6 +2,8 @@ import os
 from os import system
 from random import *
 from sys import *
+from visualize import *
+from winner import winner
 
 from PIL import Image
 
@@ -19,6 +21,9 @@ DATA = "C"
 NAME = "data"
 TWO_DIMENSIONAL = True
 
+
+# TODO: change files structure
+# TODO: refactor
 
 # GENERATE POINTS
 
@@ -102,8 +107,8 @@ def saveData(name):
             f.write("{} {} {}".format(p[0], p[1], p[2]))
         f.close()
 
-        # pref2d2.pref(str(name + ".in"), str(name + ".out"))
-        system("python pref2d2.py <%s.in >%s.out" % (name, name))
+        pref2d2.pref(str(name + ".in"), str(name + ".out"))
+        # system("python pref2d2.py <%s.in >%s.out" % (name, name))
 
     else:
         dir_path = os.path.join("..", "out")
@@ -141,12 +146,12 @@ def impartial(M, N):
 
 def computeWinners(rule, k, output):
     global NAME
-    # TODO: replace system call
-    system("python winner.py <%s.out >%s.win %s %d" % (NAME, output, rule, k))
+    # system("python winner.py <%s.out >%s.win %s %d" % (NAME, output, rule, k))
+    winner(NAME + ".out", output + ".win", rule, k)
     if TWO_DIMENSIONAL:
         print("2D = " + str(TWO_DIMENSIONAL))
-        # TODO: replace system call
-        system("python visualize.py {}".format(output))
+        visualize(output)  # TODO: make it work from console as well
+        # system("python visualize.py {}".format(output))  # to delete
 
 
 def getOrNone(l, n):

@@ -66,7 +66,6 @@ class WeaklySeparable(Rule):
             profile.candidates_with_score[score].append(c)
 
         committees = self.get_committees(k, profile.candidates_with_score)
-        print(committees)
         committee = self.tie_break(committees)
 
         return committee

@@ -49,16 +49,23 @@ def preferenceOrders(C, V):
 # m lines with candidate names (number position)
 # n lines with preference orders (followed by positions)
 
-def printPrefOrders(C, V, P):
+# TODO: move to helpers or sth? used in other class
+def print_or_save(value, data_out=None):
+    if data_out is None:
+        print(value)
+    else:
+        data_out.write(value + '\n')
+
+def printPrefOrders(C, V, P, data_out=None):
     m = len(C)
     n = len(V)
-    print("{} {}".format(m, n))
+    print_or_save("{} {}".format(m, n), data_out)
 
     for i in range(len(C)):
-        print("{} {} {} {}".format(i, C[i][0], C[i][1], C[i][2]))
+        print_or_save("{} {} {} {}".format(i, C[i][0], C[i][1], C[i][2]), data_out)
 
     for i in range(len(P)):
-        print("{} {} {}".format(" ".join([str(p) for p in P[i]]), V[i][0], V[i][1]))
+        print_or_save("{} {} {}".format(" ".join([str(p) for p in P[i]]), V[i][0], V[i][1]), data_out)
 
 
 # read in the data in our format
@@ -90,15 +97,19 @@ def readData(f):
 
 def pref(in_name, out_name):
     # TODO: check existence
-    data_in = open(os.path.join("..", "in", in_name))
-    data_out = open(os.path.join("..", "out", out_name))
+    # data_in = open(os.path.join("..", "in", in_name))
+    # data_out = open(os.path.join("..", "out", out_name))
 
+    data_in = open(in_name, "r")
+    data_out = open(out_name, "w")
     (m, n, C, V) = readData(data_in)
 
     P = preferenceOrders(C, V)
-    printPrefOrders(C, V, P)
+    printPrefOrders(C, V, P, data_out)
 
 # MAIN
+
+
 
 if __name__ == "__main__":
 

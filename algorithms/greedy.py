@@ -5,7 +5,7 @@ def greedy(rule_class):
     return RuleBuilder().set_algorithm(find_committee).set_rule(rule_class).build()
 
 
-# dobieranie kandydata który najbardziej powieksza wynik komitetu
+# TODO: dobieranie kandydata który najbardziej powieksza wynik komitetu
 def find_committee(self, k, profile):
     profile.clean_scores()
     for candidate in profile.candidates:

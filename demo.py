@@ -10,18 +10,16 @@ from rules.borda import Borda
 from rules.bloc import Bloc
 from rules.sntv import SNTV
 from algorithms.greedy import greedy
+from rules.tie_breaking import lexical_winner
 
 k = 3
 candidates = [i for i in range(0, 5)]
 orders = [
     [3, 1, 4, 0, 2],
     [1, 0, 3, 4, 2],
-    [2, 3, 0, 1, 4]
+    [2, 3, 0, 1, 4],
+    [0, 2, 3, 4, 1]
 ]
-
-# !
-# Rozstrzyganie remisów: leksykograficznie, yolorandom, ALL
-# !
 
 preferences = [Ordinal(i) for i in orders]
 p = Profile(candidates, preferences=preferences)
@@ -34,7 +32,7 @@ p = Profile(candidates, preferences=preferences)
 # print(bloc.find_committee(p))
 # print(p.scores)
 
-sntv = SNTV()
+sntv = SNTV(tie_break=lexical_winner)
 print(sntv.find_committee(k, p))
 print(p.scores)
 

@@ -24,11 +24,13 @@ TWO_DIMENSIONAL = True
 
 # TODO: change files structure
 # TODO: refactor
+# TODO: think about where to put the files
 
 # GENERATE POINTS
 
 def generateFromImage(filename, x1, y1, x2, y2, N, Party):
-    dir_path = os.path.join("..", "in")
+    # dir_path = os.path.join("..", "in")
+    dir_path = os.path.join("..")
     try:
         os.makedirs(dir_path)
     except OSError:
@@ -90,21 +92,23 @@ def saveData(name):
     global REAL_V
 
     if TWO_DIMENSIONAL:
-        dir_path = os.path.join("..", "in")
+        # dir_path = os.path.join("..", "in") # TODO: make this path an argument or save to default place
+        dir_path = os.path.join("..")
         try:
             os.makedirs(dir_path)
         except OSError:
             if not os.path.isdir(dir_path):
                 raise
 
-        f = open(os.path.join(dir_path, name + ".in"), "w")
+        # f = open(os.path.join(dir_path, name + ".in"), "w")
+        f = open(name + ".in", "w")
         m = len(C)
         n = len(V)
-        f.write("{} {})".format(m, n))
+        f.write("{} {}\n".format(m, n))
         for p in C:
-            f.write("{} {} {}".format(p[0], p[1], p[2]))
+            f.write("{} {} {}\n".format(p[0], p[1], p[2]))
         for p in V:
-            f.write("{} {} {}".format(p[0], p[1], p[2]))
+            f.write("{} {} {}\n".format(p[0], p[1], p[2]))
         f.close()
 
         pref2d2.pref(str(name + ".in"), str(name + ".out"))

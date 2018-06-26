@@ -45,7 +45,7 @@ def readData(f):
     #  print "---"
     #  print V
     #  print "---"
-    #  print W
+    # print(W)
 
     return (m, n, k, C, V, W)
 
@@ -116,7 +116,7 @@ def visualize(input):
     stats_out.write("  max_d = " + str(max_d) + "\n")
     stats_out.write("  rep_avg_d = " + str(rep_avg_d) + "\n")
     stats_out.write("  rep_max_d = " + str(rep_max_d) + "\n")
-    for (p, v) in perParty.iteritems():
+    for (p, v) in perParty.items():
         stats_out.write("  party-" + str(p) + " = " + str(v) + "\n")
     stats_out.close()
 

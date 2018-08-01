@@ -5,7 +5,13 @@ from sys import *
 from visualize import *
 from winner import winner
 
-from PIL import Image
+image_import_fail = False
+try:
+    from PIL import Image
+except ImportError:
+    print("PIL module is not available. Pictures will not be generated.")
+    image_import_fail = True
+
 
 import pref2d2
 
@@ -92,7 +98,7 @@ def saveData(name):
     global REAL_V
 
     if TWO_DIMENSIONAL:
-        # dir_path = os.path.join("..", "in") # TODO: make this path an argument or save to default place
+        # dir_path = os.path.join("..", "in") # TODO: make this path an argument or save to default location
         dir_path = os.path.join("..")
         try:
             os.makedirs(dir_path)
@@ -154,6 +160,9 @@ def computeWinners(rule, k, output):
     winner(NAME + ".out", output + ".win", rule, k)
     if TWO_DIMENSIONAL:
         print("2D = " + str(TWO_DIMENSIONAL))
+        if image_import_fail:
+            print("Cannot visualize results because of PIL import fail.")
+            return
         visualize(output)  # TODO: make it work from console as well
         # system("python visualize.py {}".format(output))  # to delete
 
@@ -192,6 +201,8 @@ def execute(command):
         X = eval(DATA)
         X += P
     elif command[0] == "image":
+        if image_import_fail:
+            return
         P = generateFromImage(command[1], float(command[2]), float(command[3]), float(command[4]), float(command[5]),
                               int(command[6]), getOrNone(command, 7))
         X = eval(DATA)

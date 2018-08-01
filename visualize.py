@@ -1,7 +1,13 @@
 from sys import *
 from math import *
-from PIL import Image, ImageDraw
-from PIL import ImageColor
+
+pil_import_fail = False
+try:
+    from PIL import Image, ImageDraw
+    from PIL import ImageColor
+except ImportError:
+    print("Cannot import PIL.")
+    pil_import_fail = True
 
 DIMENSION = 2
 
@@ -123,6 +129,9 @@ def visualize(input):
     W = 600
     H = 600
 
+    if pil_import_fail:
+        print("Cannot use functions from PIL")
+        return
     im = Image.new("RGB", (W, H), "white")
     dr = ImageDraw.Draw(im)
 

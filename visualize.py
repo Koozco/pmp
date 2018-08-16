@@ -1,5 +1,6 @@
 from sys import *
 from math import *
+import os
 
 pil_import_fail = False
 try:
@@ -45,13 +46,6 @@ def readData(f):
         s = l.split()[1:]
         s = [perhapsFloat(x) for x in s]
         W += [s]
-
-    #  print len(C)
-    #  print C
-    #  print "---"
-    #  print V
-    #  print "---"
-    # print(W)
 
     return (m, n, k, C, V, W)
 
@@ -107,7 +101,7 @@ def compute_winners_per_party(C, W):
 
 def visualize(input):
     # data_in  = open( argv[1]+".win", "r")
-    data_in = open(input + ".win", "r")
+    data_in = open(os.path.join("generated", input + ".win"), "r")
 
     (m, n, k, C, V, Winner) = readData(data_in)
 
@@ -115,7 +109,7 @@ def visualize(input):
     rep_avg_d, rep_max_d = compute_dist_of_representatives_to_virt_districts(V, Winner)
     perParty = compute_winners_per_party(C, Winner)
 
-    stats_out = open("stats.out", "a")
+    stats_out = open(os.path.join("generated", "stats.out"), "a")
     # stats_out.write(argv[1] + ": \n")
     stats_out.write(input + ": \n")
     stats_out.write("  avg_d = " + str(avg_d) + "\n")
@@ -168,4 +162,4 @@ def visualize(input):
     dr.text((0, 0), input + " (%d out of %d)" % (len(Winner), len(C)), fill="blue")
 
     # im.save( argv[1]+".png")
-    im.save(input + ".png")
+    im.save(os.path.join("generated", input + ".png"))

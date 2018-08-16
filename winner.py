@@ -100,8 +100,8 @@ def find_winners(R, k, data_in, data_out=None):
 
 
 def winner(name_in, output, rule, k_value):
-    data_in = open(name_in, "r")
-    data_out = open(output, "w")
+    data_in = open(os.path.join("generated", name_in), "r")
+    data_out = open(os.path.join("generated", output), "w")
 
     seed()
 

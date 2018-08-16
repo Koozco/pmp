@@ -5,6 +5,7 @@ from sys import *
 from visualize import *
 from winner import winner
 
+# TODO: add install_requires to setup.py?
 image_import_fail = False
 try:
     from PIL import Image
@@ -31,12 +32,13 @@ TWO_DIMENSIONAL = True
 # TODO: change files structure
 # TODO: refactor
 # TODO: think about where to put the files
+# TODO: generate files in the place that user is calling?
 
 # GENERATE POINTS
 
 def generateFromImage(filename, x1, y1, x2, y2, N, Party):
     # dir_path = os.path.join("..", "in")
-    dir_path = os.path.join("..")
+    dir_path = os.path.join("generated")
     try:
         os.makedirs(dir_path)
     except OSError:
@@ -99,15 +101,19 @@ def saveData(name):
 
     if TWO_DIMENSIONAL:
         # dir_path = os.path.join("..", "in") # TODO: make this path an argument or save to default location
-        dir_path = os.path.join("..")
+        dir_path = os.path.join("generated")
+        out_path = os.path.join("out")
         try:
-            os.makedirs(dir_path)
+            os.makedirs(dir_path, exist_ok=True)
+            os.makedirs(out_path, exist_ok=True)
         except OSError:
             if not os.path.isdir(dir_path):
                 raise
+            if not os.path.isdir(out_path):
+                raise
 
         # f = open(os.path.join(dir_path, name + ".in"), "w")
-        f = open(name + ".in", "w")
+        f = open(os.path.join(dir_path, name + ".in"), "w")
         m = len(C)
         n = len(V)
         f.write("{} {}\n".format(m, n))
@@ -121,7 +127,7 @@ def saveData(name):
         # system("python pref2d2.py <%s.in >%s.out" % (name, name))
 
     else:
-        dir_path = os.path.join("..", "out")
+        dir_path = os.path.join("out")
         try:
             os.makedirs(dir_path)
         except OSError:

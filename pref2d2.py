@@ -100,8 +100,8 @@ def pref(in_name, out_name):
     # data_in = open(os.path.join("..", "in", in_name))
     # data_out = open(os.path.join("..", "out", out_name))
 
-    data_in = open(in_name, "r")
-    data_out = open(out_name, "w")
+    data_in = open(os.path.join("generated", in_name), "r")
+    data_out = open(os.path.join("generated", out_name), "w")
     (m, n, C, V) = readData(data_in)
 
     P = preferenceOrders(C, V)

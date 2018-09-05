@@ -4,6 +4,7 @@
 
 from sys import *
 import os
+from helpers import *
 from itertools import *
 
 
@@ -49,13 +50,6 @@ def preferenceOrders(C, V):
 # m lines with candidate names (number position)
 # n lines with preference orders (followed by positions)
 
-# TODO: move to helpers or sth? used in other class
-def print_or_save(value, data_out=None):
-    if data_out is None:
-        print(value)
-    else:
-        data_out.write(value + '\n')
-
 def printPrefOrders(C, V, P, data_out=None):
     m = len(C)
     n = len(V)
@@ -95,13 +89,11 @@ def readData(f):
     return (m, n, C, P)
 
 
-def pref(in_name, out_name):
+def pref(in_name, out_name, generated_dir_path):
     # TODO: check existence
-    # data_in = open(os.path.join("..", "in", in_name))
-    # data_out = open(os.path.join("..", "out", out_name))
 
-    data_in = open(os.path.join("generated", in_name), "r")
-    data_out = open(os.path.join("generated", out_name), "w")
+    data_in = open(os.path.join(generated_dir_path, in_name), "r")
+    data_out = open(os.path.join(generated_dir_path, out_name), "w")
     (m, n, C, V) = readData(data_in)
 
     P = preferenceOrders(C, V)
@@ -110,7 +102,7 @@ def pref(in_name, out_name):
 # MAIN
 
 
-
+# TODO: add path to generated directory
 if __name__ == "__main__":
 
     if len(argv) > 1:

@@ -4,6 +4,7 @@
 from doctest import debug
 from random import *
 from sys import *
+from helpers import *
 from itertools import *
 from math import *
 from copy import copy
@@ -45,12 +46,6 @@ except:
 # ...
 # pref1  (n preference orders)
 # ...
-
-def print_or_save(value, data_out):
-    if data_out is None:
-        print(value)
-    else:
-        data_out.write(value + "\n")
 
 
 # return (m,n,V)
@@ -99,9 +94,9 @@ def find_winners(R, k, data_in, data_out=None):
     printWinners(W, C, k, data_out)
 
 
-def winner(name_in, output, rule, k_value):
-    data_in = open(os.path.join("generated", name_in), "r")
-    data_out = open(os.path.join("generated", output), "w")
+def winner(name_in, output, rule, k_value, generated_dir_path):
+    data_in = open(os.path.join(generated_dir_path, name_in), "r")
+    data_out = open(os.path.join(generated_dir_path, output), "w")
 
     seed()
 

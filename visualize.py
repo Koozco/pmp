@@ -99,9 +99,9 @@ def compute_winners_per_party(C, W):
     return result
 
 
-def visualize(input):
+def visualize(input, generated_dir_path):
     # data_in  = open( argv[1]+".win", "r")
-    data_in = open(os.path.join("generated", input + ".win"), "r")
+    data_in = open(os.path.join(generated_dir_path, input + ".win"), "r")
 
     (m, n, k, C, V, Winner) = readData(data_in)
 
@@ -109,7 +109,7 @@ def visualize(input):
     rep_avg_d, rep_max_d = compute_dist_of_representatives_to_virt_districts(V, Winner)
     perParty = compute_winners_per_party(C, Winner)
 
-    stats_out = open(os.path.join("generated", "stats.out"), "a")
+    stats_out = open(os.path.join(generated_dir_path, "stats.out"), "a")
     # stats_out.write(argv[1] + ": \n")
     stats_out.write(input + ": \n")
     stats_out.write("  avg_d = " + str(avg_d) + "\n")
@@ -162,4 +162,4 @@ def visualize(input):
     dr.text((0, 0), input + " (%d out of %d)" % (len(Winner), len(C)), fill="blue")
 
     # im.save( argv[1]+".png")
-    im.save(os.path.join("generated", input + ".png"))
+    im.save(os.path.join(generated_dir_path, input + ".png"))

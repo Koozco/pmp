@@ -27,18 +27,15 @@ REAL_V = []
 DATA = "C"
 NAME = "data"
 TWO_DIMENSIONAL = True
+generated_dir_path = "generated"
 
 
-# TODO: change files structure
 # TODO: refactor
-# TODO: think about where to put the files
-# TODO: generate files in the place that user is calling?
 
 # GENERATE POINTS
 
 def generateFromImage(filename, x1, y1, x2, y2, N, Party):
-    # dir_path = os.path.join("..", "in")
-    dir_path = os.path.join("generated")
+    dir_path = os.path.join(generated_dir_path)
     try:
         os.makedirs(dir_path)
     except OSError:
@@ -94,25 +91,29 @@ def generateCircle(x, y, r, N, Party):
 
 # save data
 
+def make_dirs(dir_path, exist_ok=False):
+    path_exists = os.path.exists(dir_path)
+    if exist_ok:
+        if not path_exists:
+            os.makedirs(dir_path)
+    else:
+        if path_exists:
+            raise OSError("Directory already exists.")
+
+
 def saveData(name):
     global TWO_DIMENSIONAL
     global REAL_C
     global REAL_V
 
     if TWO_DIMENSIONAL:
-        # dir_path = os.path.join("..", "in") # TODO: make this path an argument or save to default location
-        dir_path = os.path.join("generated")
-        out_path = os.path.join("out")
+        dir_path = os.path.join(generated_dir_path)
         try:
-            os.makedirs(dir_path, exist_ok=True)
-            os.makedirs(out_path, exist_ok=True)
+            make_dirs(dir_path, exist_ok=True)
         except OSError:
             if not os.path.isdir(dir_path):
                 raise
-            if not os.path.isdir(out_path):
-                raise
 
-        # f = open(os.path.join(dir_path, name + ".in"), "w")
         f = open(os.path.join(dir_path, name + ".in"), "w")
         m = len(C)
         n = len(V)
@@ -123,11 +124,11 @@ def saveData(name):
             f.write("{} {} {}\n".format(p[0], p[1], p[2]))
         f.close()
 
-        pref2d2.pref(str(name + ".in"), str(name + ".out"))
+        pref2d2.pref(str(name + ".in"), str(name + ".out"), generated_dir_path)
         # system("python pref2d2.py <%s.in >%s.out" % (name, name))
 
     else:
-        dir_path = os.path.join("out")
+        dir_path = os.path.join(generated_dir_path)
         try:
             os.makedirs(dir_path)
         except OSError:
@@ -163,13 +164,13 @@ def impartial(M, N):
 def computeWinners(rule, k, output):
     global NAME
     # system("python winner.py <%s.out >%s.win %s %d" % (NAME, output, rule, k))
-    winner(NAME + ".out", output + ".win", rule, k)
+    winner(NAME + ".out", output + ".win", rule, k, generated_dir_path)
     if TWO_DIMENSIONAL:
         print("2D = " + str(TWO_DIMENSIONAL))
         if image_import_fail:
             print("Cannot visualize results because of PIL import fail.")
             return
-        visualize(output)  # TODO: make it work from console as well
+        visualize(output, generated_dir_path)  # TODO: make it work from console as well
         # system("python visualize.py {}".format(output))  # to delete
 
 
@@ -216,7 +217,6 @@ def execute(command):
     elif command[0] == "generate":
         NAME = command[1]
         saveData(NAME)
-
     elif command[0] == "impartial":
         TWO_DIMENSIONAL = False
         impartial(int(command[1]), int(command[2]))
@@ -243,18 +243,22 @@ def readData(f):
 # MAIN
 
 if __name__ == "__main__":
-
-    if len(argv) > 1:
+    args_number = len(argv)
+    if args_number == 1 or args_number > 2 or (args_number > 1 and argv[1] == "-help"):
         print("This scripts runs a single experiment (generates an elections, "
-              "\ncomputes the results accoring to specified rules, and prepares visualizations)")
+              "\ncomputes the results according to specified rules, and prepares visualizations)")
         print("\nInvocation:")
-        print("  python experiment.py  <description.input")
+        print("  python experiment.py [path_to_output_directory]  <description.input")
         exit()
 
     seed()
-
+    # TODO: OOP, store dir_path in an object
     data_in = stdin
     data_out = stdout
+    if args_number > 1:
+        generated_dir_path = argv[1]
+        if not os.path.isabs(generated_dir_path):
+            generated_dir_path = os.path.join(os.path.pardir, generated_dir_path)
 
     cmd = readData(data_in)
 

@@ -1,22 +1,18 @@
+from .tie_breaking import random_winner
+
+
 class Rule:
     """Scoring rule."""
 
-    def __init__(self, committee_size, candidates, preferences):
-        self.k = committee_size
-        self.candidates = list(candidates)
-        self.preferences = list(preferences)
-        self.algorithm = None
+    def __init__(self, tie_break=random_winner):
+        self.tie_break = tie_break
 
-    def find_committee(self):
+    def find_committee(self, k, profile):
         raise NotImplementedError()
 
-    def compute_candidate_scores(self):
+    def compute_candidate_scores(self, k, profile):
         """Fill self.scores hash"""
         raise NotImplementedError()
 
-    def compute_score(self, candidate):
-        raise NotImplementedError()
-
-    def copy_rule(self):
-        """Create identical scoring rule."""
+    def compute_committee_score(self, committee, k, profile):
         raise NotImplementedError()

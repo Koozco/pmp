@@ -1,32 +1,15 @@
-from .algorithm import Algorithm
+from .rule_builder import RuleBuilder
 
 
-class Greedy(Algorithm):
-    """Greedy algorithm - k-times takes best candidate."""
+def greedy(rule_class):
+    return RuleBuilder().set_algorithm(find_committee).set_rule(rule_class).build()
 
-    def __init__(self, rule):
-        Algorithm.__init__(self, rule)
-        self.name = "Greedy"
 
-    def find_committee(self):
-        committee = []
-        left_candidates = list(self.rule.candidates)
-        for i in range(self.rule.k):
-            best_candidate = None
-            best_score = -1
+# TODO: dobieranie kandydata który najbardziej powieksza wynik komitetu
+def find_committee(self, k, profile):
+    profile.clean_scores()
+    for candidate in profile.candidates:
+        profile.scores[candidate] = self.compute_score(candidate, k, profile)
 
-            for c in left_candidates:
-                score = self.rule.compute_score(c)
-                if score > best_score:
-                    best_score = score
-                    best_candidate = c
-
-            committee.append(best_candidate)
-            left_candidates.remove(best_candidate)
-
-        return committee
-
-    def set_algorithm(self):
-        self.rule.algorithm = self
-        self.rule.find_committee = self.find_committee
-        return self.rule
+    winners = sorted(profile.candidates, key=lambda x: profile.scores[x], reverse=True)
+    return [w for w in winners[:k]]

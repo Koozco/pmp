@@ -20,3 +20,6 @@ class Ordinal(Preference):
     def better_candidates_count(self, candidate):
         """Candidate's rank - from how many candidates the candidate is worse."""
         return self.order.index(candidate)
+
+    def is_valid(self, num_cand):
+        return len(self.order) == num_cand and len(set(self.order)) == num_cand

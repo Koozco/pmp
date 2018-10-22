@@ -17,3 +17,6 @@ class Preference:
     def better_candidates_count(self, candidate):
         """Candidate's rank - from how many candidates the candidate is worse."""
         raise NotImplementedError()
+
+    def is_valid(self, num_cand):
+        raise NotImplementedError()

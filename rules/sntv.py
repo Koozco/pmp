@@ -1,40 +1,21 @@
 from .weakly_separable import WeaklySeparable
+from .tie_breaking import random_winner
 
 
 class SNTV(WeaklySeparable):
     """Single non-transferable vote scoring rule."""
 
-    def __init__(self, committee_size, candidates, preferences):
-        WeaklySeparable.__init__(self, committee_size, candidates, preferences)
-        self.weights = self.__sntv_weights(len(candidates))
-        self.scores = self.__clean_scores()
+    def __init__(self, tie_break=random_winner):
+        WeaklySeparable.__init__(self, [1], tie_break)
 
-    @staticmethod
-    def __sntv_weights(size):
-        weights = [0] * size
-        weights[0] = 1
-        return weights
-
-    def __clean_scores(self):
-        return {candidate: 0 for candidate in self.candidates}
-
-    def compute_score(self, candidate):
+    def compute_score(self, candidate, k, profile):
         score = 0
-        for pref in self.preferences:
+        for pref in profile.preferences:
             score += 1 if pref.order[0] == candidate else 0
         return score
 
-    def compute_candidate_scores(self):
-        self.scores = self.__clean_scores()
-        for pref in self.preferences:
+    def compute_candidate_scores(self, k, profile):
+        profile.clean_scores()
+        for pref in profile.preferences:
             pref_winner = pref.order[0]
-            self.scores[pref_winner] += 1
-
-    def find_committee(self):
-        self.compute_candidate_scores()
-        winners = sorted(self.scores, key=lambda x: self.scores[x], reverse=True)
-        committee = [w for w in winners[:self.k]]
-        return committee
-
-    def copy_rule(self):
-        return SNTV(self.k, self.candidates, self.preferences)
+            profile.scores[pref_winner] += 1

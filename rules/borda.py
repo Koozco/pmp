@@ -4,27 +4,42 @@ from .weakly_separable import WeaklySeparable
 class Borda(WeaklySeparable):
     """Borda vote scoring rule."""
 
-    def __init__(self, committee_size, candidates, preferences):
-        WeaklySeparable.__init__(self, committee_size, candidates, preferences)
-        self.weights = self.__borda_weights(len(candidates))
+    def find_committee(self, k, profile):
+        self.weights = self._borda_weights(len(profile.candidates))
+        committee = WeaklySeparable.find_committee(self, k, profile)
+        return committee
 
-    @staticmethod
-    def __borda_weights(size):
-        weights = [size - i for i in range(1, size + 1)]
-        return weights
-
-    def compute_score(self, candidate):
-        score = 0
-        for pref in self.preferences:
-            candidate_id = pref.order.index(candidate)
-            score += pref.weights[candidate_id]
+    def compute_score(self, candidate, k, profile):
+        self.weights = self._borda_weights(len(profile.candidates))
+        score = WeaklySeparable.compute_score(self, candidate, k, profile)
         return score
 
-    def compute_candidate_scores(self):
-        self.scores = self.__clean_scores()
-        for pref in self.preferences:
-            for i in range(0, len(self.candidates)):
-                self.scores[pref.order[i]] += self.weights[i]
-
-    def copy_rule(self):
-        return Borda(self.k, self.candidates, self.preferences)
+    def _borda_weights(self, size):
+        return [size - i for i in range(1, size + 1)]
+#
+# class Borda(WeaklySeparable):
+#     """Borda vote scoring rule."""
+#
+#     def __init__(self, committee_size):
+#         WeaklySeparable.__init__(self, committee_size)
+#
+#     def __borda_weights(self, size):
+#         self.weights = [size - i for i in range(1, size + 1)]
+#
+#     def compute_score(self, candidate, candidates, preferences):
+#         self.__borda_weights(len(candidates))
+#         score = 0
+#         for pref in preferences:
+#             candidate_id = pref.order.index(candidate)
+#             score += pref.weights[candidate_id]
+#         return score
+#
+#     def compute_candidate_scores(self, candidates, preferences):
+#         self._clean_scores(candidates)
+#         self.__borda_weights(len(candidates))
+#         for pref in preferences:
+#             for i in range(0, len(candidates)):
+#                 self.scores[pref.order[i]] += self.weights[i]
+#
+#     def copy_rule(self):
+#         return Borda(self.k)

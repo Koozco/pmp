@@ -104,7 +104,8 @@ def winner(name_in, output, rule, k_value, generated_dir_path):
     R = Borda
 
     if rule is not None:
-        R = eval(rule)  # TODO: replace this eval?
+        pass
+        #R = rule  # TODO: replace this eval?
 
     if k_value is not None:
         k = int(k_value)

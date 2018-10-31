@@ -93,6 +93,9 @@ def find_winners(R, k, data_in, data_out=None):
 
     printWinners(W, C, k, data_out)
 
+# TODO: change calculating winners, to do it in place,
+# not saving files and reading from them
+
 
 def winner(name_in, output, rule, k_value, generated_dir_path):
     data_in = open(os.path.join(generated_dir_path, name_in), "r")
@@ -105,7 +108,6 @@ def winner(name_in, output, rule, k_value, generated_dir_path):
 
     if rule is not None:
         pass
-        #R = rule  # TODO: replace this eval?
 
     if k_value is not None:
         k = int(k_value)

@@ -19,11 +19,11 @@ def make_dirs(dir_path, exist_ok=False):
             raise OSError("Directory already exists.")
 
 
-def print_or_save(value, data_out=None):
+def print_or_save(id, value, data_out=None):
     if data_out is None:
-        print(value)
+        print(id, value)
     else:
-        data_out.write(value + '\n')
+        data_out.write("{} {}\n".format(str(id), ' '.join(map(str, value))))
 
 # GENERATE POINTS
 

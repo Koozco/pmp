@@ -14,16 +14,16 @@ from itertools import *
 
 
 def dist(x, y):
-    return (sum([(x[i] - y[i]) ** 2 for i in range(len(x))])) ** 0.5
+    return (sum([(x[i] - y[i]) ** 2 for i in range(len(x) - 1)])) ** 0.5
 
 
 # Compute the distances of voter v from the candidates in set C
 # outputs a list of the format (i,d) where i is the candidate
 # name and d is the distance
 #
-def computeDist(v, C):
-    m = len(C)
-    d = [(j, dist(v, C[j])) for j in range(m)]
+def compute_dist(v, candidates):
+    m = len(candidates)
+    d = [(j, dist(v, candidates[j])) for j in range(m)]
     return d
 
 
@@ -36,10 +36,9 @@ def preferenceOrders(C, V):
     #  print C
     for v in V:
         #    print v
-        v_dist = computeDist(v, C)
+        v_dist = compute_dist(v, C)
         v_sorted = sorted(v_dist, key=second)
-        #    print v_sorted
-        v_order = [cand for (cand, dis) in v_sorted]
+        v_order = [cand for (cand, _) in v_sorted]
         #    print v_order
         P += [v_order]
     return P
@@ -89,16 +88,16 @@ def readData(f):
     return (m, n, C, P)
 
 
-def pref(in_name, out_name, generated_dir_path):
-    # TODO: check existence
-
-    data_in = open(os.path.join(generated_dir_path, in_name), "r")
-    data_out = open(os.path.join(generated_dir_path, out_name), "w")
-    (m, n, C, V) = readData(data_in)
+def pref(config):
+    C = config.get_candidates()
+    V = config.get_voters()
+    m = len(C)
+    n = len(V)
 
     P = preferenceOrders(C, V)
-    printPrefOrders(C, V, P, data_out)
-
+    # printPrefOrders(C, V, P, data_out)
+    return P
+#
 # MAIN
 
 

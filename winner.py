@@ -48,42 +48,22 @@ except:
 # ...
 
 
-# return (m,n,V)
-def readData(f, k, data_out=None):
-    V = []
-    C = []
-    lines = f.readlines()
-    (m, n) = lines[0].split()
-    m = int(m)
-    n = int(n)
-
-    print_or_save("{} {} {}".format(m, n, k), data_out)
-
-    for l in lines[1:m + 1]:
-        s = l.rstrip()
-        C += [s]
-        print_or_save(s, data_out)
-
-    for l in lines[m + 1:m + n + 1]:
-        print_or_save(l.rstrip(), data_out)
-        s = l.split()[0:m]
-        s = [int(x) for x in s]
-        V += [s]
-
-    return (m, n, C, V)
-
-
 #
 # print winners
 #
 
 def printWinners(W, C, k, data_out=None):
     for i in W:
-        print_or_save(C[i], data_out)
+        print_or_save(i, C[i], data_out)
 
 
-def find_winners(R, k, data_in, data_out=None):
-    (m, n, C, V) = readData(data_in, k, data_out)
+# returns list of candidates ids
+def find_winners(config, P, data_out=None):
+    C = config.get_candidates()
+    V = P
+    m = len(C)
+    k = config.get_k()
+    R = config.get_rule()
 
     candidates = range(m)
     preferences = [Preference(i) for i in V]
@@ -92,8 +72,8 @@ def find_winners(R, k, data_in, data_out=None):
     W = R().find_committee(k, profile)
 
     printWinners(W, C, k, data_out)
+    return W
 
-# TODO: change calculating winners, to do it in place,
 # not saving files and reading from them
 
 
@@ -103,17 +83,17 @@ def winner(name_in, output, rule, k_value, generated_dir_path):
 
     seed()
 
+    # default values
     k = 1
     R = Borda
 
     if rule is not None:
-        pass
+        R = rule
 
     if k_value is not None:
         k = int(k_value)
 
     find_winners(R, k, data_in, data_out)
-
 
 if __name__ == "__main__":
 
@@ -131,7 +111,7 @@ if __name__ == "__main__":
         print("Invocation:")
         print("  python winner.py rule k <ordinal_election.out\n")
         print("Available rules:")
-        # for (rule, description) in RULES: # TODO: what is "RULES"?
+        # for (rule, description) in RULES:
         #     l = 10
         #     print("%s - %s" % (rule + " " * (l - len(rule)), description))
         exit()

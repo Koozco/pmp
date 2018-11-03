@@ -12,12 +12,10 @@ from helpers import generateUniform
 config = experiment_config.ExperimentConfig()
 # config.set_candidates(generateUniform(-3, -3, 3, 3, 100, 'None'))
 config.add_candidates_function(lambda: generateUniform(-3, -3, 3, 3, 100, 'None'))
-print(config.get_candidates())
 # add a single candidate
 # config.add_candidates([(999.888, 111.222, 'None')])
-config.add_candidate((999.88, 11.22, 2.2), 'Be')
+# config.add_candidate((999.88, 11.22, 2.2), 'Be')
 config.add_voters(generateUniform(-3, -3, 3, 3, 100, 'None'))
-config.save_data("square")
 config.compute_winners(Borda, 10, "kb10")
 
 config.run()

@@ -2,8 +2,9 @@ import helpers
 import os
 import pref2d2
 from random import *
-from winner import winner
+from winner import winner, find_winners
 from visualize import *
+from rules.borda import Borda
 
 image_import_fail = False
 try:
@@ -14,11 +15,12 @@ except ImportError:
 
 # TODO: refactor
 # TODO: test Impartial, non-2d
-# TODO: what to do with save_data
 
 
 class ExperimentConfig:
     def __init__(self):
+        self.__k = 1
+        self.__rule = Borda
         self.__candidates = []
         self.__candidates_generating = []
         self.__voters = []
@@ -70,8 +72,17 @@ class ExperimentConfig:
                 self.compute_winners(*command_line)
             command_line_id += 1
 
+    def get_k(self):
+        return self.__k
+
+    def get_rule(self):
+        return self.__rule
+
     def set_generated_dir_path(self, path):
         self.__generated_dir_path = path
+
+    def get_generated_dir_path(self):
+        return self.__generated_dir_path
 
     def set_candidates(self, list_of_candidates):
         self.__candidates = list_of_candidates
@@ -113,6 +124,9 @@ class ExperimentConfig:
         self.__commands.append(('save', filename))
 
     def compute_winners(self, rule, k, output_filename):
+        self.__k = k
+        self.__rule = rule
+        self.__output_filename = output_filename
         self.__commands.append(('compute_winners', (rule, k, output_filename)))
 
     def impartial(self, m, n):
@@ -126,18 +140,8 @@ class ExperimentConfig:
     def run(self):
 
         self.__generate_candidates()
-       # self.__generate_voters()
+        self.__generate_voters()
 
-        for experiment_command in self.__commands:
-            {
-                'save': lambda x: self.__save_data(x),
-                'compute_winners': lambda x: self.__compute_winners(*x)
-            }[experiment_command[0]](experiment_command[1])
-
-            # save data
-
-    def __save_data(self, name):
-        self.__name = name
         dir_path = os.path.join(self.__generated_dir_path)
 
         if self.__two_dimensional:
@@ -147,48 +151,26 @@ class ExperimentConfig:
                 if not os.path.isdir(dir_path):
                     raise
 
-            f = open(os.path.join(dir_path, name + ".in"), "w")
-            m = len(self.__candidates)
-            n = len(self.__voters)
-            f.write("{} {}\n".format(m, n))
-            for p in self.__candidates:
-                f.write("{} {} {}\n".format(p[0], p[1], p[2]))
-            for p in self.__voters:
-                f.write("{} {} {}\n".format(p[0], p[1], p[2]))
-            f.close()
-
-            pref2d2.pref(str(name + ".in"), str(name + ".out"), self.__generated_dir_path)
-
-        else:
-            try:
-                os.makedirs(dir_path)
-            except OSError:
-                if not os.path.isdir(dir_path):
-                    raise
-
-            f = open(os.path.join(dir_path, name + ".out"), "w")
-            f.write("{} {}".format(len(self.__candidates), len(self.__voters)))
-            for c in self.__candidates:
-                f.write(c)
-            for v in self.__voters:
-                s = ""
-                for z in v:
-                    s += str(z) + " "
-                f.write(s)
-            f.close()
+        for experiment_command in self.__commands:
+            {
+                'compute_winners': lambda x: self.__compute_winners(*x)
+            }[experiment_command[0]](experiment_command[1])
 
     # compute winners
-
+    # TODO: refactor this part
     def __compute_winners(self, rule, k, output):
-        # system("python winner.py <%s.out >%s.win %s %d" % (NAME, output, rule, k))
-        winner(self.__name + ".out", output + ".win", rule, k, self.__generated_dir_path)
+        seed()
+        P = pref2d2.pref(self)
+
+        data_out = open(os.path.join(self.__generated_dir_path, output + ".win"), "w")
+        W = find_winners(self, P, data_out)
+
         if self.__two_dimensional:
             print("2D = " + str(self.__two_dimensional))
             if image_import_fail:
                 print("Cannot visualize results because of PIL import fail.")
                 return
-            visualize(output, self.__generated_dir_path)  # TODO: make it work from console as well
-            # system("python visualize.py {}".format(output))  # to delete
+            visualize(self, W, output)
 
     def __generate_candidates(self):
         for gen_command in self.__candidates_generating:

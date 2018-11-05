@@ -72,15 +72,15 @@ def visualize(config, w, input):
     rep_avg_d, rep_max_d = compute_dist_of_representatives_to_virt_districts(V, C, winners)
     per_party = compute_winners_per_party(C, winners)
 
-    stats_out = open(os.path.join(generated_dir_path, "stats.out"), "a")
-    stats_out.write(input + ": \n")
-    stats_out.write("  avg_d = " + str(avg_d) + "\n")
-    stats_out.write("  max_d = " + str(max_d) + "\n")
-    stats_out.write("  rep_avg_d = " + str(rep_avg_d) + "\n")
-    stats_out.write("  rep_max_d = " + str(rep_max_d) + "\n")
-    for (p, v) in per_party.items():
-        stats_out.write("  party-" + str(p) + " = " + str(v) + "\n")
-    stats_out.close()
+    with open(os.path.join(generated_dir_path, "stats.out"), "a") as stats_out:
+        stats_out.write(input + ": \n")
+        stats_out.write("  avg_d = " + str(avg_d) + "\n")
+        stats_out.write("  max_d = " + str(max_d) + "\n")
+        stats_out.write("  rep_avg_d = " + str(rep_avg_d) + "\n")
+        stats_out.write("  rep_max_d = " + str(rep_max_d) + "\n")
+        for (p, v) in per_party.items():
+            stats_out.write("  party-" + str(p) + " = " + str(v) + "\n")
+
 
     WIDTH = 600
     HEIGHT = 600

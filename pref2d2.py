@@ -12,6 +12,7 @@ from itertools import *
 #
 # functions for preparing the preference profile
 
+# TODO: make it work both ways
 
 def dist(x, y):
     return (sum([(x[i] - y[i]) ** 2 for i in range(len(x) - 1)])) ** 0.5

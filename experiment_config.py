@@ -3,7 +3,7 @@ import inspect
 import os
 import pref2d2
 from random import *
-from winner import winner, find_winners
+from winner import find_winners
 from visualize import *
 from rules.borda import Borda
 from enum import Enum
@@ -19,9 +19,10 @@ except ImportError:
 # TODO: test Impartial, non-2d
 
 
-class Category(Enum):
-    CANDIDATES = 1
-    VOTERS = 2
+class Command(Enum):
+    GEN_CANDIDATES = 1
+    GEN_VOTERS = 2
+    COMPUTE_WINNERS = 3
 
 
 class ExperimentConfig:
@@ -32,7 +33,7 @@ class ExperimentConfig:
         self.__voters = []
         self.__commands = []
         self.__two_dimensional = True
-        self.__generated_dir_path = "generated" # default directory name for generated files
+        self.__generated_dir_path = "generated"  # default directory name for generated files
 
     # TODO: change it so that it is not executed until called
     def init_from_cmd(self, commands):
@@ -40,9 +41,7 @@ class ExperimentConfig:
         while command_line_id < len(commands):
             command_line = commands[command_line_id]
             command = command_line[0]
-            if command == 'generate':
-                self.save_data(command_line[1])
-            elif command == "impartial":
+            if command == "impartial":
                 self.__two_dimensional = False
                 self.impartial(int(command[1]), int(command[2]))
             elif command[0] == "#":
@@ -74,6 +73,7 @@ class ExperimentConfig:
                     self.set_candidates(generated_points)
                 command_line_id += 1
             else:
+                command_line[0] = eval(command_line[0])
                 self.compute_winners(*command_line)
             command_line_id += 1
 
@@ -83,8 +83,8 @@ class ExperimentConfig:
     def get_rule(self):
         return self.__rule
 
-    def set_generated_dir_path(self, path):
-        self.__generated_dir_path = path
+    def set_generated_dir_path(self, dir_path):
+        self.__generated_dir_path = dir_path
 
     def get_generated_dir_path(self):
         return self.__generated_dir_path
@@ -94,7 +94,7 @@ class ExperimentConfig:
 
     def add_candidates(self, list_of_candidates):
         if inspect.isfunction(list_of_candidates):
-            self.__commands.append((Category.CANDIDATES, list_of_candidates))
+            self.__commands.append((Command.GEN_CANDIDATES, list_of_candidates))
         else:
             self.__candidates += list_of_candidates
 
@@ -106,7 +106,7 @@ class ExperimentConfig:
 
     def add_voters(self, list_of_voters):
         if inspect.isfunction(list_of_voters):
-            self.__commands.append((Category.VOTERS, list_of_voters))
+            self.__commands.append((Command.GEN_VOTERS, list_of_voters))
         else:
             self.__voters += list_of_voters
 
@@ -125,14 +125,11 @@ class ExperimentConfig:
     def is_two_dimensional(self):
         return self.__two_dimensional
 
-    def save_data(self, filename):
-        self.__commands.append(('save', filename))
-
     def compute_winners(self, rule, k, output_filename):
-        self.__k = k
+        self.__k = int(k)
         self.__rule = rule
         self.__output_filename = output_filename
-        self.__commands.append(('compute_winners', (rule, k, output_filename)))
+        self.__commands.append((Command.COMPUTE_WINNERS, (rule, k, output_filename)))
 
     def impartial(self, m, n):
         self.set_candidates(range(m))
@@ -154,13 +151,13 @@ class ExperimentConfig:
 
         for experiment_command in self.__commands:
             {
-                Category.CANDIDATES: lambda fun: self.add_candidates(fun()),
-                Category.VOTERS: lambda fun: self.add_voters(fun()),
-                'compute_winners': lambda x: self.__compute_winners(*x)
+                Command.GEN_CANDIDATES: lambda fun: self.add_candidates(fun()),
+                Command.GEN_VOTERS: lambda fun: self.add_voters(fun()),
+                Command.COMPUTE_WINNERS: lambda x: self.__compute_winners(*x)
             }[experiment_command[0]](experiment_command[1])
 
     # compute winners
-    # TODO: refactor this part
+    # TODO: clean this part
     def __compute_winners(self, rule, k, output):
         seed()
         P = pref2d2.pref(self)

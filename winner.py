@@ -40,14 +40,6 @@ except:
     pass
 
 
-# read in the data in our format
-# m n  (number of candidates and voters)
-# m candidate names
-# ...
-# pref1  (n preference orders)
-# ...
-
-
 #
 # print winners
 #
@@ -75,25 +67,6 @@ def find_winners(config, P, data_out=None):
     return W
 
 # not saving files and reading from them
-
-
-def winner(name_in, output, rule, k_value, generated_dir_path):
-    data_in = open(os.path.join(generated_dir_path, name_in), "r")
-    data_out = open(os.path.join(generated_dir_path, output), "w")
-
-    seed()
-
-    # default values
-    k = 1
-    R = Borda
-
-    if rule is not None:
-        R = rule
-
-    if k_value is not None:
-        k = int(k_value)
-
-    find_winners(R, k, data_in, data_out)
 
 if __name__ == "__main__":
 

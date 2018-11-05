@@ -1,10 +1,12 @@
 import helpers
+import inspect
 import os
 import pref2d2
 from random import *
 from winner import winner, find_winners
 from visualize import *
 from rules.borda import Borda
+from enum import Enum
 
 image_import_fail = False
 try:
@@ -17,14 +19,17 @@ except ImportError:
 # TODO: test Impartial, non-2d
 
 
+class Category(Enum):
+    CANDIDATES = 1
+    VOTERS = 2
+
+
 class ExperimentConfig:
     def __init__(self):
         self.__k = 1
         self.__rule = Borda
         self.__candidates = []
-        self.__candidates_generating = []
         self.__voters = []
-        self.__voters_generating = []
         self.__commands = []
         self.__two_dimensional = True
         self.__generated_dir_path = "generated" # default directory name for generated files
@@ -87,11 +92,11 @@ class ExperimentConfig:
     def set_candidates(self, list_of_candidates):
         self.__candidates = list_of_candidates
 
-    def add_candidates_function(self, generating_function):
-        self.__candidates_generating += [generating_function]
-
     def add_candidates(self, list_of_candidates):
-        self.__candidates += list_of_candidates
+        if inspect.isfunction(list_of_candidates):
+            self.__commands.append((Category.CANDIDATES, list_of_candidates))
+        else:
+            self.__candidates += list_of_candidates
 
     def add_candidate(self, position, party='None'):
         self.__candidates += [position + (party,)]
@@ -99,11 +104,11 @@ class ExperimentConfig:
     def set_voters(self, list_of_voters):
         self.__voters = list_of_voters
 
-    def add_voters_function(self, generating_function):
-        self.__voters_generating += [generating_function]
-
     def add_voters(self, list_of_voters):
-        self.__voters += list_of_voters
+        if inspect.isfunction(list_of_voters):
+            self.__commands.append((Category.VOTERS, list_of_voters))
+        else:
+            self.__voters += list_of_voters
 
     def add_voter(self, position, party='None'):
         self.__voters += [position + (party,)]
@@ -138,10 +143,6 @@ class ExperimentConfig:
             self.add_candidates([x])
 
     def run(self):
-
-        self.__generate_candidates()
-        self.__generate_voters()
-
         dir_path = os.path.join(self.__generated_dir_path)
 
         if self.__two_dimensional:
@@ -153,6 +154,8 @@ class ExperimentConfig:
 
         for experiment_command in self.__commands:
             {
+                Category.CANDIDATES: lambda fun: self.add_candidates(fun()),
+                Category.VOTERS: lambda fun: self.add_voters(fun()),
                 'compute_winners': lambda x: self.__compute_winners(*x)
             }[experiment_command[0]](experiment_command[1])
 
@@ -171,15 +174,6 @@ class ExperimentConfig:
                 print("Cannot visualize results because of PIL import fail.")
                 return
             visualize(self, W, output)
-
-    def __generate_candidates(self):
-        for gen_command in self.__candidates_generating:
-            self.add_candidates(gen_command())
-
-    # TODO: maybe one list of commands with enum on which thing to generate
-    def __generate_voters(self):
-        for gen_command in self.__voters_generating:
-            self.add_voters(gen_command())
 
 
 def get_or_none(l, n):

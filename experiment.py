@@ -10,7 +10,6 @@ from experiment_config import ExperimentConfig
 # TODO: separate experiment module
 
 # TODO: make it a class to run multiple experiments ?
-# TODO: generate candidates and voters each time
 
 image_import_fail = False
 try:
@@ -20,13 +19,10 @@ except ImportError:
     image_import_fail = True
 
 
-
-
-class Experiment():
+class Experiment:
 
     def __init__(self, conf):
-        self.__candidates = conf.get_candidates()
-        self.__voters = conf.get_voters()
+        self.__config = conf
 
 
 # READ DATA IN
@@ -45,16 +41,14 @@ def read_data(f):
 
 if __name__ == "__main__":
     args_number = len(argv)
-    if args_number > 2 or (args_number > 1 and argv[1] == "-help"):
+    if (args_number == 1 and stdin.isatty()) or args_number > 2 or (args_number > 1 and argv[1] == "-help"):
         print("This scripts runs a single experiment (generates an elections, "
               "\ncomputes the results according to specified rules, and prepares visualizations)")
         print("\nInvocation:")
-        print("  python experiment.py [path_to_output_directory]  <description.input")
+        print("  python experiment.py [path_to_output_directory] <description.input")
         exit()
 
     seed()
-    # TODO: store dir_path in config
-    # TODO: check if called with no input data
     data_in = stdin
     data_out = stdout
     generated_dir_path = "generated"
@@ -68,5 +62,4 @@ if __name__ == "__main__":
     config = ExperimentConfig()
     config.set_generated_dir_path(generated_dir_path)
     config.init_from_cmd(cmd)
-    e = Experiment(config)
     config.run()

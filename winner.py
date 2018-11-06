@@ -9,28 +9,13 @@ from itertools import *
 from math import *
 from copy import copy
 from random import choice
-# from sets import Set # TODO: check where is it used?
 import sys
 import os
-
-# from core import *
-
-# from rule_pr import *
 
 sys.path.append(os.path.join(".."))
 from rules.borda import Borda
 from preferences.profile import Profile
 from preferences.preference import Preference
-
-# import rule packages
-# for file in os.listdir("."):
-#     if file.startswith("rule_") and file.endswith(".py"):
-#         debug("RULES: %s" % file[:-3])
-#         exec("from %s import *" % (file[:-3]))
-#
-# # irrespectively, import core rule packages
-# from rule_weakly_separable import *
-# from rule_proportional import *
 
 try:
     import numpy as np
@@ -39,34 +24,33 @@ except:
     # debug("No numeric libraries! Do not use ILP")
     pass
 
-
+# TODO: fix it to work from console as before
 #
 # print winners
 #
 
-def printWinners(W, C, k, data_out=None):
-    for i in W:
-        print_or_save(i, C[i], data_out)
+
+def print_winners(winners, candidates, data_out=None):
+    for w in winners:
+        print_or_save(w, candidates[w], data_out)
 
 
 # returns list of candidates ids
-def find_winners(config, P, data_out=None):
+def find_winners(config, preferences, data_out=None):
     C = config.get_candidates()
-    V = P
     m = len(C)
     k = config.get_k()
-    R = config.get_rule()
+    rule = config.get_rule()
 
     candidates = range(m)
-    preferences = [Preference(i) for i in V]
+    preferences = [Preference(i) for i in preferences]
 
     profile = Profile(candidates, preferences)
-    W = R().find_committee(k, profile)
+    W = rule().find_committee(k, profile)
 
-    printWinners(W, C, k, data_out)
+    print_winners(W, C, data_out)
     return W
 
-# not saving files and reading from them
 
 if __name__ == "__main__":
 
@@ -79,14 +63,12 @@ if __name__ == "__main__":
 
     R = Borda
 
-    if len(argv) >= 2 and argv[1].endswith("help"):
+    if len(argv) < 1 or (len(argv) >= 2 and argv[1].endswith("help")):
         print("This script computes election results\n")
         print("Invocation:")
         print("  python winner.py rule k <ordinal_election.out\n")
         print("Available rules:")
-        # for (rule, description) in RULES:
-        #     l = 10
-        #     print("%s - %s" % (rule + " " * (l - len(rule)), description))
+        # TODO: print available rules with description
         exit()
 
     if len(argv) >= 2:
@@ -96,4 +78,3 @@ if __name__ == "__main__":
         k = int(argv[2])
 
     find_winners(R, k, data_in, data_out)
-

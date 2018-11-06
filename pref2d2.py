@@ -15,7 +15,12 @@ from itertools import *
 # TODO: make it work both ways
 
 def dist(x, y):
-    return (sum([(x[i] - y[i]) ** 2 for i in range(len(x) - 1)])) ** 0.5
+    if type(x) is not tuple:
+        return (x - y) ** 2
+    length = len(x)
+    if isinstance(x[-1], str):
+        length -= 1
+    return sum([(x[i] - y[i]) ** 2 for i in range(length)]) ** 0.5
 
 
 # Compute the distances of voter v from the candidates in set C
@@ -32,17 +37,17 @@ def second(x):
     return x[1]
 
 
-def preferenceOrders(C, V):
-    P = []
+def preference_orders(candidates, voters):
+    preferences = []
     #  print C
-    for v in V:
+    for v in voters:
         #    print v
-        v_dist = compute_dist(v, C)
+        v_dist = compute_dist(v, candidates)
         v_sorted = sorted(v_dist, key=second)
         v_order = [cand for (cand, _) in v_sorted]
         #    print v_order
-        P += [v_order]
-    return P
+        preferences += [v_order]
+    return preferences
 
 
 # Print pref orders
@@ -70,7 +75,7 @@ def printPrefOrders(C, V, P, data_out=None):
 # ...
 
 # return (n,k,d,F,X)
-def readData(f):
+def read_data(f):
     P = []
     C = []
     lines = f.readlines()
@@ -90,14 +95,12 @@ def readData(f):
 
 
 def pref(config):
-    C = config.get_candidates()
-    V = config.get_voters()
-    m = len(C)
-    n = len(V)
+    candidates = config.get_candidates()
+    voters = config.get_voters()
 
-    P = preferenceOrders(C, V)
+    preferences = preference_orders(candidates, voters)
     # printPrefOrders(C, V, P, data_out)
-    return P
+    return preferences
 #
 # MAIN
 
@@ -108,13 +111,13 @@ if __name__ == "__main__":
     if len(argv) > 1:
         print("This script converts an election in the 2D Euclidean format to a preference-order based one\n")
         print("Invocation:")
-        print("  python pref2d2.py  <2d_point.in >election.out")
+        print("  python pref2d2.py <2d_point.in >election.out")
         exit()
 
     data_in = stdin
     data_out = stdout
 
-    (m, n, C, V) = readData(data_in)
+    (m, n, C, V) = read_data(data_in)
 
-    P = preferenceOrders(C, V)
+    P = preference_orders(C, V)
     printPrefOrders(C, V, P)

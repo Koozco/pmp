@@ -33,12 +33,12 @@ def compute_dist(voters, candidates, winners):
 
 
 # Computes distance of each committee member to the closest n/k voters
-def compute_dist_of_representatives_to_virt_districts(voters, candidates, Winners):
+def compute_dist_of_representatives_to_virt_districts(voters, candidates, winners):
     n = len(voters)
-    k = len(Winners)
+    k = len(winners)
     d = 0.0
     max_dist = 0.0
-    for w in Winners:
+    for w in winners:
         distances = []
         dmin = 0.0
         for v in voters:
@@ -62,7 +62,7 @@ def compute_winners_per_party(candidates, winners):
     return result
 
 
-def visualize(config, w, input):
+def visualize(config, w, name):
     C = config.get_candidates()
     V = config.get_voters()
     winners = w
@@ -73,14 +73,13 @@ def visualize(config, w, input):
     per_party = compute_winners_per_party(C, winners)
 
     with open(os.path.join(generated_dir_path, "stats.out"), "a") as stats_out:
-        stats_out.write(input + ": \n")
+        stats_out.write(name + ": \n")
         stats_out.write("  avg_d = " + str(avg_d) + "\n")
         stats_out.write("  max_d = " + str(max_d) + "\n")
         stats_out.write("  rep_avg_d = " + str(rep_avg_d) + "\n")
         stats_out.write("  rep_max_d = " + str(rep_max_d) + "\n")
         for (p, v) in per_party.items():
             stats_out.write("  party-" + str(p) + " = " + str(v) + "\n")
-
 
     WIDTH = 600
     HEIGHT = 600
@@ -101,7 +100,6 @@ def visualize(config, w, input):
                     HEIGHT / 2 - z[1] * 100 + hy),
                    fill="rgb(220,220,220)")
 
-
     hx = 2
     hy = 2
 
@@ -118,6 +116,6 @@ def visualize(config, w, input):
         dr.ellipse((WIDTH / 2 + c[0] * 100 - wx, HEIGHT / 2 - c[1] * 100 - wy, WIDTH / 2 + c[0] * 100 + wx,
                     HEIGHT / 2 - c[1] * 100 + wy), fill="red")
 
-    dr.text((0, 0), input + " (%d out of %d)" % (len(winners), len(C)), fill="blue")
+    dr.text((0, 0), name + " (%d out of %d)" % (len(winners), len(C)), fill="blue")
 
-    im.save(os.path.join(generated_dir_path, input + ".png"))
+    im.save(os.path.join(generated_dir_path, name + ".png"))

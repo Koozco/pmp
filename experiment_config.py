@@ -15,14 +15,16 @@ except ImportError:
     print("PIL module is not available. Pictures will not be generated.")
     image_import_fail = True
 
-# TODO: refactor
 # TODO: test Impartial, non-2d
+# TODO: think about files structure
+# TODO: how should Impartial work when it comes to Profiles and distance?
 
 
 class Command(Enum):
     GEN_CANDIDATES = 1
     GEN_VOTERS = 2
-    COMPUTE_WINNERS = 3
+    RUN_ELECTION = 3
+    IMPARTIAL = 4
 
 
 class ExperimentConfig:
@@ -33,9 +35,8 @@ class ExperimentConfig:
         self.__voters = []
         self.__commands = []
         self.__two_dimensional = True
-        self.__generated_dir_path = "generated"  # default directory name for generated files
+        self.__generated_dir_path = "generated"  # default directory path for generated files
 
-    # TODO: change it so that it is not executed until called
     def init_from_cmd(self, commands):
         command_line_id = 0
         while command_line_id < len(commands):
@@ -49,32 +50,31 @@ class ExperimentConfig:
             elif command in ['voters', 'candidates']:
                 distribution = commands[command_line_id + 1][0]
                 args = commands[command_line_id + 1][1:]
-                generated_points = []
+                f = []
                 # generate points
                 if distribution == "circle":
-                    generated_points = helpers.generateCircle(float(args[0]), float(args[1]), float(args[2]),
-                                                              int(args[3]), get_or_none(args, 4))
+                    f = lambda: helpers.generateCircle(float(args[0]), float(args[1]), float(args[2]), int(args[3]),
+                                                       get_or_none(args, 4))
                 elif distribution == "gauss":
-                    generated_points = helpers.generateGauss(float(args[0]), float(args[1]), float(args[2]),
-                                                             int(args[3]), get_or_none(args, 4))
+                    f = lambda: helpers.generateGauss(float(args[0]), float(args[1]), float(args[2]), int(args[3]),
+                                                      get_or_none(args, 4))
                 elif distribution == "uniform":
-                    generated_points = helpers.generateUniform(float(args[0]), float(args[1]), float(args[2]),
-                                                               float(args[3]), int(args[4]), get_or_none(args, 5))
+                    f = lambda: helpers.generateUniform(float(args[0]), float(args[1]), float(args[2]), float(args[3]),
+                                                        int(args[4]), get_or_none(args, 5))
                 elif distribution == "image":
                     if image_import_fail:
                         return
-                    generated_points = helpers.generateFromImage(args[0], float(args[1]), float(args[2]),
-                                                                 float(args[3]), float(args[4]), int(args[5]),
-                                                                 get_or_none(args, 6))
-                # fill with generated points
+                    f = lambda: helpers.generateFromImage(args[0], float(args[1]), float(args[2]), float(args[3]),
+                                                          float(args[4]), int(args[5]), get_or_none(args, 6))
                 if command == 'voters':
-                    self.add_voters(generated_points)
+                    self.__commands.append((Command.GEN_VOTERS, f))
                 elif command == 'candidates':
-                    self.set_candidates(generated_points)
+                    self.set_candidates((Command.GEN_CANDIDATES, f))
                 command_line_id += 1
             else:
+                # make a class object from string
                 command_line[0] = eval(command_line[0])
-                self.compute_winners(*command_line)
+                self.run_election(*command_line)
             command_line_id += 1
 
     def get_k(self):
@@ -84,10 +84,15 @@ class ExperimentConfig:
         return self.__rule
 
     def set_generated_dir_path(self, dir_path):
+        if not os.path.isabs(dir_path):
+            dir_path = os.path.join(os.path.pardir, dir_path)
         self.__generated_dir_path = dir_path
 
     def get_generated_dir_path(self):
         return self.__generated_dir_path
+
+    def get_candidates(self):
+        return self.__candidates
 
     def set_candidates(self, list_of_candidates):
         self.__candidates = list_of_candidates
@@ -98,7 +103,7 @@ class ExperimentConfig:
         else:
             self.__candidates += list_of_candidates
 
-    def add_candidate(self, position, party='None'):
+    def add_one_candidate(self, position, party='None'):
         self.__candidates += [position + (party,)]
 
     def set_voters(self, list_of_voters):
@@ -110,11 +115,8 @@ class ExperimentConfig:
         else:
             self.__voters += list_of_voters
 
-    def add_voter(self, position, party='None'):
+    def add_one_voter(self, position, party='None'):
         self.__voters += [position + (party,)]
-
-    def get_candidates(self):
-        return self.__candidates
 
     def get_voters(self):
         return self.__voters
@@ -125,23 +127,17 @@ class ExperimentConfig:
     def is_two_dimensional(self):
         return self.__two_dimensional
 
-    def compute_winners(self, rule, k, output_filename):
+    def run_election(self, rule, k, output_filename):
         self.__k = int(k)
         self.__rule = rule
         self.__output_filename = output_filename
-        self.__commands.append((Command.COMPUTE_WINNERS, (rule, k, output_filename)))
+        self.__commands.append((Command.RUN_ELECTION, (output_filename,)))
 
     def impartial(self, m, n):
-        self.set_candidates(range(m))
-
-        for p in range(n):
-            x = range(m)
-            shuffle(x)
-            self.add_candidates([x])
+        self.__commands.append((Command.IMPARTIAL, (m, n)))
 
     def run(self):
         dir_path = os.path.join(self.__generated_dir_path)
-
         if self.__two_dimensional:
             try:
                 helpers.make_dirs(dir_path, exist_ok=True)
@@ -153,24 +149,35 @@ class ExperimentConfig:
             {
                 Command.GEN_CANDIDATES: lambda fun: self.add_candidates(fun()),
                 Command.GEN_VOTERS: lambda fun: self.add_voters(fun()),
-                Command.COMPUTE_WINNERS: lambda x: self.__compute_winners(*x)
+                Command.RUN_ELECTION: lambda x: self.__run_election(*x),
+                Command.IMPARTIAL: lambda x: self.__impartial(*x)
             }[experiment_command[0]](experiment_command[1])
 
-    # compute winners
-    # TODO: clean this part
-    def __compute_winners(self, rule, k, output):
-        seed()
-        P = pref2d2.pref(self)
+    def __impartial(self, m, n):
+        self.set_candidates(range(m))
 
-        data_out = open(os.path.join(self.__generated_dir_path, output + ".win"), "w")
-        W = find_winners(self, P, data_out)
+        for p in range(n):
+            x = range(m)
+            shuffle(x)
+            self.add_voters([x])
+
+    # run election, compute winners
+    # TODO: clean this part
+    def __run_election(self, output):
+        seed()
+        preferences = pref2d2.pref(self)
+
+        with open(os.path.join(self.__generated_dir_path, output + ".win"), "w") as data_out:
+            winners = find_winners(self, preferences, data_out)
+
+        print(winners)
 
         if self.__two_dimensional:
             print("2D = " + str(self.__two_dimensional))
             if image_import_fail:
                 print("Cannot visualize results because of PIL import fail.")
                 return
-            visualize(self, W, output)
+            visualize(self, winners, output)
 
 
 def get_or_none(l, n):

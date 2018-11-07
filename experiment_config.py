@@ -3,7 +3,7 @@ import inspect
 import os
 import pref2d2
 from random import *
-from winner import find_winners
+from winner import find_winners_from_config
 from visualize import *
 from rules.borda import Borda
 from enum import Enum
@@ -37,7 +37,7 @@ class ExperimentConfig:
         self.__two_dimensional = True
         self.__generated_dir_path = "generated"  # default directory path for generated files
 
-    def init_from_cmd(self, commands):
+    def init_from_input(self, commands):
         command_line_id = 0
         while command_line_id < len(commands):
             command_line = commands[command_line_id]
@@ -53,19 +53,19 @@ class ExperimentConfig:
                 f = []
                 # generate points
                 if distribution == "circle":
-                    f = lambda: helpers.generateCircle(float(args[0]), float(args[1]), float(args[2]), int(args[3]),
-                                                       get_or_none(args, 4))
+                    f = lambda: helpers.generate_circle(float(args[0]), float(args[1]), float(args[2]), int(args[3]),
+                                                        get_or_none(args, 4))
                 elif distribution == "gauss":
-                    f = lambda: helpers.generateGauss(float(args[0]), float(args[1]), float(args[2]), int(args[3]),
-                                                      get_or_none(args, 4))
+                    f = lambda: helpers.generate_gauss(float(args[0]), float(args[1]), float(args[2]), int(args[3]),
+                                                       get_or_none(args, 4))
                 elif distribution == "uniform":
-                    f = lambda: helpers.generateUniform(float(args[0]), float(args[1]), float(args[2]), float(args[3]),
-                                                        int(args[4]), get_or_none(args, 5))
+                    f = lambda: helpers.generate_uniform(float(args[0]), float(args[1]), float(args[2]), float(args[3]),
+                                                         int(args[4]), get_or_none(args, 5))
                 elif distribution == "image":
                     if image_import_fail:
                         return
-                    f = lambda: helpers.generateFromImage(args[0], float(args[1]), float(args[2]), float(args[3]),
-                                                          float(args[4]), int(args[5]), get_or_none(args, 6))
+                    f = lambda: helpers.generate_from_image(args[0], float(args[1]), float(args[2]), float(args[3]),
+                                                            float(args[4]), int(args[5]), get_or_none(args, 6))
                 if command == 'voters':
                     self.__commands.append((Command.GEN_VOTERS, f))
                 elif command == 'candidates':
@@ -80,8 +80,14 @@ class ExperimentConfig:
     def get_k(self):
         return self.__k
 
+    def set_k(self, k):
+        self.__k = k
+
     def get_rule(self):
         return self.__rule
+
+    def set_rule(self, rule):
+        self.__rule = rule
 
     def set_generated_dir_path(self, dir_path):
         if not os.path.isabs(dir_path):
@@ -168,7 +174,7 @@ class ExperimentConfig:
         preferences = pref2d2.pref(self)
 
         with open(os.path.join(self.__generated_dir_path, output + ".win"), "w") as data_out:
-            winners = find_winners(self, preferences, data_out)
+            winners = find_winners_from_config(self, preferences, data_out)
 
         print(winners)
 

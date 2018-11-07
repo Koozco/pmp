@@ -39,13 +39,11 @@ def second(x):
 
 def preference_orders(candidates, voters):
     preferences = []
-    #  print C
+
     for v in voters:
-        #    print v
         v_dist = compute_dist(v, candidates)
         v_sorted = sorted(v_dist, key=second)
         v_order = [cand for (cand, _) in v_sorted]
-        #    print v_order
         preferences += [v_order]
     return preferences
 
@@ -65,33 +63,6 @@ def printPrefOrders(C, V, P, data_out=None):
 
     for i in range(len(P)):
         print_or_save("{} {} {}".format(" ".join([str(p) for p in P[i]]), V[i][0], V[i][1]), data_out)
-
-
-# read in the data in our format
-# m n  (number of candidates and voters)
-# x  y (m candidates in m lines)
-# ...
-# x  y (n voters in n lines)
-# ...
-
-# return (n,k,d,F,X)
-def read_data(f):
-    P = []
-    C = []
-    lines = f.readlines()
-    (m, n) = lines[0].split()
-    m = int(m)
-    n = int(n)
-
-    for l in lines[1:m + 1]:
-        (x, y, p) = l.split()
-        C += [(float(x), float(y), p)]
-
-    for l in lines[m + 1:m + n + 1]:
-        (x, y, ignored) = l.split()
-        P += [(float(x), float(y))]
-
-    return (m, n, C, P)
 
 
 def pref(config):
@@ -117,7 +88,6 @@ if __name__ == "__main__":
     data_in = stdin
     data_out = stdout
 
-    (m, n, C, V) = read_data(data_in)
+    C, V, P = read_data(data_in)
 
-    P = preference_orders(C, V)
     printPrefOrders(C, V, P)

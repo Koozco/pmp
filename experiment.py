@@ -61,5 +61,5 @@ if __name__ == "__main__":
 
     config = ExperimentConfig()
     config.set_generated_dir_path(generated_dir_path)
-    config.init_from_cmd(cmd)
+    config.init_from_input(cmd)
     config.run()

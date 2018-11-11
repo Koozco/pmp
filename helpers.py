@@ -1,5 +1,7 @@
 from random import *
+from enum import Enum
 import os
+
 
 image_import_fail = False
 try:
@@ -7,6 +9,13 @@ try:
 except ImportError:
     print("PIL module is not available. Pictures will not be generated.")
     image_import_fail = True
+
+
+class Command(Enum):
+    GEN_CANDIDATES = 1
+    GEN_VOTERS = 2
+    GEN_FROM_CANDIDATES = 3
+    IMPARTIAL = 4
 
 
 def make_dirs(dir_path, exist_ok=False):
@@ -76,6 +85,19 @@ def generate_circle(x, y, r, N, party):
             L += [(px + x, py + y, party)]
             count += 1
     return L
+
+
+def impartial(m, n):
+    # preferences
+    candidates = list(range(m))
+    voters = []
+
+    for p in range(n):
+        x = list(range(m))
+        shuffle(x)
+        voters += [x]
+
+    return candidates, voters
 
 
 # read in the data in our format

@@ -65,10 +65,7 @@ def printPrefOrders(C, V, P, data_out=None):
         print_or_save("{} {} {}".format(" ".join([str(p) for p in P[i]]), V[i][0], V[i][1]), data_out)
 
 
-def pref(config):
-    candidates = config.get_candidates()
-    voters = config.get_voters()
-
+def pref(candidates, voters):
     preferences = preference_orders(candidates, voters)
     # printPrefOrders(C, V, P, data_out)
     return preferences

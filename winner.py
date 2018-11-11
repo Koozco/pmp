@@ -8,7 +8,6 @@ from sys import *
 from helpers import *
 from itertools import *
 from math import *
-from copy import copy
 from random import choice
 import sys
 import os
@@ -37,10 +36,9 @@ def print_winners(winners, cands, data_out=None):
 
 
 # returns list of candidates ids
-def find_winners_from_config(config, preferences, data_out=None):
-    candidates = config.get_candidates()
-    k = config.get_k()
-    rule = config.get_rule()
+def find_winners_from_config(experiment, candidates, preferences, data_out=None):
+    k = experiment.get_k()
+    rule = experiment.get_rule()
     return find_winners(rule, k, candidates, preferences, data_out)
 
 

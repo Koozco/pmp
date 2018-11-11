@@ -62,17 +62,13 @@ def compute_winners_per_party(candidates, winners):
     return result
 
 
-def visualize(config, w, name):
-    C = config.get_candidates()
-    V = config.get_voters()
-    winners = w
-    generated_dir_path = config.get_generated_dir_path()
+def visualize(candidates, voters, winners, name, path):
 
-    avg_d, max_d = compute_dist(V, C, winners)
-    rep_avg_d, rep_max_d = compute_dist_of_representatives_to_virt_districts(V, C, winners)
-    per_party = compute_winners_per_party(C, winners)
+    avg_d, max_d = compute_dist(voters, candidates, winners)
+    rep_avg_d, rep_max_d = compute_dist_of_representatives_to_virt_districts(voters, candidates, winners)
+    per_party = compute_winners_per_party(candidates, winners)
 
-    with open(os.path.join(generated_dir_path, "stats.out"), "a") as stats_out:
+    with open(os.path.join(path, "stats.out"), "a") as stats_out:
         stats_out.write(name + ": \n")
         stats_out.write("  avg_d = " + str(avg_d) + "\n")
         stats_out.write("  max_d = " + str(max_d) + "\n")
@@ -95,7 +91,7 @@ def visualize(config, w, name):
 
     dr.line((0, HEIGHT / 2, WIDTH, HEIGHT / 2), fill=128)
     dr.line((WIDTH / 2, 0, WIDTH / 2, HEIGHT), fill=128)
-    for z in C:
+    for z in candidates:
         dr.ellipse((WIDTH / 2 + z[0] * 100 - hx, HEIGHT / 2 - z[1] * 100 - hy, WIDTH / 2 + z[0] * 100 + hx,
                     HEIGHT / 2 - z[1] * 100 + hy),
                    fill="rgb(220,220,220)")
@@ -105,17 +101,17 @@ def visualize(config, w, name):
 
     dr.line((0, HEIGHT / 2, WIDTH, HEIGHT / 2), fill=128)
     dr.line((WIDTH / 2, 0, WIDTH / 2, HEIGHT), fill=128)
-    for z in V:
+    for z in voters:
         dr.ellipse((WIDTH / 2 + z[0] * 100 - hx, HEIGHT / 2 - z[1] * 100 - hy, WIDTH / 2 + z[0] * 100 + hx,
                     HEIGHT / 2 - z[1] * 100 + hy), fill="rgb(150,150,150)")
 
     wx = 5
     wy = 5
     for z in winners:
-        c = C[z]
+        c = candidates[z]
         dr.ellipse((WIDTH / 2 + c[0] * 100 - wx, HEIGHT / 2 - c[1] * 100 - wy, WIDTH / 2 + c[0] * 100 + wx,
                     HEIGHT / 2 - c[1] * 100 + wy), fill="red")
 
-    dr.text((0, 0), name + " (%d out of %d)" % (len(winners), len(C)), fill="blue")
+    dr.text((0, 0), name + " (%d out of %d)" % (len(winners), len(candidates)), fill="blue")
 
-    im.save(os.path.join(generated_dir_path, name + ".png"))
+    im.save(os.path.join(path, name + ".png"))

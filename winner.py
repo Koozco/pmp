@@ -11,7 +11,6 @@ from math import *
 from random import choice
 import sys
 import os
-import pref2d2
 
 sys.path.append(os.path.join(".."))
 from rules.borda import Borda

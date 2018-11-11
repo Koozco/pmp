@@ -4,17 +4,16 @@ from os import system
 from random import *
 from sys import *
 
-import pref2d2
-from winner import find_winners_from_config
 from visualize import *
 from experiment_config import ExperimentConfig
 from rules.borda import Borda
+from preferences.ordinal import Ordinal
+from preferences.profile import Profile
 
 # TODO: add install_requires to setup.py?
 # TODO clean imports
 # TODO: separate experiment module
 # TODO: test Impartial, non-2d
-# TODO: what to do with preference? Where and how to create it? What for?
 # TODO: think about files structure
 
 
@@ -113,12 +112,16 @@ class Experiment:
                 if not os.path.isdir(dir_path):
                     raise
 
-        candidates, voters = self.__execute_commands()
-        self.__run_election(candidates, voters, visualization)
+        candidates, voters, preferences = self.__execute_commands()
+        if self.__is_ordinal:
+            self.__run_election(candidates, preferences, visualization)
+        else:
+            self.__run_election(candidates, preferences, visualization)
 
     def __execute_commands(self):
         candidates = self.__config.get_candidates()
         voters = self.__config.get_voters()
+        preferences = []
 
         for experiment_command in self.__config.get_commands():
             command_type = experiment_command[0]
@@ -129,44 +132,76 @@ class Experiment:
                 voters += experiment_command[1]()
             elif command_type == Command.GEN_FROM_CANDIDATES:
                 self.__is_ordinal = False
-                voters += experiment_command[1](candidates)
+                voters, preferences = experiment_command[1](candidates)
             elif command_type == Command.IMPARTIAL:
                 self.__is_ordinal = False
-                candidates, voters = self.__impartial(*args)
-        return candidates, voters
+                candidates, preferences = impartial(*args)
+        if not preferences:
+            preferences = preference_orders(candidates, voters)
+        return candidates, voters, preferences
 
     # run election, compute winners
     # TODO: clean this part
-    def __run_election(self, candidates, voters, visualization):
+    def __run_election(self, candidates, preferences, visualization):
         output = self.__filename
         seed()
-        if self.__is_ordinal:
-            preferences = pref2d2.pref(candidates, voters)
 
-            with open(os.path.join(self.__generated_dir_path, output + ".win"), "w") as data_out:
-                winners = find_winners_from_config(self, candidates, preferences, data_out)
+        profile = Profile(candidates, preferences)
+        if self.__k > len(candidates):
+            print("k is too big. Not enough candidates")
+            return
 
-            print("WINNERS", winners)
+        winners = self.__rule().find_committee(self.__k, profile)
 
-            if self.__config.is_two_dimensional() and visualization:
-                print("2D = True")
-                if image_import_fail:
-                    print("Cannot visualize results because of PIL import fail.")
-                    return
-                visualize(candidates, voters, winners, output, self.__generated_dir_path)
-        else:
-            print("NOT IMPLEMENTED")
+        print("WINNERS", winners)
 
-    def __impartial(self, m, n):
-        # preferences
-        candidates = range(m)
-        voters = []
+        if self.__config.is_two_dimensional() and visualization:
+            print("2D = True")
+            if image_import_fail:
+                print("Cannot visualize results because of PIL import fail.")
+                return
 
-        for p in range(n):
-            x = range(m)
-            shuffle(x)
-            voters += [x]
-        return candidates, voters
+            print("CANNOT VISUALIZE")
+            return
+            # visualize(candidates, preferences, winners, output, self.__generated_dir_path)
+
+
+def impartial(m, n):
+    # preferences
+    candidates = list(range(m))
+    voters = []
+
+    for p in range(n):
+        x = list(range(m))
+        shuffle(x)
+        voters += [x]
+    preferences = [Ordinal(voter) for voter in voters]
+    return candidates, preferences
+
+
+# Compute the distances of voter v from the candidates in set C
+# outputs a list of the format (i,d) where i is the candidate
+# name and d is the distance
+#
+def compute_dist(v, candidates):
+    m = len(candidates)
+    d = [(j, dist(v, candidates[j])) for j in range(m)]
+    return d
+
+
+def second(x):
+    return x[1]
+
+
+def preference_orders(candidates, voters):
+    preferences = []
+
+    for v in voters:
+        v_dist = compute_dist(v, candidates)
+        v_sorted = sorted(v_dist, key=second)
+        v_order = [candidates[cand] for (cand, _) in v_sorted]
+        preferences += [Ordinal(v_order)]
+    return preferences
 
 
 def get_or_none(l, n):

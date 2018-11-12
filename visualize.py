@@ -25,7 +25,7 @@ def compute_dist(voters, candidates, winners):
     for v in voters:
         dmin = float("inf")
         for w in winners:
-            dmin = min(dmin, dist(v, candidates[w]))
+            dmin = min(dmin, dist(v, w))
         d += dmin
         max_dist = max(max_dist, dmin)
         n += 1
@@ -42,7 +42,7 @@ def compute_dist_of_representatives_to_virt_districts(voters, candidates, winner
         distances = []
         dmin = 0.0
         for v in voters:
-            distances.append(dist(v, candidates[w]))
+            distances.append(dist(v, w))
         for val in sorted(distances)[: int(n / k)]:
             dmin += val
         d += dmin
@@ -57,7 +57,7 @@ def compute_winners_per_party(candidates, winners):
         if party not in result.keys():
             result[party] = 0
     for w in winners:
-        party = candidates[w][-1]
+        party = w[-1]
         result[party] += 1
     return result
 
@@ -108,7 +108,7 @@ def visualize(candidates, voters, winners, name, path):
     wx = 5
     wy = 5
     for z in winners:
-        c = candidates[z]
+        c = z
         dr.ellipse((WIDTH / 2 + c[0] * 100 - wx, HEIGHT / 2 - c[1] * 100 - wy, WIDTH / 2 + c[0] * 100 + wx,
                     HEIGHT / 2 - c[1] * 100 + wy), fill="red")
 

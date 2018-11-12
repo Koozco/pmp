@@ -114,9 +114,9 @@ class Experiment:
 
         candidates, voters, preferences = self.__execute_commands()
         if self.__is_ordinal:
-            self.__run_election(candidates, preferences, visualization)
+            self.__run_election(candidates, voters, preferences, visualization)
         else:
-            self.__run_election(candidates, preferences, visualization)
+            self.__run_election(candidates, voters, preferences, visualization)
 
     def __execute_commands(self):
         candidates = self.__config.get_candidates()
@@ -142,7 +142,7 @@ class Experiment:
 
     # run election, compute winners
     # TODO: clean this part
-    def __run_election(self, candidates, preferences, visualization):
+    def __run_election(self, candidates, voters, preferences, visualization):
         output = self.__filename
         seed()
 
@@ -161,9 +161,11 @@ class Experiment:
                 print("Cannot visualize results because of PIL import fail.")
                 return
 
-            print("CANNOT VISUALIZE")
-            return
-            # visualize(candidates, preferences, winners, output, self.__generated_dir_path)
+            if not self.__is_ordinal:
+                print("CANNOT VISUALIZE")
+                return
+
+            visualize(candidates, voters, winners, output, self.__generated_dir_path)
 
 
 def impartial(m, n):
@@ -189,16 +191,12 @@ def compute_dist(v, candidates):
     return d
 
 
-def second(x):
-    return x[1]
-
-
 def preference_orders(candidates, voters):
     preferences = []
 
     for v in voters:
         v_dist = compute_dist(v, candidates)
-        v_sorted = sorted(v_dist, key=second)
+        v_sorted = sorted(v_dist, key=lambda x: x[1])
         v_order = [candidates[cand] for (cand, _) in v_sorted]
         preferences += [Ordinal(v_order)]
     return preferences
@@ -207,8 +205,8 @@ def preference_orders(candidates, voters):
 def get_or_none(l, n):
     try:
         return l[n]
-    except:
-        return "NONE"
+    except (TypeError, IndexError):
+        return 'None'
 
 
 # READ DATA IN

@@ -1,6 +1,7 @@
-from helpers import Command
-import inspect
 import copy
+import inspect
+
+from experiments.helpers import Command
 
 
 class ExperimentConfig:
@@ -8,10 +9,7 @@ class ExperimentConfig:
         self.__candidates = []
         self.__voters = []
         self.__commands = []
-        self.__two_dimensional = True
-
-    def set_two_dimensional(self, value):
-        self.__two_dimensional = value
+        self.two_dimensional = True
 
     def get_candidates(self):
         return copy.copy(self.__candidates)
@@ -47,14 +45,12 @@ class ExperimentConfig:
     def get_voters(self):
         return copy.copy(self.__voters)
 
-    def is_two_dimensional(self):
-        return self.__two_dimensional
-
     def add_command(self, value):
         self.__commands.append(value)
 
     def get_commands(self):
         return self.__commands
 
+    # candidates in impartial only as a list of consecutive integers starting from 0
     def impartial(self, m, n):
         self.__commands.append((Command.IMPARTIAL, (m, n)))

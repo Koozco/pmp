@@ -1,8 +1,7 @@
-import experiment_config
-from experiment import Experiment, impartial
-from rules.borda import Borda
+from experiments import experiment_config
+from experiments.experiment import Experiment
+from experiments.generating_functions import generate_uniform
 from rules.bloc import Bloc
-from helpers import generate_uniform
 
 # Experiment as more generic class for running experiments described in config
 
@@ -18,16 +17,16 @@ config.add_voters(generate_uniform(-3, -3, 3, 3, 10, 'None'))
 # config.add_one_voter((1000, 11, 2))
 
 # Impartial
-# config.add_candidates([0, 1])
+# config.add_candidates([0, 1, 2, 3])
 # config.add_voters(lambda c: impartial(len(c), 10))
 
 # config.impartial(10, 10)
 
 experiment = Experiment(config)
-experiment.set_election(Bloc, 1)
+experiment.set_election(Bloc, 3)
 experiment.set_filename("kb10")
 experiment.set_generated_dir_path("gene")
 
-experiment.run(visualization=True)
+experiment.run(visualization=True, n=2)
 
 

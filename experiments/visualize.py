@@ -1,16 +1,16 @@
-from sys import *
-from math import *
 import os
 
 pil_import_fail = False
 try:
     from PIL import Image, ImageDraw
     from PIL import ImageColor
-except ImportError:
+except (ImportError, NameError):
     print("Cannot import PIL.")
     pil_import_fail = True
 
 DIMENSION = 2
+WIDTH = 600
+HEIGHT = 600
 
 
 def dist(x, y):
@@ -18,7 +18,7 @@ def dist(x, y):
 
 
 # Computes distances of the voters to the closest members of the committee
-def compute_dist(voters, candidates, winners):
+def compute_dist(voters, winners):
     d = 0.0
     max_dist = 0.0
     n = 0
@@ -33,7 +33,7 @@ def compute_dist(voters, candidates, winners):
 
 
 # Computes distance of each committee member to the closest n/k voters
-def compute_dist_of_representatives_to_virt_districts(voters, candidates, winners):
+def compute_dist_of_representatives_to_virt_districts(voters, winners):
     n = len(voters)
     k = len(winners)
     d = 0.0
@@ -64,8 +64,8 @@ def compute_winners_per_party(candidates, winners):
 
 def visualize(candidates, voters, winners, name, path):
 
-    avg_d, max_d = compute_dist(voters, candidates, winners)
-    rep_avg_d, rep_max_d = compute_dist_of_representatives_to_virt_districts(voters, candidates, winners)
+    avg_d, max_d = compute_dist(voters, winners)
+    rep_avg_d, rep_max_d = compute_dist_of_representatives_to_virt_districts(voters, winners)
     per_party = compute_winners_per_party(candidates, winners)
 
     with open(os.path.join(path, "stats.out"), "a") as stats_out:
@@ -76,9 +76,6 @@ def visualize(candidates, voters, winners, name, path):
         stats_out.write("  rep_max_d = " + str(rep_max_d) + "\n")
         for (p, v) in per_party.items():
             stats_out.write("  party-" + str(p) + " = " + str(v) + "\n")
-
-    WIDTH = 600
-    HEIGHT = 600
 
     if pil_import_fail:
         print("Cannot use functions from PIL")

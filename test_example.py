@@ -1,7 +1,11 @@
-from experiments import experiment_config
-from experiments.experiment import Experiment
-from experiments.generating_functions import generate_uniform
-from rules.bloc import Bloc
+try:
+    from experiments import experiment_config
+    from experiments.experiment import Experiment
+    from experiments.generating_functions import generate_uniform
+    from rules.bloc import Bloc
+except (ImportError, NameError):
+    print("Cannot import pmp. Check whether pmp is installed")
+    exit()
 
 # Experiment as more generic class for running experiments described in config
 

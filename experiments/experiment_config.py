@@ -1,7 +1,7 @@
 import copy
 import inspect
 
-from experiments.helpers import Command
+from .helpers import Command
 
 
 class ExperimentConfig:

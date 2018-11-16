@@ -1,11 +1,11 @@
 from random import seed, shuffle
 from sys import *
 
-from experiments import helpers
-from experiments import generating_functions
-from experiments.experiment_config import ExperimentConfig
-from experiments.helpers import Command
-from experiments.visualize import *
+from . import helpers
+from . import generating_functions
+from .experiment_config import ExperimentConfig
+from .helpers import Command
+from .visualize import *
 from preferences.ordinal import Ordinal
 from preferences.profile import Profile
 from rules.borda import Borda

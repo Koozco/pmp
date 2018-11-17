@@ -15,7 +15,10 @@ class WeaklySeparable(Rule):
             for n in range(len(pref.order)):
                 candidate = pref.order[n]
                 weight = self.weights[n] if n < len(self.weights) else 0
-                profile.scores[candidate] += weight
+                if candidate in profile.scores:
+                    profile.scores[candidate] += weight
+                else:
+                    profile.scores[candidate] = weight
 
     def compute_score(self, candidate, k, profile):
         score = 0
@@ -59,11 +62,11 @@ class WeaklySeparable(Rule):
         self.compute_candidate_scores(k, profile)
 
         profile.candidates_with_score = {}
-        for c in profile.candidates:
-            score = profile.scores[c]
+        for cand_id in range(len(profile.candidates)):
+            score = profile.scores[cand_id]
             if profile.candidates_with_score.get(score) is None:
                 profile.candidates_with_score[score] = []
-            profile.candidates_with_score[score].append(c)
+            profile.candidates_with_score[score].append(cand_id)
 
         committees = self.get_committees(k, profile.candidates_with_score)
         committee = self.tie_break(committees)

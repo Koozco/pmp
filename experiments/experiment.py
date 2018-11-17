@@ -9,10 +9,10 @@ from .visualize import *
 from preferences.ordinal import Ordinal
 from preferences.profile import Profile
 from rules.borda import Borda
-from saving_files import save_to_file
+from saving_files import save_to_file, FileType
 
 # TODO: test Impartial, non-2d
-# TODO: think about files structure
+# TODO: running from console
 
 
 image_import_fail = False
@@ -95,7 +95,7 @@ class Experiment:
     def set_filename(self, name):
         self.filename = name
 
-    def run(self, visualization=False, n=1):
+    def run(self, visualization=False, n=1, saving=False, save_in=False, save_out=False):
         dir_path = os.path.join(self.__generated_dir_path)
 
         try:
@@ -104,14 +104,20 @@ class Experiment:
             if not os.path.isdir(dir_path):
                 raise
 
-        for _ in range(n):
+        for i in range(n):
             candidates, voters, preferences = self.__execute_commands()
+            if save_in:
+                save_to_file(self, FileType.IN_FILE, i, candidates, voters)
+            if save_out:
+                save_to_file(self, FileType.OUT_FILE, i, candidates, voters, preferences)
+
             if self.is_ordinal:
                 winners = self.__run_election(candidates, preferences)
             else:
                 winners = self.__run_election(candidates, preferences)
 
-            save_to_file(candidates, preferences, voters, self.k, winners)
+            if saving:
+                save_to_file(self, FileType.WIN_FILE, i, candidates, voters, preferences, winners)
 
             if visualization:
                 self.__visualize(candidates, voters, winners)
@@ -239,4 +245,4 @@ if __name__ == "__main__":
 
     experiment = Experiment()
     experiment.init_from_input(cmd, generated_dir_path)
-    experiment.run(visualization=True)
+    experiment.run(visualization=True, saving=True)

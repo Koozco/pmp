@@ -1,36 +1,80 @@
 import os
+import time
+from enum import Enum
 
 
-def save_to_file(candidates=None, preferences=None, voters=None, k=0, winners=None):
+class FileType(Enum):
+    IN_FILE = 1,
+    OUT_FILE = 2,
+    WIN_FILE = 3
+
+
+def __get_extension(file_type):
+    if file_type == FileType.IN_FILE:
+        return ".in"
+    elif file_type == FileType.OUT_FILE:
+        return ".out"
+    elif file_type == FileType.WIN_FILE:
+        return ".win"
+
+
+def __file_path_stamped(path, filename, file_extension, number):
+    time_str = time.strftime("%Y%m%d-%H%M%S")
+    temp_filename = '{}_{}_{}'.format(filename, number, time_str)
+    return os.path.join(path, temp_filename + file_extension)
+
+
+def save_to_file(experiment, file_type, number, candidates, voters, preferences=None, winners=None):
+    filename = experiment.filename
+    path = experiment.get_generated_dir_path()
+    k = experiment.k
+    file_extension = __get_extension(file_type)
+
     m = 0
     n = 0
     if candidates:
         m = len(candidates)
     if voters:
         n = len(voters)
-    print(m, n, k)
 
-    if candidates:
-        save_candidates(candidates)
-    if preferences and voters:
-        save_preferences(voters, preferences)
-    if winners:
-        save_winners(winners, candidates)
+    file_path = __file_path_stamped(path, filename, file_extension, number)
+
+    with open(file_path, 'w') as file:
+        if file_type == FileType.IN_FILE:
+            file.write('{} {}\n'.format(m, n))
+            __save_content(file, candidates)
+            __save_content(file, voters)
+        else:
+            file.write('{} {} {}\n'.format(m, n, k))
+            __save_candidates(file, candidates)
+            __save_preferences(file, voters, preferences)
+            if file_type == FileType.WIN_FILE:
+                __save_winners(file, winners, candidates)
 
 
-def save_candidates(candidates):
+def __save_content(file, content):
+    for i in range(len(content)):
+        result = ' '.join(map(str, content[i]))
+        file.write(result)
+
+
+def __save_candidates(file, candidates):
     for i in range(len(candidates)):
-        print(i, *candidates[i])
+        candidates_string = ' '.join(map(str, candidates[i]))
+        result = '{} {}\n'.format(i, candidates_string)
+        file.write(result)
 
 
-def save_preferences(voters, preferences):
+def __save_preferences(file, voters, preferences):
     for i in range(len(preferences)):
         preference = ' '.join(map(str, preferences[i].order))
         voter = ' '.join(map(str, voters[i][:-1]))
-        print(preference, voter)
+        result = '{} {}\n'.format(preference, voter)
+        file.write(result)
 
 
-def save_winners(winners, candidates):
+def __save_winners(file, winners, candidates):
     for i in range(len(winners)):
         candidate = ' '.join(map(str, candidates[i]))
-        print(i, candidate)
+        result = '{} {}\n'.format(i, candidate)
+        file.write(result)

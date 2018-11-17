@@ -3,6 +3,7 @@ try:
     from experiments.experiment import Experiment
     from experiments.generating_functions import generate_uniform
     from rules.bloc import Bloc
+    from saving_files import FileType
 except (ImportError, NameError):
     print("Cannot import pmp. Check whether pmp is installed")
     exit()
@@ -28,9 +29,9 @@ config.add_voters(generate_uniform(-3, -3, 3, 3, 10, 'None'))
 
 experiment = Experiment(config)
 experiment.set_election(Bloc, 3)
-experiment.set_filename("kb10")
+# experiment.set_filename("kb10")
 experiment.set_generated_dir_path("gene")
 
-experiment.run(visualization=True, n=2)
+experiment.run(visualization=True, n=2, saving=True, save_in=True)
 
 

@@ -1,9 +1,9 @@
 try:
     from experiments import experiment_config
     from experiments.experiment import Experiment
-    from experiments.generating_functions import generate_uniform
+    from experiments.generating_functions import generate_uniform, impartial
     from rules.bloc import Bloc
-    from saving_files import FileType
+    from experiments.saving_files import FileType
 except (ImportError, NameError):
     print("Cannot import pmp. Check whether pmp is installed")
     exit()
@@ -11,8 +11,8 @@ except (ImportError, NameError):
 # Experiment as more generic class for running experiments described in config
 
 config = experiment_config.ExperimentConfig()
-# config.set_candidates(generate_uniform(-3, -3, 3, 3, 100, 'None'))
-config.add_candidates(lambda: generate_uniform(-3, -3, 3, 3, 10, 'None'))
+config.set_candidates(generate_uniform(-3, -3, 3, 3, 100, 'None'))
+# config.add_candidates(lambda: generate_uniform(-3, -3, 3, 3, 10, 'None'))
 
 # add a single candidate
 # config.add_candidates([(999.888, 111.222, 'None')])
@@ -22,6 +22,7 @@ config.add_voters(generate_uniform(-3, -3, 3, 3, 10, 'None'))
 # config.add_one_voter((1000, 11, 2))
 
 # Impartial
+# config.impartial(4, 10)
 # config.add_candidates([0, 1, 2, 3])
 # config.add_voters(lambda c: impartial(len(c), 10))
 
@@ -32,6 +33,6 @@ experiment.set_election(Bloc, 3)
 # experiment.set_filename("kb10")
 experiment.set_generated_dir_path("gene")
 
-experiment.run(visualization=True, n=2, saving=True, save_in=True)
+experiment.run(n=2, save_win=True, save_in=True)
 
 

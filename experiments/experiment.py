@@ -1,15 +1,16 @@
-from random import seed, shuffle
+from random import seed
 from sys import *
 
-from . import helpers
-from . import generating_functions
-from .experiment_config import ExperimentConfig
-from .helpers import Command
-from .visualize import *
+from experiments.saving_files import save_to_file, FileType
 from preferences.ordinal import Ordinal
 from preferences.profile import Profile
 from rules.borda import Borda
-from saving_files import save_to_file, FileType
+from . import generating_functions
+from . import helpers
+from .experiment_config import ExperimentConfig
+from .generating_functions import impartial
+from .helpers import Command
+from .visualize import *
 
 # TODO: test Impartial, non-2d
 # TODO: running from console
@@ -95,7 +96,7 @@ class Experiment:
     def set_filename(self, name):
         self.filename = name
 
-    def run(self, visualization=False, n=1, saving=False, save_in=False, save_out=False):
+    def run(self, visualization=False, n=1, save_win=False, save_in=False, save_out=False):
         dir_path = os.path.join(self.__generated_dir_path)
 
         try:
@@ -116,7 +117,7 @@ class Experiment:
             else:
                 winners = self.__run_election(candidates, preferences)
 
-            if saving:
+            if save_win:
                 save_to_file(self, FileType.WIN_FILE, i, candidates, voters, preferences, winners)
 
             if visualization:
@@ -136,10 +137,11 @@ class Experiment:
                 voters += experiment_command[1]()
             elif command_type == Command.GEN_FROM_CANDIDATES:
                 self.is_ordinal = False
-                voters, preferences = experiment_command[1](candidates)
+                _, voters, preferences = experiment_command[1](candidates)
             elif command_type == Command.IMPARTIAL:
                 self.is_ordinal = False
-                candidates, preferences = impartial(*args)
+                candidates, voters, preferences = impartial(*args)
+                print("pref", preferences)
         if not preferences:
             preferences = preference_orders(candidates, voters)
         return candidates, voters, preferences
@@ -168,19 +170,6 @@ class Experiment:
             visualize(candidates, voters, winners, self.filename, self.__generated_dir_path)
         else:
             print("Cannot visualize non 2D.")
-
-
-def impartial(m, n):
-    # preferences
-    candidates = list(range(m))
-    voters = []
-
-    for p in range(n):
-        x = list(range(m))
-        shuffle(x)
-        voters += [x]
-    preferences = [Ordinal(voter) for voter in voters]
-    return candidates, preferences
 
 
 # Compute the distances of voter v from the candidates in set C
@@ -245,4 +234,4 @@ if __name__ == "__main__":
 
     experiment = Experiment()
     experiment.init_from_input(cmd, generated_dir_path)
-    experiment.run(visualization=True, saving=True)
+    experiment.run(visualization=True, save_win=True)

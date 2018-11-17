@@ -1,6 +1,8 @@
 import os
 from random import random, gauss, shuffle
 
+from preferences.ordinal import Ordinal
+
 image_import_fail = False
 try:
     from PIL import Image
@@ -69,5 +71,5 @@ def impartial(m, n):
         x = list(range(m))
         shuffle(x)
         voters += [x]
-
-    return candidates, voters
+    preferences = [Ordinal(voter) for voter in voters]
+    return candidates, voters, preferences

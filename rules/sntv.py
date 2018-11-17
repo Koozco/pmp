@@ -18,4 +18,7 @@ class SNTV(WeaklySeparable):
         profile.clean_scores()
         for pref in profile.preferences:
             pref_winner = pref.order[0]
-            profile.scores[pref_winner] += 1
+            if pref_winner in profile.scores:
+                profile.scores[pref_winner] += 1
+            else:
+                profile.scores[pref_winner] = 1

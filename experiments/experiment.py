@@ -9,9 +9,8 @@ from .visualize import *
 from preferences.ordinal import Ordinal
 from preferences.profile import Profile
 from rules.borda import Borda
+from saving_files import save_to_file
 
-# TODO: add install_requires to setup.py?
-# TODO: separate experiment module
 # TODO: test Impartial, non-2d
 # TODO: think about files structure
 
@@ -112,7 +111,7 @@ class Experiment:
             else:
                 winners = self.__run_election(candidates, preferences)
 
-            print('winners', winners)
+            save_to_file(candidates, preferences, voters, self.k, winners)
 
             if visualization:
                 self.__visualize(candidates, voters, winners)
@@ -157,12 +156,12 @@ class Experiment:
                 return
 
             if not self.is_ordinal:
-                print("CANNOT VISUALIZE")
+                print("Cannot visualize preferences that are not ordinal.")
                 return
 
             visualize(candidates, voters, winners, self.filename, self.__generated_dir_path)
         else:
-            print("Cannot visualize non 2D")
+            print("Cannot visualize non 2D.")
 
 
 def impartial(m, n):
@@ -194,7 +193,7 @@ def preference_orders(candidates, voters):
     for v in voters:
         v_dist = compute_dist(v, candidates)
         v_sorted = sorted(v_dist, key=lambda x: x[1])
-        v_order = [candidates[candidate_id] for (candidate_id, _) in v_sorted]
+        v_order = [candidate_id for (candidate_id, _) in v_sorted]
         preferences += [Ordinal(v_order)]
     return preferences
 

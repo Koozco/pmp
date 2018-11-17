@@ -18,14 +18,14 @@ def dist(x, y):
 
 
 # Computes distances of the voters to the closest members of the committee
-def compute_dist(voters, winners):
+def compute_dist(voters, winners, candidates):
     d = 0.0
     max_dist = 0.0
     n = 0
     for v in voters:
         dmin = float("inf")
         for w in winners:
-            dmin = min(dmin, dist(v, w))
+            dmin = min(dmin, dist(v, candidates[w]))
         d += dmin
         max_dist = max(max_dist, dmin)
         n += 1
@@ -33,7 +33,7 @@ def compute_dist(voters, winners):
 
 
 # Computes distance of each committee member to the closest n/k voters
-def compute_dist_of_representatives_to_virt_districts(voters, winners):
+def compute_dist_of_representatives_to_virt_districts(voters, winners, candidates):
     n = len(voters)
     k = len(winners)
     d = 0.0
@@ -42,7 +42,7 @@ def compute_dist_of_representatives_to_virt_districts(voters, winners):
         distances = []
         dmin = 0.0
         for v in voters:
-            distances.append(dist(v, w))
+            distances.append(dist(v, candidates[w]))
         for val in sorted(distances)[: int(n / k)]:
             dmin += val
         d += dmin
@@ -57,15 +57,15 @@ def compute_winners_per_party(candidates, winners):
         if party not in result.keys():
             result[party] = 0
     for w in winners:
-        party = w[-1]
+        party = candidates[w][-1]
         result[party] += 1
     return result
 
 
 def visualize(candidates, voters, winners, name, path):
 
-    avg_d, max_d = compute_dist(voters, winners)
-    rep_avg_d, rep_max_d = compute_dist_of_representatives_to_virt_districts(voters, winners)
+    avg_d, max_d = compute_dist(voters, winners, candidates)
+    rep_avg_d, rep_max_d = compute_dist_of_representatives_to_virt_districts(voters, winners, candidates)
     per_party = compute_winners_per_party(candidates, winners)
 
     with open(os.path.join(path, "stats.out"), "a") as stats_out:
@@ -105,7 +105,7 @@ def visualize(candidates, voters, winners, name, path):
     wx = 5
     wy = 5
     for z in winners:
-        c = z
+        c = candidates[z]
         dr.ellipse((WIDTH / 2 + c[0] * 100 - wx, HEIGHT / 2 - c[1] * 100 - wy, WIDTH / 2 + c[0] * 100 + wx,
                     HEIGHT / 2 - c[1] * 100 + wy), fill="red")
 

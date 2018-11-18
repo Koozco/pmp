@@ -1,12 +1,11 @@
 from random import seed
-from sys import *
+# from sys import *
 
-from pmp.experiments.saving_files import save_to_file, FileType
-from pmp.preferences.ordinal import Ordinal
-from pmp.preferences.profile import Profile
-from pmp.rules.borda import Borda
+from .saving_files import save_to_file, FileType
+from ..preferences.ordinal import Ordinal
+from ..preferences.profile import Profile
+from ..rules.borda import Borda
 
-from . import generating_functions
 from . import helpers
 from .experiment_config import ExperimentConfig
 from .generating_functions import impartial
@@ -14,7 +13,6 @@ from .helpers import Command
 from .visualize import *
 
 # TODO: test Impartial, non-2d
-# TODO: running from console
 
 
 image_import_fail = False
@@ -34,57 +32,11 @@ class Experiment:
         self.k = 1
         self.rule = Borda
         self.filename = "default"
-        self.is_ordinal = True
-
-    def init_from_input(self, commands, generated_dir_path):
-        config = ExperimentConfig()
-        self.__generated_dir_path = generated_dir_path
-
-        command_line_id = 0
-        while command_line_id < len(commands):
-            command_line = commands[command_line_id]
-            command = command_line[0]
-            if command == "impartial":
-                config.two_dimensional = False
-                config.impartial(int(command[1]), int(command[2]))
-            elif command[0] == "#":
-                pass
-            elif command in ['voters', 'candidates']:
-                distribution = commands[command_line_id + 1][0]
-                args = commands[command_line_id + 1][1:]
-                f = []
-                # generate points
-                if distribution == "circle":
-                    f = lambda: generating_functions.generate_circle(float(args[0]), float(args[1]), float(args[2]),
-                                                                     int(args[3]), get_or_none(args, 4))
-                elif distribution == "gauss":
-                    f = lambda: generating_functions.generate_gauss(float(args[0]), float(args[1]), float(args[2]),
-                                                                    int(args[3]), get_or_none(args, 4))
-                elif distribution == "uniform":
-                    f = lambda: generating_functions.generate_uniform(float(args[0]), float(args[1]), float(args[2]),
-                                                                      float(args[3]), int(args[4]),
-                                                                      get_or_none(args, 5))
-                elif distribution == "image":
-                    if image_import_fail:
-                        return
-                    f = lambda: generating_functions.generate_from_image(args[0], float(args[1]), float(args[2]),
-                                                                         float(args[3]), float(args[4]), int(args[5]),
-                                                                         get_or_none(args, 6))
-                if command == 'voters':
-                    self.__config.add_command((Command.GEN_VOTERS, f))
-                elif command == 'candidates':
-                    self.__config.add_command((Command.GEN_CANDIDATES, f))
-                command_line_id += 1
-            else:
-                # make a class object from string
-                command_line[0] = eval(command_line[0])
-                self.set_election(*command_line[:-1])
-                self.filename = command_line[-1]
-            command_line_id += 1
+        self.two_dimensional = True
 
     def set_generated_dir_path(self, dir_path):
         if not os.path.isabs(dir_path):
-            dir_path = os.path.join(os.path.pardir, dir_path)
+            dir_path = os.path.join(os.path.curdir, dir_path)
         self.__generated_dir_path = dir_path
 
     def get_generated_dir_path(self):
@@ -98,13 +50,13 @@ class Experiment:
         self.filename = name
 
     def run(self, visualization=False, n=1, save_win=False, save_in=False, save_out=False):
-        dir_path = os.path.join(self.__generated_dir_path)
+        dir_path = self.__generated_dir_path
 
         try:
             helpers.make_dirs(dir_path, exist_ok=True)
-        except OSError:
+        except OSError as e:
             if not os.path.isdir(dir_path):
-                raise
+                raise e
 
         for i in range(n):
             candidates, voters, preferences = self.__execute_commands()
@@ -113,10 +65,7 @@ class Experiment:
             if save_out:
                 save_to_file(self, FileType.OUT_FILE, i, candidates, voters, preferences)
 
-            if self.is_ordinal:
-                winners = self.__run_election(candidates, preferences)
-            else:
-                winners = self.__run_election(candidates, preferences)
+            winners = self.__run_election(candidates, preferences)
 
             if save_win:
                 save_to_file(self, FileType.WIN_FILE, i, candidates, voters, preferences, winners)
@@ -137,14 +86,13 @@ class Experiment:
             elif command_type == Command.GEN_VOTERS:
                 voters += experiment_command[1]()
             elif command_type == Command.GEN_FROM_CANDIDATES:
-                self.is_ordinal = False
                 _, voters, preferences = experiment_command[1](candidates)
             elif command_type == Command.IMPARTIAL:
-                self.is_ordinal = False
                 candidates, voters, preferences = impartial(*args)
-                print("pref", preferences)
         if not preferences:
             preferences = preference_orders(candidates, voters)
+        if any(isinstance(candidate, int) or len(candidate) != 3 for candidate in candidates ):
+            self.two_dimensional = False
         return candidates, voters, preferences
 
     # run election, compute winners
@@ -159,13 +107,9 @@ class Experiment:
         return self.rule().find_committee(self.k, profile)
 
     def __visualize(self, candidates, voters, winners):
-        if self.__config.two_dimensional:
+        if self.two_dimensional:
             if image_import_fail:
                 print("Cannot visualize results because of PIL import fail.")
-                return
-
-            if not self.is_ordinal:
-                print("Cannot visualize preferences that are not ordinal.")
                 return
 
             visualize(candidates, voters, winners, self.filename, self.__generated_dir_path)
@@ -192,47 +136,3 @@ def preference_orders(candidates, voters):
         v_order = [candidate_id for (candidate_id, _) in v_sorted]
         preferences += [Ordinal(v_order)]
     return preferences
-
-
-def get_or_none(l, n):
-    try:
-        return l[n]
-    except (TypeError, IndexError):
-        return 'None'
-
-
-# READ DATA IN
-def read_experiment_data(f):
-    commands = []
-    lines = f.readlines()
-
-    for l in lines:
-        s = l.split()
-        if len(s) > 0:
-            commands += [s]
-    return commands
-
-
-if __name__ == "__main__":
-    args_number = len(argv)
-    if (args_number == 1 and stdin.isatty()) or args_number > 2 or (args_number > 1 and argv[1] == "-help"):
-        print("This scripts runs a single experiment (generates an elections, "
-              "\ncomputes the results according to specified rules, and prepares visualizations)")
-        print("\nInvocation:")
-        print("  python experiment.py [path_to_output_directory] <description.input")
-        exit()
-
-    seed()
-    data_in = stdin
-    data_out = stdout
-    generated_dir_path = "generated"
-    if args_number > 1:
-        generated_dir_path = argv[1]
-        if not os.path.isabs(generated_dir_path):
-            generated_dir_path = os.path.join(os.path.pardir, generated_dir_path)
-
-    cmd = read_experiment_data(data_in)
-
-    experiment = Experiment()
-    experiment.init_from_input(cmd, generated_dir_path)
-    experiment.run(visualization=True, save_win=True)

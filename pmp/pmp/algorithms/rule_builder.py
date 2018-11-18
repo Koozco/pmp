@@ -1,6 +1,6 @@
 from types import MethodType
 
-from pmp.rules.rule import Rule
+from ..rules.rule import Rule
 
 
 class RuleBuilder:

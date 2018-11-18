@@ -1,9 +1,9 @@
 try:
-    from experiments import experiment_config
-    from experiments.experiment import Experiment
-    from experiments.generating_functions import generate_uniform, impartial
-    from rules.bloc import Bloc
-    from experiments.saving_files import FileType
+    from pmp.experiments import experiment_config
+    from pmp.experiments import Experiment
+    from pmp.experiments import generate_uniform, impartial
+    from pmp.rules.bloc import Bloc
+    from pmp.experiments import FileType
 except (ImportError, NameError) as e:
     print("Cannot import pmp. Check whether pmp is installed.\n" + str(e))
     exit()

@@ -4,8 +4,8 @@ try:
     from experiments.generating_functions import generate_uniform, impartial
     from rules.bloc import Bloc
     from experiments.saving_files import FileType
-except (ImportError, NameError):
-    print("Cannot import pmp. Check whether pmp is installed")
+except (ImportError, NameError) as e:
+    print("Cannot import pmp. Check whether pmp is installed.\n" + str(e))
     exit()
 
 # Experiment as more generic class for running experiments described in config

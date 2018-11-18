@@ -1,4 +1,8 @@
+import numpy as np
 from .solvers import Solvers, init_solver
+from .ilp import VariableTypes
+
+_default_vtype = VariableTypes.int
 
 
 class Model:
@@ -10,11 +14,15 @@ class Model:
     def solve(self):
         self.wrapper.solve()
 
-    def add_variable(self, name, lb=None, ub=None):
-        self.wrapper.add_variable(name, lb, ub)
+    def add_variable(self, name, lb=None, ub=None, vtype=None):
+        if vtype is None:
+            vtype = _default_vtype
+        self.wrapper.add_variable(name, lb, ub, vtype)
 
-    def add_variables(self, name, lb=None, ub=None):
-        self.wrapper.add_variables(name, lb, ub)
+    def add_variables(self, name, lb=None, ub=None, vtype=None):
+        if vtype is None:
+            vtype = np.full(len(name), _default_vtype)
+        self.wrapper.add_variables(name, lb, ub, vtype)
 
     def add_constraint(self, var, coeff, sense, rs):
         self.wrapper.add_constraint(var, coeff, sense, rs)

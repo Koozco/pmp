@@ -3,10 +3,10 @@ class SolverWrapper:
     def solve(self):
         raise NotImplementedError()
 
-    def add_variable(self, name, lb, ub):
+    def add_variable(self, name, lb, ub, vtype):
         raise NotImplementedError()
 
-    def add_variables(self, name, lb, ub):
+    def add_variables(self, name, lb, ub, vtype):
         raise NotImplementedError()
 
     def add_constraint(self, var, coeff, sense, rs):

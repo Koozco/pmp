@@ -9,7 +9,6 @@ class ExperimentConfig:
         self.__candidates = []
         self.__voters = []
         self.__commands = []
-        self.two_dimensional = True
 
     def get_candidates(self):
         return copy.copy(self.__candidates)

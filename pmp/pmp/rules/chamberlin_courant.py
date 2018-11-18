@@ -4,9 +4,9 @@ from operator import itemgetter
 import numpy as np
 from six import iteritems
 
-from pmp._common import solve_methods_registry
+from .._common import solve_methods_registry
 
-from pmp.utils.ilp import *
+from ..utils.ilp import *
 from .rule import Rule
 
 algorithm = solve_methods_registry()

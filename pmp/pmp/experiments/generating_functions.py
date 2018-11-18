@@ -1,7 +1,7 @@
 import os
 from random import random, gauss, shuffle
 
-from pmp.preferences import Ordinal
+from ..preferences import Ordinal
 
 image_import_fail = False
 try:

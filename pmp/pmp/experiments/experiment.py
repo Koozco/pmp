@@ -1,10 +1,10 @@
 from random import seed
 from sys import *
 
-from pmp.experiments.saving_files import save_to_file, FileType
-from pmp.preferences.ordinal import Ordinal
-from pmp.preferences.profile import Profile
-from pmp.rules.borda import Borda
+from .saving_files import save_to_file, FileType
+from ..preferences.ordinal import Ordinal
+from ..preferences.profile import Profile
+from ..rules.borda import Borda
 
 from . import generating_functions
 from . import helpers
@@ -34,7 +34,7 @@ class Experiment:
         self.k = 1
         self.rule = Borda
         self.filename = "default"
-        self.is_ordinal = True
+        self.two_dimensional = True
 
     def init_from_input(self, commands, generated_dir_path):
         config = ExperimentConfig()
@@ -45,7 +45,7 @@ class Experiment:
             command_line = commands[command_line_id]
             command = command_line[0]
             if command == "impartial":
-                config.two_dimensional = False
+                self.two_dimensional = False
                 config.impartial(int(command[1]), int(command[2]))
             elif command[0] == "#":
                 pass
@@ -84,7 +84,7 @@ class Experiment:
 
     def set_generated_dir_path(self, dir_path):
         if not os.path.isabs(dir_path):
-            dir_path = os.path.join(os.path.pardir, dir_path)
+            dir_path = os.path.join(os.path.curdir, dir_path)
         self.__generated_dir_path = dir_path
 
     def get_generated_dir_path(self):
@@ -113,10 +113,7 @@ class Experiment:
             if save_out:
                 save_to_file(self, FileType.OUT_FILE, i, candidates, voters, preferences)
 
-            if self.is_ordinal:
-                winners = self.__run_election(candidates, preferences)
-            else:
-                winners = self.__run_election(candidates, preferences)
+            winners = self.__run_election(candidates, preferences)
 
             if save_win:
                 save_to_file(self, FileType.WIN_FILE, i, candidates, voters, preferences, winners)
@@ -137,14 +134,13 @@ class Experiment:
             elif command_type == Command.GEN_VOTERS:
                 voters += experiment_command[1]()
             elif command_type == Command.GEN_FROM_CANDIDATES:
-                self.is_ordinal = False
                 _, voters, preferences = experiment_command[1](candidates)
             elif command_type == Command.IMPARTIAL:
-                self.is_ordinal = False
                 candidates, voters, preferences = impartial(*args)
-                print("pref", preferences)
         if not preferences:
             preferences = preference_orders(candidates, voters)
+        if any(isinstance(candidate, int) or len(candidate) != 3 for candidate in candidates ):
+            self.two_dimensional = False
         return candidates, voters, preferences
 
     # run election, compute winners
@@ -159,13 +155,9 @@ class Experiment:
         return self.rule().find_committee(self.k, profile)
 
     def __visualize(self, candidates, voters, winners):
-        if self.__config.two_dimensional:
+        if self.two_dimensional:
             if image_import_fail:
                 print("Cannot visualize results because of PIL import fail.")
-                return
-
-            if not self.is_ordinal:
-                print("Cannot visualize preferences that are not ordinal.")
                 return
 
             visualize(candidates, voters, winners, self.filename, self.__generated_dir_path)

@@ -1,6 +1,7 @@
 import numpy as np
 from itertools import combinations, product, chain
 from operator import itemgetter
+from six import iteritems
 
 from .rule import Rule
 from _common import solve_methods_registry
@@ -33,7 +34,7 @@ class ChamberlinCourant(Rule):
     @algorithm('Bruteforce', 'Exponential.', True)
     def _brute(self, k, profile):
         self.scores = self.compute_scores(k, profile)
-        return max(self.scores.iteritems(), key=itemgetter(1))[0]
+        return max(iteritems(self.scores), key=itemgetter(1))[0]
 
     @algorithm('ILP')
     def _ilp(self, k, profile):

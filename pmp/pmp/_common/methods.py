@@ -11,7 +11,7 @@ def solve_methods_registry():
     def method(name, comment=None, default=False):
         def wrapper(func):
             if default:
-                registry.default = func
+                registry.default = name
 
             if comment is not None:
                 registry.comments[name] = comment

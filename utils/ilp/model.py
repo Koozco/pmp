@@ -1,4 +1,4 @@
-from solvers import Solvers, init_solver
+from .solvers import Solvers, init_solver
 
 
 class Model:

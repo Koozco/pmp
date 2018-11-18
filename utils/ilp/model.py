@@ -1,15 +1,11 @@
-from cplex_wrapper import CplexWrapper
-from ilp import Solvers
-
-__wrappers__ = {
-    Solvers.CPLEX: CplexWrapper
-}
+from solvers import Solvers, init_solver
 
 
 class Model:
 
     def __init__(self, solver=Solvers.CPLEX):
-        self.wrapper = __wrappers__[solver]()
+        self._s_module = init_solver(solver)
+        self.wrapper = self._s_module.wrapper_class()
 
     def solve(self):
         self.wrapper.solve()

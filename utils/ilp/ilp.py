@@ -1,10 +1,6 @@
 from enum import Enum
 
 
-class Solvers(Enum):
-    CPLEX = 1
-
-
 class Sense(Enum):
     eq = 'E'
     lt = 'L'

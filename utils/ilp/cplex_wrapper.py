@@ -68,3 +68,6 @@ class CplexWrapper:
         names = self.model.variables.get_names()
         vals = self.model.solution.get_values()
         return {names[i]: vals[i] for i in range(numcols)}
+
+
+wrapper_class = CplexWrapper

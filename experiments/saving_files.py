@@ -1,7 +1,6 @@
 import os
 import time
 from enum import Enum
-
 from collections import Iterable
 
 
@@ -32,12 +31,8 @@ def save_to_file(experiment, file_type, number, candidates, voters, preferences=
     k = experiment.k
     file_extension = __get_extension(file_type)
 
-    m = 0
-    n = 0
-    if candidates:
-        m = len(candidates)
-    if voters:
-        n = len(voters)
+    m = len(candidates)
+    n = len(voters)
 
     file_path = __file_path_stamped(path, filename, file_extension, number)
 

@@ -50,13 +50,13 @@ class Experiment:
         self.filename = name
 
     def run(self, visualization=False, n=1, save_win=False, save_in=False, save_out=False):
-        dir_path = os.path.join(self.__generated_dir_path)
+        dir_path = self.__generated_dir_path
 
         try:
             helpers.make_dirs(dir_path, exist_ok=True)
-        except OSError:
+        except OSError as e:
             if not os.path.isdir(dir_path):
-                raise
+                raise e
 
         for i in range(n):
             candidates, voters, preferences = self.__execute_commands()

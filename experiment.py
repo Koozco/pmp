@@ -104,7 +104,7 @@ if __name__ == "__main__":
     if args_number > 1:
         generated_dir_path = argv[1]
         if not os.path.isabs(generated_dir_path):
-            generated_dir_path = os.path.join(os.path.pardir, generated_dir_path)
+            generated_dir_path = os.path.join(os.path.curdir, generated_dir_path)
 
     cmd = read_experiment_data(data_in)
 

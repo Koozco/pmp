@@ -14,8 +14,8 @@ def init_solver(solver):
     try:
         module = import_module(__solver_module_names[solver], __package__)
         return module
-    except (ImportError, NameError), e:
-        raise MissingSolver("Couldn't initialize ilp solver. Please check required dependencies.\n" + e.message)
+    except (ImportError, NameError) as e:
+        raise MissingSolver("Couldn't initialize ilp solver. Please check required dependencies.\n" + str(e))
 
 
 __solver_module_names = {

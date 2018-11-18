@@ -1,5 +1,5 @@
 import cplex
-from ilp import Objective
+from .ilp import Objective
 from .solver_wrapper import SolverWrapper
 
 

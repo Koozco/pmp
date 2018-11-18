@@ -60,5 +60,3 @@ def read_data(f):
         voters.append(voter)
 
     return candidates, voters, preferences
-
-

@@ -1,10 +1,11 @@
 from random import seed
 from sys import *
 
-from experiments.saving_files import save_to_file, FileType
-from preferences.ordinal import Ordinal
-from preferences.profile import Profile
-from rules.borda import Borda
+from pmp.experiments.saving_files import save_to_file, FileType
+from pmp.preferences.ordinal import Ordinal
+from pmp.preferences.profile import Profile
+from pmp.rules.borda import Borda
+
 from . import generating_functions
 from . import helpers
 from .experiment_config import ExperimentConfig

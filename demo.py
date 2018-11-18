@@ -1,16 +1,14 @@
-import sys
 import os
+import sys
 
 sys.path.append(os.path.join(".."))
 
-from preferences.ordinal import Ordinal
-from preferences.profile import Profile
-from rules.weakly_separable import WeaklySeparable
-from rules.borda import Borda
-from rules.bloc import Bloc
-from rules.sntv import SNTV
-from algorithms.greedy import greedy
-from rules.tie_breaking import lexical_winner
+from pmp.preferences import Ordinal
+from pmp.preferences import Profile
+from pmp.rules.borda import Borda
+from pmp.rules.sntv import SNTV
+from pmp.algorithms import greedy
+from pmp.rules import lexical_winner
 
 k = 3
 candidates = [i for i in range(0, 5)]

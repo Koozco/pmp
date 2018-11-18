@@ -1,5 +1,5 @@
 import cplex
-from .ilp import Objective
+from .ilp import Objective, VariableTypes
 from .solver_wrapper import SolverWrapper
 
 
@@ -11,20 +11,24 @@ class CplexWrapper(SolverWrapper):
     def solve(self):
         self.model.solve()
 
-    def add_variable(self, name, lb, ub):
+    def add_variable(self, name, lb, ub, vtype):
         args = {'names': [name]}
         if ub is not None:
             args['ub'] = [ub]
         if lb is not None:
             args['lb'] = [lb]
+        if vtype is not None:
+            args['types'] = [self._var_types_mapping(vtype)]
         self.model.variables.add(**args)
 
-    def add_variables(self, name, lb, ub):
+    def add_variables(self, name, lb, ub, vtype):
         args = {'names': name}
         if ub is not None:
             args['ub'] = ub
         if lb is not None:
             args['lb'] = lb
+        if vtype is not None:
+            args['types'] = [self._var_types_mapping(t) for t in vtype]
         self.model.variables.add(**args)
 
     def add_constraint(self, var, coeff, sense, rs):
@@ -69,6 +73,13 @@ class CplexWrapper(SolverWrapper):
         names = self.model.variables.get_names()
         vals = self.model.solution.get_values()
         return {names[i]: vals[i] for i in range(numcols)}
+
+    def _var_types_mapping(self, vtype):
+        mapping = {
+            VariableTypes.int: self.model.variables.type.integer,
+            VariableTypes.continuous: self.model.variables.type.continuous
+        }
+        return mapping[vtype]
 
 
 wrapper_class = CplexWrapper

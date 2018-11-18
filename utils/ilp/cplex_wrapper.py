@@ -1,8 +1,9 @@
 import cplex
 from ilp import Objective
+from .solver_wrapper import SolverWrapper
 
 
-class CplexWrapper:
+class CplexWrapper(SolverWrapper):
 
     def __init__(self):
         self.model = cplex.Cplex()

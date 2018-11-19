@@ -1,1 +1,0 @@
-# Python Multiwinner Package

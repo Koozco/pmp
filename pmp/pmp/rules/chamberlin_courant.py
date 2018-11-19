@@ -33,12 +33,12 @@ class ChamberlinCourant(Rule):
             committee = algorithm.registry.all[method](self, k, profile)
         return committee
 
-    @algorithm('Bruteforce', 'Exponential.', True)
+    @algorithm('Bruteforce', 'Exponential.')
     def _brute(self, k, profile):
         self.scores = self.compute_scores(k, profile)
         return max(iteritems(self.scores), key=itemgetter(1))[0]
 
-    @algorithm('ILP')
+    @algorithm('ILP', default=True)
     def _ilp(self, k, profile):
         m = len(profile.candidates)
         n = len(profile.preferences)

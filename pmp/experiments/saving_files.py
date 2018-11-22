@@ -71,7 +71,7 @@ def __save_preferences(file, voters, preferences):
 
 
 def __save_winners(file, winners, candidates):
-    for i in range(len(winners)):
+    for i in winners:
         candidate = __get_content_string(candidates[i])
         result = '{} {}\n'.format(i, candidate)
         file.write(result)

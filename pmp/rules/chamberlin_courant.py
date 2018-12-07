@@ -106,6 +106,9 @@ class ChamberlinCourant(Rule):
         return scores
 
     def committee_score(self, committee, profile):
+        if self.weights is None:
+            self.weights = self._borda_weights(len(profile.candidates))
+
         score = 0
         for pref in profile.preferences:
             satisfaction = [self.satisfaction(pref, cand) for cand in committee]

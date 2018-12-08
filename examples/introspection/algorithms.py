@@ -13,11 +13,11 @@ print(CC.methods.all)
 print("\n")
 
 print('Dictionary of optional comments regarding these methods { "method_name": "comment" }')
-print CC.methods.comments
+print(CC.methods.comments)
 print("\n")
 
 print('Name of method used in find_committee by default')
-print CC.methods.default
+print(CC.methods.default)
 print("\n")
 
 # In case of CC default is ILP

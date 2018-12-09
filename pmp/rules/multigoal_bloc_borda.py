@@ -2,19 +2,19 @@ from .._common import solve_methods_registry
 
 from .threshold_rule import ThresholdRule
 from .multigoal_rule import MultigoalRule
-from .chamberlin_courant import ChamberlinCourant
 from .borda import Borda
+from .bloc import Bloc
 
 algorithm = solve_methods_registry()
 
 
-class MultigoalCCBorda(MultigoalRule):
+class MultigoalBlocBorda(MultigoalRule):
 
     methods = algorithm.registry
 
-    def __init__(self, cc_threshold=0, borda_threshold=0, weights=None):
+    def __init__(self, bloc_threshold=0, borda_threshold=0, weights=None):
         MultigoalRule.__init__(self,
-                               ThresholdRule(ChamberlinCourant(), cc_threshold),
+                               ThresholdRule(Bloc(), bloc_threshold),
                                ThresholdRule(Borda(), borda_threshold))
         self.weights = weights
 

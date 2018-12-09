@@ -2,6 +2,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import random
 
+from pmp.experiments import generate_uniform
+from pmp.experiments.experiment import preference_orders
+from pmp.preferences import Profile
+from pmp.rules import Borda, Bloc
+from pmp.rules import MultigoalBlocBorda as BB
+
 repetitions = 100
 best_point_coordinates = (0, 0)
 best_point = 0
@@ -36,3 +42,27 @@ plt.plot([0, best_point_coordinates[0]], [best_point_coordinates[1], best_point_
 plt.plot([best_point_coordinates[0], best_point_coordinates[0]], [0, best_point_coordinates[1]], linewidth=1, linestyle="--", c="red")
 
 plt.show()
+
+
+
+
+k = 2
+voters = generate_uniform(-3, -3, 3, 3, 100, 'None')
+candidates = generate_uniform(-3, -3, 3, 3, 100, 'None')
+preferences = preference_orders(candidates, voters)
+candidates = list(range(0, 100))
+profile = Profile(candidates, preferences)
+
+borda = Borda()
+bloc = Bloc()
+best_borda = borda.find_committee(k, profile)
+best_bloc = bloc.find_committee(k, profile)
+best_borda_score = borda.committee_score(best_borda, profile)
+best_bloc_score = bloc.committee_score(best_bloc, profile)
+print(best_borda, ":", best_borda_score)
+print(best_bloc, ":", best_bloc_score)
+
+bb = BB(bloc_threshold=12, borda_threshold=13)
+committees = bb.find_committees(k, profile, method='Bruteforce')
+print('Points:', bb.scores)
+print('Selected committees:', committees)

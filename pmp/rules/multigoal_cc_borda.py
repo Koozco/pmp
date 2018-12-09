@@ -1,4 +1,3 @@
-from itertools import combinations
 from .._common import solve_methods_registry
 
 from .threshold_rule import ThresholdRule
@@ -14,10 +13,10 @@ class MultigoalCCBorda(MultigoalRule):
 
     methods = algorithm.registry
 
-    def __init__(self, s1, s2, weights=None):
+    def __init__(self, cc_threshold=0, borda_threshold=0, weights=None):
         MultigoalRule.__init__(self,
-                               ThresholdRule(ChamberlinCourant(), s1),
-                               ThresholdRule(Borda(), s2))
+                               ThresholdRule(ChamberlinCourant(), cc_threshold),
+                               ThresholdRule(Borda(), borda_threshold))
         self.weights = weights
 
     def find_committees(self, k, profile, method=None):

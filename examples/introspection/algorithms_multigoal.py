@@ -25,8 +25,9 @@ candidates = [0, 1, 2]
 
 profile = Profile(candidates, preferences)
 
-ccb = CCB(8, 8)
+ccb = CCB(cc_threshold=8, borda_threshold=8)
 
-committee = ccb.find_committees(k, profile, method='Bruteforce')
+committees = ccb.find_committees(k, profile, method='Bruteforce')
 print('Points:', ccb.scores)
-print('Selected committees:', committee)
+print('Selected committees:', committees)
+print('scores ', ccb.committee_score(committees[0], profile))

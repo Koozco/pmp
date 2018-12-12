@@ -1,4 +1,5 @@
 from random import seed
+# from sys import *
 
 from .saving_files import save_to_file, FileType
 from ..preferences.ordinal import Ordinal
@@ -10,6 +11,9 @@ from .experiment_config import ExperimentConfig
 from .generating_functions import impartial
 from .helpers import Command, ExperimentElectionConfig
 from .visualize import *
+
+# TODO: test Impartial, non-2d
+
 
 image_import_fail = False
 try:
@@ -29,8 +33,10 @@ class Experiment:
         self.__generated_dir_path = "generated"  # default directory path for generated files
         self.k = 1
         self.rule = Borda
-        self.filename = "default"
+        self.inout_filename = "input-data"
+        self.result_filename = "default"
         self.two_dimensional = True
+        self.__generate_inout = False
 
     def set_generated_dir_path(self, dir_path):
         """Set a path to the directory where files are generated"""
@@ -47,14 +53,22 @@ class Experiment:
         self.rule = rule
         self.k = int(k)
 
-    def set_filename(self, name):
-        """Set filename"""
-        self.filename = name
+    def set_result_filename(self, name):
+        """Set filename of result file."""
+        self.result_filename = name
+
+    def set_inout_filename(self, name):
+        """Set filename of files containing generated candidates and voters"""
+        self.__generate_inout = True
+        self.inout_filename = name
 
     def run(self, visualization=False, n=1, save_win=False, save_in=False, save_out=False, log_on=True,
             elect_configs=None):
         """Run experiment"""
         dir_path = self.__generated_dir_path
+        if self.__generate_inout:
+            save_in = True
+            save_out = True
 
         try:
             helpers.make_dirs(dir_path, exist_ok=True)
@@ -69,7 +83,7 @@ class Experiment:
                 elect_configs = [ExperimentElectionConfig(self.rule, self.k, self.filename)]
 
             for elect_config in elect_configs:
-                self.set_filename(elect_config.filename)
+                self.set_result_filename(elect_config.filename)
                 self.set_election(elect_config.rule, elect_config.k)
 
                 if log_on:
@@ -133,7 +147,7 @@ class Experiment:
                 print("Cannot visualize results because of PIL import fail.")
                 return
 
-            visualize(candidates, voters, winners, self.filename, self.__generated_dir_path)
+            visualize(candidates, voters, winners, self.result_filename, self.__generated_dir_path)
         else:
             print("Cannot visualize non 2D.")
 

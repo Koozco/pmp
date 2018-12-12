@@ -61,6 +61,8 @@ def init_from_input(commands, generated_dir_path):
             elif command == 'candidates':
                 config.add_command((Command.GEN_CANDIDATES, f))
             command_line_id += 1
+        elif command == 'generate':
+            experiment.set_inout_filename(command_line[1])
         else:
             # make a class object from string
             command_line[0] = eval(command_line[0])

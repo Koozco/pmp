@@ -26,7 +26,10 @@ def __file_path_stamped(path, filename, file_extension, number):
 
 
 def save_to_file(experiment, file_type, number, candidates, voters, preferences=None, winners=None):
-    filename = experiment.filename
+    if file_type == FileType.WIN_FILE:
+        filename = experiment.result_filename
+    else:
+        filename = experiment.inout_filename
     path = experiment.get_generated_dir_path()
     k = experiment.k
     file_extension = __get_extension(file_type)

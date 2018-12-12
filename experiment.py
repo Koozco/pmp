@@ -6,7 +6,7 @@ try:
     from pmp.experiments.experiment import Experiment
     from pmp.experiments.experiment_config import ExperimentConfig
     from pmp.experiments import generating_functions
-    from pmp.experiments.helpers import Command
+    from pmp.experiments.helpers import Command, ExperimentElectionConfig
     from pmp.rules import *
 except (ImportError, NameError) as e:
     print("Cannot import pmp. Check whether pmp is installed.\n" + str(e))
@@ -21,8 +21,10 @@ except (ImportError, NameError):
 
 
 def init_from_input(commands, generated_dir_path):
+    """Init Experiment object from .input file passed to stdin"""
     config = ExperimentConfig()
     experiment = Experiment(config)
+    elect_configs = []
 
     command_line_id = 0
     while command_line_id < len(commands):
@@ -59,26 +61,27 @@ def init_from_input(commands, generated_dir_path):
             elif command == 'candidates':
                 config.add_command((Command.GEN_CANDIDATES, f))
             command_line_id += 1
+        elif command == 'generate':
+            experiment.set_inout_filename(command_line[1])
         else:
             # make a class object from string
             command_line[0] = eval(command_line[0])
-            experiment.set_election(*command_line[:-1])
-            filename = command_line[-1]
+            elect_configs.append(ExperimentElectionConfig(*command_line))
         command_line_id += 1
     experiment.set_generated_dir_path(generated_dir_path)
-    experiment.set_filename(filename)
-    return experiment
+    return experiment, elect_configs
 
 
 def get_or_none(l, n):
+    """Get value or return 'None'"""
     try:
         return l[n]
     except (TypeError, IndexError):
         return 'None'
 
 
-# READ DATA IN
 def read_experiment_data(f):
+    """Read data from stdin"""
     commands = []
     lines = f.readlines()
 
@@ -88,9 +91,11 @@ def read_experiment_data(f):
             commands += [s]
     return commands
 
+
 if __name__ == "__main__":
     args_number = len(argv)
-    if (args_number == 1 and stdin.isatty()) or args_number > 2 or (args_number > 1 and argv[1] == "-help"):
+    if (args_number == 1 and stdin.isatty()) or args_number > 2 or (
+            args_number > 1 and (argv[1] == "-help" or argv[1] == "-h")):
         print("This scripts runs a single experiment (generates an elections, "
               "\ncomputes the results according to specified rules, and prepares visualizations)")
         print("\nInvocation:")
@@ -108,5 +113,5 @@ if __name__ == "__main__":
 
     cmd = read_experiment_data(data_in)
 
-    experiment = init_from_input(cmd, generated_dir_path)
-    experiment.run(visualization=True, save_win=True)
+    experiment, configs = init_from_input(cmd, generated_dir_path)
+    experiment.run(visualization=True, save_win=True, elect_configs=configs)

@@ -16,7 +16,7 @@ print('Dictionary of optional comments regarding these methods { "method_name": 
 print(CC.methods.comments)
 print("\n")
 
-print('Name of method that is used in find_committee() by default')
+print('Name of method that is used in find_committee by default')
 print(CC.methods.default)
 print("\n")
 

@@ -1,7 +1,7 @@
 from random import seed
 # from sys import *
 
-from .saving_files import save_to_file, FileType
+from .saving_files import save_to_file, FileType, filename_stamped
 from ..preferences.ordinal import Ordinal
 from ..preferences.profile import Profile
 from ..rules.borda import Borda
@@ -100,7 +100,7 @@ class Experiment:
                     save_to_file(self, FileType.WIN_FILE, i, candidates, voters, preferences, winners)
 
                 if visualization:
-                    self.__visualize(candidates, voters, winners)
+                    self.__visualize(candidates, voters, winners, i)
 
     def __execute_commands(self):
         """Execute commands from config to compute candidates, voters and preferences"""
@@ -137,14 +137,15 @@ class Experiment:
 
         return self.rule().find_committee(self.k, profile)
 
-    def __visualize(self, candidates, voters, winners):
-        """Visualize winners from two-dimensional candidates and voters space"""
+    def __visualize(self, candidates, voters, winners, iteration):
+     """Visualize winners from two-dimensional candidates and voters space"""
         if self.two_dimensional:
             if image_import_fail:
                 print("Cannot visualize results because of PIL import fail.")
                 return
 
-            visualize(candidates, voters, winners, self.result_filename, self.__generated_dir_path)
+            visualize(candidates, voters, winners, filename_stamped(self.filename, iteration),
+                      self.__generated_dir_path)
         else:
             print("Cannot visualize non 2D.")
 

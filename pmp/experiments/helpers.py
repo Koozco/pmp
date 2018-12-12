@@ -9,6 +9,13 @@ class Command(Enum):
     IMPARTIAL = 4
 
 
+class ExperimentElectionConfig:
+    def __init__(self, rule, k, filename):
+        self.rule = rule
+        self.k = k
+        self.filename = filename
+
+
 def make_dirs(dir_path, exist_ok=False):
     path_exists = os.path.exists(dir_path)
     if exist_ok:

@@ -2,4 +2,6 @@ candidates
 uniform -3 -3 3 3 100
 voters
 uniform -3 -3 3 3 100
+generate data
 Borda 10 kb10
+Bloc 10 bloc10

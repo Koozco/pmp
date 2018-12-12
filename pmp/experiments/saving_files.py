@@ -11,6 +11,7 @@ class FileType(Enum):
 
 
 def __get_extension(file_type):
+    """Get extension of file based on its type."""
     if file_type == FileType.IN_FILE:
         return ".in"
     elif file_type == FileType.OUT_FILE:
@@ -19,13 +20,19 @@ def __get_extension(file_type):
         return ".win"
 
 
-def __file_path_stamped(path, filename, file_extension, number):
+def filename_stamped(filename, number):
+    """Create a time-stamped filename"""
     time_str = time.strftime("%Y%m%d-%H%M%S")
-    temp_filename = '{}_{}_{}'.format(filename, number, time_str)
-    return os.path.join(path, temp_filename + file_extension)
+    return '{}_{}_{}'.format(filename, number, time_str)
+
+
+def __file_path_stamped(path, filename, file_extension, number):
+    """Create filepath with filename time-stamped."""
+    return os.path.join(path, filename_stamped(filename, number) + file_extension)
 
 
 def save_to_file(experiment, file_type, number, candidates, voters, preferences=None, winners=None):
+    """Save relevant structures to file depending on file type."""
     filename = experiment.filename
     path = experiment.get_generated_dir_path()
     k = experiment.k
@@ -50,12 +57,14 @@ def save_to_file(experiment, file_type, number, candidates, voters, preferences=
 
 
 def __save_content(file, content):
+    """Save structure content to file."""
     for i in range(len(content)):
         result = __get_content_string(content[i])
         file.write(result + '\n')
 
 
 def __save_candidates(file, candidates):
+    """Save candidates to file."""
     for i in range(len(candidates)):
         candidates_string = __get_content_string(candidates[i])
         result = '{} {}\n'.format(i, candidates_string)
@@ -63,6 +72,7 @@ def __save_candidates(file, candidates):
 
 
 def __save_preferences(file, voters, preferences):
+    """Save preferences to file."""
     for i in range(len(preferences)):
         preference = __get_content_string(preferences[i].order)
         voter = __get_content_string(voters[i][:-1])
@@ -71,6 +81,7 @@ def __save_preferences(file, voters, preferences):
 
 
 def __save_winners(file, winners, candidates):
+    """Save winners to file."""
     for i in winners:
         candidate = __get_content_string(candidates[i])
         result = '{} {}\n'.format(i, candidate)
@@ -78,6 +89,7 @@ def __save_winners(file, winners, candidates):
 
 
 def __get_content_string(content):
+    """Create a string from content of a structure."""
     if isinstance(content, Iterable):
         return ' '.join(map(str, content))
     return str(content)

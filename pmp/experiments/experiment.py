@@ -1,7 +1,7 @@
 from random import seed
 # from sys import *
 
-from .saving_files import save_to_file, FileType
+from .saving_files import save_to_file, FileType, filename_stamped
 from ..preferences.ordinal import Ordinal
 from ..preferences.profile import Profile
 from ..rules.borda import Borda
@@ -71,7 +71,7 @@ class Experiment:
                 save_to_file(self, FileType.WIN_FILE, i, candidates, voters, preferences, winners)
 
             if visualization:
-                self.__visualize(candidates, voters, winners)
+                self.__visualize(candidates, voters, winners, i)
 
     def __execute_commands(self):
         candidates = self.__config.get_candidates()
@@ -91,7 +91,7 @@ class Experiment:
                 candidates, voters, preferences = impartial(*args)
         if not preferences:
             preferences = preference_orders(candidates, voters)
-        if any(isinstance(candidate, int) or len(candidate) != 3 for candidate in candidates ):
+        if any(isinstance(candidate, int) or len(candidate) != 3 for candidate in candidates):
             self.two_dimensional = False
         return candidates, voters, preferences
 
@@ -106,13 +106,14 @@ class Experiment:
 
         return self.rule().find_committee(self.k, profile)
 
-    def __visualize(self, candidates, voters, winners):
+    def __visualize(self, candidates, voters, winners, iteration):
         if self.two_dimensional:
             if image_import_fail:
                 print("Cannot visualize results because of PIL import fail.")
                 return
 
-            visualize(candidates, voters, winners, self.filename, self.__generated_dir_path)
+            visualize(candidates, voters, winners, filename_stamped(self.filename, iteration),
+                      self.__generated_dir_path)
         else:
             print("Cannot visualize non 2D.")
 

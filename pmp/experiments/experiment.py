@@ -77,7 +77,7 @@ class Experiment:
             candidates, voters, preferences = self.__execute_commands()
 
             if elect_configs is None:
-                elect_configs = [ExperimentElectionConfig(self.rule, self.k, self.filename)]
+                elect_configs = [ExperimentElectionConfig(self.rule, self.k, self.result_filename)]
 
             for elect_config in elect_configs:
                 self.set_result_filename(elect_config.filename)
@@ -138,13 +138,13 @@ class Experiment:
         return self.rule().find_committee(self.k, profile)
 
     def __visualize(self, candidates, voters, winners, iteration):
-     """Visualize winners from two-dimensional candidates and voters space"""
+        """Visualize winners from two-dimensional candidates and voters space"""
         if self.two_dimensional:
             if image_import_fail:
                 print("Cannot visualize results because of PIL import fail.")
                 return
 
-            visualize(candidates, voters, winners, filename_stamped(self.filename, iteration),
+            visualize(candidates, voters, winners, filename_stamped(self.result_filename, iteration),
                       self.__generated_dir_path)
         else:
             print("Cannot visualize non 2D.")

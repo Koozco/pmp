@@ -12,9 +12,6 @@ from .generating_functions import impartial
 from .helpers import Command, ExperimentElectionConfig
 from .visualize import *
 
-# TODO: test Impartial, non-2d
-
-
 image_import_fail = False
 try:
     from PIL import Image

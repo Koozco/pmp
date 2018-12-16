@@ -34,13 +34,13 @@ class CplexWrapper(SolverWrapper):
     def add_constraint(self, var, coeff, sense, rs):
         args = {
             'lin_expr': [[var, coeff]],
-            'senses': sense.value,
+            'senses': sense,
             'rhs': [rs]
         }
         self.model.linear_constraints.add(**args)
 
     def add_constraints(self, var, coeff, sense, rs):
-        senses = map(lambda s: s.value, sense)
+        senses = map(lambda s: s, sense)
         senses_str = ''.join(senses)
         args = {
             'lin_expr': zip(var, coeff),

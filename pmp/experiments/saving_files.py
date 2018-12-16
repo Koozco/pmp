@@ -80,7 +80,7 @@ def __save_preferences(file, voters, preferences):
     """Save preferences to file."""
     for i in range(len(preferences)):
         preference = __get_content_string(preferences[i].order)
-        voter = __get_content_string(voters[i][:-1])
+        voter = __get_content_string(voters[i])
         result = '{} {}\n'.format(preference, voter)
         file.write(result)
 

@@ -12,10 +12,10 @@ class MultigoalBlocBorda(MultigoalRule):
 
     methods = algorithm.registry
 
-    def __init__(self, bloc_threshold=0, borda_threshold=0, weights=None):
+    def __init__(self, s1=0, s2=0, weights=None):
         MultigoalRule.__init__(self,
-                               ThresholdRule(Bloc(), bloc_threshold),
-                               ThresholdRule(Borda(), borda_threshold))
+                               ThresholdRule(Bloc(), s1),
+                               ThresholdRule(Borda(), s2))
         self.weights = weights
 
     def find_committees(self, k, profile, method=None):

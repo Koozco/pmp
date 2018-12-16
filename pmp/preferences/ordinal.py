@@ -1,11 +1,10 @@
-from .preference import Preference
-
-
-class Ordinal(Preference):
+class Ordinal:
     """Ordinal preference profile."""
 
     def __init__(self, order, weights=None):
-        Preference.__init__(self, order, weights)
+        self.order = list(order)
+        self.weights = weights
+        self.candidates_num = len(self.order)
 
     def compare_candidates(self, candidate_a, candidate_b):
         """Returns the better one."""

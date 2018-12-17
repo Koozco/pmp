@@ -30,19 +30,19 @@ profile = Profile(candidates, preferences)
 
 ccb = CCB(s1=8, s2=8)
 
-committees = ccb.find_committees(k, profile, method='Bruteforce')
+committees = ccb.find_committees(k, profile, method='ILP')
 print('Points:', ccb.scores)
 print('Selected committees:', committees)
 
 
-# Borda + Bloc + Bruteforce + uniform distribution of voters and candidates
-voters = generate_uniform(-3, -3, 3, 3, 100, 'None')
-candidates = generate_uniform(-3, -3, 3, 3, 100, 'None')
-preferences = preference_orders(candidates, voters)
-candidates = list(range(0, 100))
-profile = Profile(candidates, preferences)
-
-bb = BB(s1=12, s2=13)
-committees = bb.find_committees(k, profile, method='Bruteforce')
-print('Points:', bb.scores)
-print('Selected committees:', committees)
+# # Borda + Bloc + Bruteforce + uniform distribution of voters and candidates
+# voters = generate_uniform(-3, -3, 3, 3, 100, 'None')
+# candidates = generate_uniform(-3, -3, 3, 3, 100, 'None')
+# preferences = preference_orders(candidates, voters)
+# candidates = list(range(0, 100))
+# profile = Profile(candidates, preferences)
+#
+# bb = BB(s1=12, s2=13)
+# committees = bb.find_committees(k, profile, method='ILP')
+# print('Points:', bb.scores)
+# print('Selected committees:', committees)

@@ -3,10 +3,8 @@ You can check available implementations of finding committee without checking ac
 Rules may have different algorithms, eg. brute, approximation, ilp
 Like Chamberlin-Courant, having bruteforce and ilp:
 """
-from pmp.experiments import generate_uniform
-from pmp.experiments.experiment import preference_orders
+
 from pmp.rules import MultigoalCCBorda as CCB
-from pmp.rules import MultigoalBlocBorda as BB
 from pmp.preferences import Ordinal, Profile
 
 # In case of CCB default is ILP

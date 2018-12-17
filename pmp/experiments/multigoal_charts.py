@@ -11,7 +11,7 @@ def get_profile(voters_number, candidates_number):
     voters = generate_uniform(-3, -3, 3, 3, voters_number, 'None')
     candidates = generate_uniform(-3, -3, 3, 3, candidates_number, 'None')
     preferences = preference_orders(candidates, voters)
-    candidates = list(range(0, candidates_number))
+    candidates = list(range(candidates_number))
     return Profile(candidates, preferences)
 
 
@@ -20,24 +20,17 @@ def get_best_score(rule, profile, k):
     return rule.committee_score(best_committee, profile)
 
 
-def plot(x, y, e, rule1, rule2, bpc, title=""):
+def plot(x, y, e, rule1, rule2, title=""):
     axes = plt.gca()
     axes.set_xlim([0, 100])
     plt.xlabel(rule2.__class__.__name__)
     axes.set_ylim([0, y[0] + e[0]])
     plt.ylabel(rule1.__class__.__name__)
     plt.errorbar(x, y, np.zeros(len(e)), linestale=None)
-
-    # plt.plot(bpc[0], bpc[1], 'ro')
-    # plt.plot([0, bpc[0]], [bpc[1], bpc[1]], linewidth=1, linestyle="--", c="red")
-    # plt.plot([bpc[0], bpc[0]], [0, bpc[1]], linewidth=1, linestyle="--", c="red")
     plt.title(title)
 
 
-def draw_chart(k, n, m, repetitions, rule1, rule2, multigoal_rule):
-    best_point_coordinates = (0, 0)
-    best_point = 0
-
+def draw_chart(filename, k, n, m, repetitions, rule1, rule2, multigoal_rule):
     x = np.array([a for a in range(70, 101, 5)])
     y_samples = np.array([np.zeros(repetitions) for _ in x])
 
@@ -58,16 +51,12 @@ def draw_chart(k, n, m, repetitions, rule1, rule2, multigoal_rule):
                     y_samples[i][j] = rule.committee_score(committee, profile)[0] / float(rule1_best) * 100
                 except CplexSolverError:
                     break
-        print(y_samples[i])
         y[i] = np.mean(y_samples[i])
         mins[i] = np.min(y_samples[i])
         e[i] = np.std(y_samples[i])
-        if y[i] * x[i] > best_point:
-            best_point = y[i] * x[i]
-            best_point_coordinates = (x[i], y[i])
         print(r2, "% - ", y[i], "%, min: ", mins[i], ", error: ", e[i])
 
     title = "voters: {}, candidates: {}, committee size: {}".format(n, m, k)
-    plot(x, y, e, rule1, rule2, best_point_coordinates, title=title)
-    plot(x, mins, e, rule1, rule2, best_point_coordinates, title=title)
-    plt.show()
+    plot(x, y, e, rule1, rule2, title=title)
+    plot(x, mins, e, rule1, rule2, title=title)
+    plt.savefig(filename)

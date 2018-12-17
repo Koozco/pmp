@@ -10,4 +10,5 @@ n = 10
 m = 4
 
 # draw_chart(k, n, m, repetitions,  Bloc(), Borda(), BB)
-draw_chart(k, n, m, repetitions, ChamberlinCourant(), Borda(), CCB)
+filename = 'chart-k{}-n{}-m{}'.format(k, n, m)
+draw_chart(filename, k, n, m, repetitions, ChamberlinCourant(), Borda(), CCB)

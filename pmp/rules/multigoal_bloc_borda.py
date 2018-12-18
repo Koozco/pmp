@@ -1,3 +1,5 @@
+import numpy as np
+from ..utils.ilp import *
 from .._common import solve_methods_registry
 
 from .threshold_rule import ThresholdRule
@@ -9,7 +11,6 @@ algorithm = solve_methods_registry()
 
 
 class MultigoalBlocBorda(MultigoalRule):
-
     methods = algorithm.registry
 
     def __init__(self, s1=0, s2=0, weights=None):
@@ -37,9 +38,39 @@ class MultigoalBlocBorda(MultigoalRule):
 
     @algorithm('ILP', default=True)
     def _ilp(self, k, profile):
-        """
-        $x_i \in \{0, 1\}$ \ \ \ \ for i = 1, 2, ... m\\[4\jot]
-        $\sum_{i=1}^{m} \ x_i = k$\\[4\jot]
-        $\sum_{i=1}^{m} \ x_i \cdot \gamma_{m,k}^j(c_i) \geq s_j$ \ \ \ \ for j=1, 2, ... t
-        """
-        raise NotImplementedError()
+        # kBorda initialisation
+        self.rule2.rule.initialise_weights(profile)
+        self.rule2.rule.compute_candidate_scores(k, profile)
+
+        # ILP
+        m = len(profile.candidates)
+
+        model = Model()
+
+        # Xi - ith candidate is in committee
+        x = ['x{}'.format(i) for i in range(m)]
+        x_lb = np.zeros(m)
+        x_ub = np.ones(m)
+        model.add_variables(x, x_lb, x_ub)
+
+        # Constraint1 - Vi Ei xi = k
+        # K candidates are chosen
+        xi = np.ones(m)
+        model.add_constraint(x, xi, Sense.eq, k)
+
+        # Constraint2 - Bloc
+        bloc_candidate_scores = [self.rule1.rule.compute_score(i, k, profile) for i in range(m)]
+        model.add_constraint(x, bloc_candidate_scores, Sense.gt, self.rule1.s)
+
+        # Constraint3 - kBorda
+        borda_candidate_scores = [profile.scores[i] for i in range(m)]
+        model.add_constraint(x, borda_candidate_scores, Sense.gt, self.rule2.s)
+
+        # End of definition
+
+        model.solve()
+
+        solution = model.get_solution()
+        committee = (i for i in range(m) if abs(solution['x{}'.format(i)] - 1) <= 1e-05)
+
+        return committee

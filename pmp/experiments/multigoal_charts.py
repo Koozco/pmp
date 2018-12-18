@@ -31,7 +31,7 @@ def plot(x, y, e, rule1, rule2, title=""):
 
 
 def draw_chart(filename, k, n, m, repetitions, rule1, rule2, multigoal_rule):
-    x = np.array([a for a in range(70, 101, 5)])
+    x = np.array([a for a in range(70, 101, 2)])
     y_samples = np.array([np.zeros(repetitions) for _ in x])
 
     y = np.zeros(len(x))
@@ -39,7 +39,7 @@ def draw_chart(filename, k, n, m, repetitions, rule1, rule2, multigoal_rule):
     e = np.zeros(len(x))
     for i, r2 in enumerate(x):
         for j in range(repetitions):
-            for r1 in x:
+            for r1 in range(0, 101, 1):
                 profile = get_profile(n, m)
                 rule1_best = get_best_score(rule1, profile, k)
                 rule2_best = get_best_score(rule2, profile, k)
@@ -47,7 +47,7 @@ def draw_chart(filename, k, n, m, repetitions, rule1, rule2, multigoal_rule):
                 rule2_threshold = rule2_best * r2 / 100
                 rule = multigoal_rule(s1=rule1_threshold, s2=rule2_threshold)
                 try:
-                    committee = tuple(rule.find_committees(k, profile, method='ILP'))
+                    committee = list(rule.find_committees(k, profile, method='ILP'))
                     y_samples[i][j] = rule.committee_score(committee, profile)[0] / float(rule1_best) * 100
                 except CplexSolverError:
                     break

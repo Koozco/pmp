@@ -32,7 +32,7 @@ class WeaklySeparable(Rule):
     def committee_score(self, committee, profile):
         score = 0
         for cand in committee:
-            score += self.compute_score(cand, None, profile)
+            score += self.compute_score(cand, len(committee), profile)
         return score
 
     def get_committees(self, k, candidates_with_score):

@@ -4,11 +4,13 @@ from pmp.rules import MultigoalBlocBorda as BB
 from pmp.rules import MultigoalCCBorda as CCB
 
 
-repetitions = 1
-k = 2
-n = 10
-m = 4
+repetitions = 10
+k = 5
+n = 33
+m = 44
 
-# draw_chart(k, n, m, repetitions,  Bloc(), Borda(), BB)
-filename = 'chart-k{}-n{}-m{}'.format(k, n, m)
+filename = 'bb-chart-k{}-n{}-m{}'.format(k, n, m)
+draw_chart(filename, k, n, m, repetitions,  Bloc(), Borda(), BB)
+
+filename = 'ccb-chart-k{}-n{}-m{}'.format(k, n, m)
 draw_chart(filename, k, n, m, repetitions, ChamberlinCourant(), Borda(), CCB)

@@ -100,6 +100,6 @@ class MultigoalCCBorda(MultigoalRule):
         model.solve()
 
         solution = model.get_solution()
-        committee = (i for i in range(m) if solution['x{}'.format(i)] == 1)
+        committee = (i for i in range(m) if abs(solution['x{}'.format(i)] - 1) <= 1e-05)
 
         return committee

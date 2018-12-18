@@ -7,9 +7,9 @@ _default_vtype = VariableTypes.int
 
 class Model:
 
-    def __init__(self, solver=Solvers.CPLEX):
+    def __init__(self, solver=Solvers.CPLEX, log_errors=True):
         self._s_module = init_solver(solver)
-        self.wrapper = self._s_module.wrapper_class()
+        self.wrapper = self._s_module.wrapper_class(log_errors=log_errors)
 
     def solve(self):
         self.wrapper.solve()

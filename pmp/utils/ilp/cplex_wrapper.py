@@ -5,9 +5,11 @@ from .solver_wrapper import SolverWrapper
 
 class CplexWrapper(SolverWrapper):
 
-    def __init__(self):
+    def __init__(self, log_errors=True):
         self.model = cplex.Cplex()
         self.model.set_results_stream(None)
+        if not log_errors:
+            self.model.set_error_stream(None)
 
     def solve(self):
         self.model.solve()

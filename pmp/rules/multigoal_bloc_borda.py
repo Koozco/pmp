@@ -13,11 +13,12 @@ algorithm = solve_methods_registry()
 class MultigoalBlocBorda(MultigoalRule):
     methods = algorithm.registry
 
-    def __init__(self, s1=0, s2=0, weights=None):
+    def __init__(self, s1=0, s2=0, weights=None, log_errors=True):
         MultigoalRule.__init__(self,
                                ThresholdRule(Bloc(), s1),
                                ThresholdRule(Borda(), s2))
         self.weights = weights
+        self.log_errors = log_errors
 
     def find_committees(self, k, profile, method=None):
         if method is None:
@@ -45,7 +46,7 @@ class MultigoalBlocBorda(MultigoalRule):
         # ILP
         m = len(profile.candidates)
 
-        model = Model()
+        model = Model(log_errors=self.log_errors)
 
         # Xi - ith candidate is in committee
         x = ['x{}'.format(i) for i in range(m)]

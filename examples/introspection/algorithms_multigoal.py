@@ -1,10 +1,5 @@
-"""
-You can check available implementations of finding committee without checking actual code
-Rules may have different algorithms, eg. brute, approximation, ilp
-Like Chamberlin-Courant, having bruteforce and ilp:
-"""
-
-from pmp.rules import MultigoalCCBorda as CCB
+# noinspection PyUnresolvedReferences
+from pmp.rules import MultigoalCCBorda, MultigoalTBloc
 from pmp.preferences import Ordinal, Profile
 
 # In case of CCB default is ILP
@@ -26,8 +21,9 @@ candidates = [0, 1, 2]
 
 profile = Profile(candidates, preferences)
 
-ccb = CCB(s1=8, s2=8)
+# rule = MultigoalCCBorda((8, 8))
+rule = MultigoalTBloc((5, 7, 10))
 
-committee = ccb.find_committees(k, profile, method='ILP')
-print('Points:', ccb.scores)
-print('Selected committees:', committee)
+committee = rule.find_committees(k, profile, method='Bruteforce')
+print('Points:', rule.scores)
+print('Selected committees:', list(committee))

@@ -7,4 +7,5 @@ from .chamberlin_courant import ChamberlinCourant
 
 from .multigoal_rule import MultigoalRule
 from .multigoal_cc_borda import MultigoalCCBorda
+from .multigoal_tbloc import MultigoalTBloc
 from .multigoal_bloc_borda import MultigoalBlocBorda

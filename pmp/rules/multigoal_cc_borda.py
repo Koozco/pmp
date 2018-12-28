@@ -15,10 +15,10 @@ class MultigoalCCBorda(MultigoalRule):
 
     methods = algorithm.registry
 
-    def __init__(self, s1, s2, weights=None, log_errors=True):
+    def __init__(self, (s1, s2), weights=None, log_errors=True):
         MultigoalRule.__init__(self,
-                               ThresholdRule(ChamberlinCourant(), s1),
-                               ThresholdRule(Borda(), s2))
+                               [ThresholdRule(ChamberlinCourant(), s1),
+                                ThresholdRule(Borda(), s2)])
         self.weights = weights
         self.log_errors = log_errors
 
@@ -30,20 +30,14 @@ class MultigoalCCBorda(MultigoalRule):
         return committee
 
     @algorithm('Bruteforce', 'Exponential.')
-    def _brute(self, k, profile):
-        self.compute_scores(k, profile)
-        res = []
-        for comm in self.scores:
-            if self.scores[comm] >= (self.rule1.s, self.rule2.s):
-                res.append(comm)
-
-        return res
+    def _brute_cc_kb(self, k, profile):
+        return self._brute(k, profile)
 
     @algorithm('ILP', default=True)
     def _ilp(self, k, profile):
-        self.rule2.rule.initialise_weights(profile)
-        self.rule1.rule.initialise_weights(profile)
-        self.rule2.rule.compute_candidate_scores(k, profile)
+        self.rules[0].rule.initialise_weights(profile)
+        self.rules[1].rule.initialise_weights(profile)
+        self.rules[1].rule.compute_candidate_scores(k, profile)
 
         # ILP
         m = len(profile.candidates)
@@ -88,13 +82,13 @@ class MultigoalCCBorda(MultigoalRule):
         model.add_constraints(c3_variables, c3_coefficients, c3_senses, c3_rights)
 
         # Constraint4 - CC
-        objective_iterable = (self.rule1.rule.satisfaction(profile.preferences[j], profile.candidates[i]) for (i, j) in
+        objective_iterable = (self.rules[0].rule.satisfaction(profile.preferences[j], profile.candidates[i]) for (i, j) in
                               all_ij)
         yij_weights = np.fromiter(objective_iterable, int, n * m)
-        model.add_constraint(y, yij_weights, Sense.gt, self.rule1.s)
+        model.add_constraint(y, yij_weights, Sense.gt, self.rules[0].s)
 
         # Constraint5 - kBorda
-        model.add_constraint(x, [profile.scores[i] for i in range(m)], Sense.gt, self.rule2.s)
+        model.add_constraint(x, [profile.scores[i] for i in range(m)], Sense.gt, self.rules[1].s)
 
         # End of definition
 

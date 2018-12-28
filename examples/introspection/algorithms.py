@@ -40,5 +40,5 @@ candidates = [0, 1, 2]
 profile = Profile(candidates, preferences)
 
 cc = CC()
-committee = cc.find_committee(k, profile, method='Bruteforce')
+committee = cc.find_committee(k, profile, method='ILP')
 print(committee)

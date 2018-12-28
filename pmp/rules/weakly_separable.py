@@ -11,6 +11,7 @@ class WeaklySeparable(Rule):
         self.weights = weights
 
     def compute_candidate_scores(self, k, profile):
+        profile.clean_scores()
         for pref in profile.preferences:
             for n in range(len(pref.order)):
                 candidate = pref.order[n]
@@ -31,7 +32,7 @@ class WeaklySeparable(Rule):
     def committee_score(self, committee, profile):
         score = 0
         for cand in committee:
-            score += self.compute_score(cand, None, profile)
+            score += self.compute_score(cand, len(committee), profile)
         return score
 
     def get_committees(self, k, candidates_with_score):

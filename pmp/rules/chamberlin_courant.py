@@ -25,7 +25,7 @@ class ChamberlinCourant(Rule):
     def initialise_weights(self, profile):
         self.weights = self._borda_weights(len(profile.candidates))
 
-    def find_committee(self, k, profile, method=None):
+    def find_committee(self, k, profile, method='ILP'):
         self.scores = {}
         if self.weights is None:
             self.weights = self._borda_weights(len(profile.candidates))
@@ -96,7 +96,7 @@ class ChamberlinCourant(Rule):
         model.solve()
 
         solution = model.get_solution()
-        committee = (i for i in range(m) if solution['x{}'.format(i)] == 1)
+        committee = (i for i in range(m) if abs(solution['x{}'.format(i)] - 1) <= 1e-05)
 
         self.scores[committee] = model.get_objective_value()
         return committee

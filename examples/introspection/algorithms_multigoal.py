@@ -2,9 +2,6 @@
 from pmp.rules import MultigoalCCBorda, MultigoalTBloc
 from pmp.preferences import Ordinal, Profile
 
-# In case of CCB default is ILP
-# Let's give a try Bruteforce implementation
-
 n = 5
 m = 3
 k = 2

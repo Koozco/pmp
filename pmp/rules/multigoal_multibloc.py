@@ -12,9 +12,10 @@ class MultigoalTBloc(MultigoalRule):
 
     methods = algorithm.registry
 
-    def __init__(self, thresholds, weights=None):
+    def __init__(self, thresholds, weights=None, log_errors=True):
         MultigoalRule.__init__(self,
-                               [ThresholdRule(TBloc(i + 1), t) for i, t in enumerate(thresholds)])
+                               [ThresholdRule(TBloc(i + 1), t) for i, t in enumerate(thresholds)],
+                               log_errors=log_errors)
         self.weights = weights
 
     def find_committees(self, k, profile, method=None):

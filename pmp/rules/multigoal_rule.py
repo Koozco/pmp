@@ -9,10 +9,11 @@ algorithm = solve_methods_registry()
 
 
 class MultigoalRule:
-    def __init__(self, rules, tie_break=random_winner):
+    def __init__(self, rules, tie_break=random_winner, log_errors=True):
         self.rules = rules
         self.tie_break = tie_break
         self.scores = {}
+        self.log_errors = log_errors
 
     def find_committees(self, k, profile, method=None):
         if method is None:
@@ -44,7 +45,7 @@ class MultigoalRule:
         # ILP
         m = len(profile.candidates)
 
-        model = Model()
+        model = Model(log_errors=self.log_errors)
 
         # Xi - ith candidate is in committee
         x = ['x{}'.format(i) for i in range(m)]
@@ -69,6 +70,6 @@ class MultigoalRule:
         model.solve()
 
         solution = model.get_solution()
-        committee = (i for i in range(m) if solution['x{}'.format(i)] == 1)
+        committee = (i for i in range(m) if abs(solution['x{}'.format(i)] - 1) <= 1e-05)
 
         return committee

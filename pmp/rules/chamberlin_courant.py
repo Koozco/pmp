@@ -22,7 +22,7 @@ class ChamberlinCourant(Rule):
         self.weights = weights
         self.scores = {}
 
-    def initialise_weights(self, profile):
+    def initialise_weights(self, _k, profile):
         self.weights = self._borda_weights(len(profile.candidates))
 
     def find_committee(self, k, profile, method='ILP'):

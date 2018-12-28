@@ -46,7 +46,7 @@ def draw_chart(filename, k, n, m, repetitions, rule1, rule2, multigoal_rule, ste
                 rule2_best = get_best_score(rule2, profile, k)
                 rule1_threshold = rule1_best * r1 / 100
                 rule2_threshold = rule2_best * r2 / 100
-                rule = multigoal_rule(s1=rule1_threshold, s2=rule2_threshold, log_errors=log_errors)
+                rule = multigoal_rule((rule1_threshold, rule2_threshold), log_errors=log_errors)
                 try:
                     committee = list(rule.find_committees(k, profile, method='ILP'))
                     y_samples[i][j] = rule.committee_score(committee, profile)[0] / float(rule1_best) * 100

@@ -35,8 +35,8 @@ class MultigoalCCBorda(MultigoalRule):
 
     @algorithm('ILP', default=True)
     def _ilp(self, k, profile):
-        self.rules[0].rule.initialise_weights(profile)
-        self.rules[1].rule.initialise_weights(profile)
+        self.rules[0].rule.initialise_weights(k, profile)
+        self.rules[1].rule.initialise_weights(k, profile)
         self.rules[1].rule.compute_candidate_scores(k, profile)
 
         # ILP

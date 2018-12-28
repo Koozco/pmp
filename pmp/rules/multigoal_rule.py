@@ -60,7 +60,7 @@ class MultigoalRule:
         # Constraint2 - thresholds
         for rule in self.rules:
             profile.scores = {}
-            rule.rule.initialise_weights(profile)
+            rule.rule.initialise_weights(k, profile)
             rule.rule.compute_candidate_scores(k, profile)
             model.add_constraint(x, [profile.scores[i] for i in range(m)], Sense.gt, rule.s)
 

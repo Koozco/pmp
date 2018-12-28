@@ -1,12 +1,8 @@
-import numpy as np
-from itertools import chain, product
-
 from pmp.rules.tbloc import TBloc
 from .._common import solve_methods_registry
 
 from .threshold_rule import ThresholdRule
 from .multigoal_rule import MultigoalRule
-from ..utils.ilp import *
 
 algorithm = solve_methods_registry()
 

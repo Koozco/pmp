@@ -46,12 +46,15 @@ def save_to_file(experiment, file_type, number, candidates, voters, preferences=
     file_path = __file_path_stamped(path, filename, file_extension, number)
 
     with open(file_path, 'w') as file:
-        if file_type == FileType.IN_FILE:
+        if file_type == FileType.WIN_FILE:
+            file.write('{} {} {}\n'.format(m, n, k))
+        else:
             file.write('{} {}\n'.format(m, n))
+
+        if file_type == FileType.IN_FILE:
             __save_content(file, candidates)
             __save_content(file, voters)
         else:
-            file.write('{} {} {}\n'.format(m, n, k))
             __save_candidates(file, candidates)
             __save_preferences(file, voters, preferences)
             if file_type == FileType.WIN_FILE:
@@ -77,7 +80,7 @@ def __save_preferences(file, voters, preferences):
     """Save preferences to file."""
     for i in range(len(preferences)):
         preference = __get_content_string(preferences[i].order)
-        voter = __get_content_string(voters[i][:-1])
+        voter = __get_content_string(voters[i])
         result = '{} {}\n'.format(preference, voter)
         file.write(result)
 

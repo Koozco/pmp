@@ -15,5 +15,5 @@ setup(name='pmp',
       author_email='',
       license='?',
       packages=setuptools.find_packages(),
-      install_requires=['pytest'],
+      install_requires=['pytest', 'six', 'numpy'],
       zip_safe=False)

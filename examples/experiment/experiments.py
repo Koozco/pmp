@@ -17,7 +17,7 @@ config.add_voters(generate_uniform(-3, -3, 3, 3, 10, 'None'))
 
 experiment = Experiment(config)
 experiment.set_election(Bloc, 3)
-experiment.set_filename("bloc3")
+experiment.set_result_filename("bloc3")
 experiment.set_generated_dir_path("bloc_example")
 experiment.run(visualization=True, n=2, save_win=True)
 
@@ -37,6 +37,6 @@ config.add_voters(lambda c: impartial(len(c), 10))
 
 experiment = Experiment(config)
 experiment.set_election(Borda, 2)
-experiment.set_filename("impartial")
+experiment.set_result_filename("impartial")
 experiment.run(n=3, save_in=True)
 

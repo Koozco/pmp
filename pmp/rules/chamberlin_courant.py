@@ -28,9 +28,9 @@ class ChamberlinCourant(Rule):
             self.weights = self._borda_weights(len(profile.candidates))
 
         if method is None:
-            committee = algorithm.registry.default(self, k, profile)
-        else:
-            committee = algorithm.registry.all[method](self, k, profile)
+            method = algorithm.registry.default
+        committee = algorithm.registry.all[method](self, k, profile)
+
         return committee
 
     @algorithm('Bruteforce', 'Exponential.')
@@ -93,7 +93,7 @@ class ChamberlinCourant(Rule):
         model.solve()
 
         solution = model.get_solution()
-        committee = (i for i in range(m) if solution['x{}'.format(i)] == 1)
+        committee = (profile.candidates[i] for i in range(m) if solution['x{}'.format(i)] == 1)
 
         self.scores[committee] = model.get_objective_value()
         return committee

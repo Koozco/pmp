@@ -6,6 +6,7 @@ def readme():
     with open('README.md') as f:
         return f.read()
 
+
 setup(name='pmp',
       version='1.01.1',
       description='Python Multiwinner Package',
@@ -14,7 +15,5 @@ setup(name='pmp',
       author_email='',
       license='?',
       packages=setuptools.find_packages(),
-      install_requires=[
-      ],
+      install_requires=['pytest'],
       zip_safe=False)
-

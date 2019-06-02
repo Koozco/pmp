@@ -4,7 +4,7 @@ from itertools import combinations, product, chain
 import numpy as np
 
 from .._common import solve_methods_registry
-from ..utils.ilp import *
+from ..utils.ilp import Model, Sense, Objective, VariableTypes
 from .rule import Rule
 
 algorithm = solve_methods_registry()
@@ -16,6 +16,7 @@ class PAV(Rule):
     methods = algorithm.registry
 
     def __init__(self, alpha=None):
+        """Alpha should be a function accepting int argument i"""
         Rule.__init__(self)
         self.scores = {}
         self.alpha = alpha if alpha is not None else self._harmonic_alpha
@@ -29,11 +30,13 @@ class PAV(Rule):
 
     @algorithm('Bruteforce', 'Exponential.')
     def _brute(self, k, profile):
-        self.scores = self.compute_scores(k, profile)
+        self.scores = self._compute_scores(k, profile)
         return max(iteritems(self.scores), key=itemgetter(1))[0]
 
     @algorithm('ILP', default=True)
     def _ilp(self, k, profile):
+        """ILP formulation from paper:
+        https://arxiv.org/abs/1609.03537"""
         m = len(profile.candidates)
         n = len(profile.preferences)
         all_il = np.fromiter(chain.from_iterable(product(range(n), range(k))), int, n * k * 2)
@@ -89,21 +92,21 @@ class PAV(Rule):
         self.scores[committee] = model.get_objective_value()
         return committee
 
-    def compute_scores(self, k, profile):
+    def _compute_scores(self, k, profile):
         scores = {}
         all = list(combinations(profile.candidates, k))
         for comm in all:
-            scores[comm] = self.committee_score(set(comm), profile)
+            scores[comm] = self._committee_score(set(comm), profile)
         return scores
 
-    def committee_score(self, committee, profile):
+    def _committee_score(self, committee, profile):
         score = 0
         for pref in profile.preferences:
-            satisfaction = self.satisfaction(len(committee & pref.approved))
+            satisfaction = self._satisfaction(len(committee & pref.approved))
             score += satisfaction
         return score
 
-    def satisfaction(self, k):
+    def _satisfaction(self, k):
         return sum([self.alpha(i + 1) for i in range(k)])
 
     @staticmethod

@@ -43,7 +43,7 @@ class CplexWrapper(SolverWrapper):
         senses = map(lambda s: s.value, sense)
         senses_str = ''.join(senses)
         args = {
-            'lin_expr': zip(var, coeff),
+            'lin_expr': list(zip(var, coeff)),
             'senses': senses_str,
             'rhs': rs
         }
@@ -57,7 +57,7 @@ class CplexWrapper(SolverWrapper):
         self.model.objective.set_sense(mapping[sense])
 
     def set_objective(self, var, coeff):
-        self.model.objective.set_linear(zip(var, coeff))
+        self.model.objective.set_linear(list(zip(var, coeff)))
 
     def write_to_file(self, name):
         self.model.write(name)

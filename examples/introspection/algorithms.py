@@ -1,7 +1,7 @@
 """
-You can check available implementations of finding committee without checking actual code
-Rules may have different algorithms, eg. brute, approximation, ilp
-Like Chamberlin-Courant, having bruteforce and ilp:
+You can check available implementations of finding committee without checking the actual code
+Rules may have different algorithms, e.g. brute, approximation, ilp
+Like Chamberlin-Courant, having brute-force and ilp:
 """
 from pmp.rules import ChamberlinCourant as CC
 from pmp.preferences import Ordinal, Profile
@@ -16,12 +16,12 @@ print('Dictionary of optional comments regarding these methods { "method_name": 
 print(CC.methods.comments)
 print("\n")
 
-print('Name of method used in find_committee by default')
+print('Name of method that is used in find_committee by default')
 print(CC.methods.default)
 print("\n")
 
 # In case of CC default is ILP
-# Let's give a try Bruteforce implementation
+# Let's give the brute-force implementations a try
 
 n = 5
 m = 3

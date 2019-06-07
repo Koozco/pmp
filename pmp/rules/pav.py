@@ -73,11 +73,9 @@ class PAV(Rule):
             ['y{}'.format(profile.candidates.index(c)) for c in profile.preferences[i].approved]
             for i in range(n)
         ]
-        # coefficients for x's
-        ones = np.ones((n, k))
-        # coefficients for y's
-        minus_ones = np.full((n, k), -1)
-        c2_coefficients = np.concatenate((ones, minus_ones), axis=1)
+        c2_coefficients = [
+            np.concatenate((np.ones(k), np.full(len(profile.preferences[i].approved), -1)), axis=0) for i in range(n)
+        ]
         c2_senses = np.full(n, Sense.lt)
         c2_rights = np.zeros(n)
         model.add_constraints(c2_variables, c2_coefficients, c2_senses, c2_rights)

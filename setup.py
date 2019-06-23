@@ -8,7 +8,7 @@ def readme():
 
 
 setup(name='pmp',
-      version='1.2.2',
+      version='1.2.3',
       description='Python Multiwinner Package',
       url='https://github.com/Koozco/pmp',
       author='Katarzyna Banaszak, Bartosz Kusek',

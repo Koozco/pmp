@@ -4,6 +4,7 @@ from importlib import import_module
 
 class Solvers(Enum):
     CPLEX = 1
+    GUROBI = 2
 
 
 class MissingSolver(Exception):
@@ -19,5 +20,6 @@ def init_solver(solver):
 
 
 __solver_module_names = {
-    Solvers.CPLEX: '.cplex_wrapper'
+    Solvers.CPLEX: '.cplex_wrapper',
+    Solvers.GUROBI: '.gurobi_wrapper'
 }

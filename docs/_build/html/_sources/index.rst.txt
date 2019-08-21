@@ -9,6 +9,8 @@
    :caption: Contents:
 
    source/ilp
+   source/usage
+   source/about
 
 .. Indices and tables
     ==================

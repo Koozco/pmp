@@ -1,7 +1,9 @@
 import pytest
 from expects import *
+
 from pmp.preferences import Profile, Approval
-from pmp.properties import justified_representation
+from pmp.properties import justified_representation, extended_justified_representation, \
+    proportional_justified_representation
 
 
 @pytest.fixture
@@ -37,3 +39,11 @@ def test_justified_representation(profile):
 
     expect(justified_representation(profile, satysfying_winners)).to(be_true)
     expect(justified_representation(profile, unsatysfying_winners)).to(be_false)
+
+
+def test_extended_justified_representation(profile):
+    satysfying_winners = {1, 2, 4}
+    unsatysfying_winners = {4, 5, 6}
+
+    expect(extended_justified_representation(profile, satysfying_winners)).to(be_true)
+    expect(extended_justified_representation(profile, unsatysfying_winners)).to(be_false)

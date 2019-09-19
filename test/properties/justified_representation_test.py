@@ -47,3 +47,11 @@ def test_extended_justified_representation(profile):
 
     expect(extended_justified_representation(profile, satysfying_winners)).to(be_true)
     expect(extended_justified_representation(profile, unsatysfying_winners)).to(be_false)
+
+
+def test_proportional_justified_representation(profile):
+    satysfying_winners = {1, 3, 5}
+    unsatysfying_winners = {4, 5, 6}
+
+    expect(proportional_justified_representation(profile, satysfying_winners)).to(be_true)
+    expect(proportional_justified_representation(profile, unsatysfying_winners)).to(be_false)

@@ -1,5 +1,5 @@
 from gurobipy import GRB, Model, LinExpr
-from .ilp import Objective, VariableTypes, Sense
+from .ilp import Objective, VariableTypes, Sense, SolutionType
 from .solver_wrapper import SolverWrapper
 
 
@@ -60,8 +60,20 @@ class GurobiWrapper(SolverWrapper):
         self.model.write(name)
 
     def get_solution_status(self):
+        """
+        :type solution_type: SolutionType
+        :type additional_data: Dict[{'status', 'status_str'}]
+        :return solution_type, additional_data:
+        """
         status = self.model.Status
-        return status, self._solution_strings()[status]
+        solution_type = SolutionType.feasible if status == 1 else SolutionType.infeasible
+
+        additional_data = {
+            'status': status,
+            'status_str': self._solution_strings()[status]
+        }
+
+        return solution_type, additional_data
 
     def get_objective_value(self):
         return self.model.ObjVal

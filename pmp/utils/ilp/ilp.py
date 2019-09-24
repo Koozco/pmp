@@ -15,3 +15,9 @@ class Objective(Enum):
 class VariableTypes(Enum):
     int = 1
     continuous = 2
+
+
+class SolutionType(Enum):
+    infeasible = -1
+    none = 0
+    feasible = 1

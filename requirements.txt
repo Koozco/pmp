@@ -8,6 +8,7 @@ Click==7.0
 commonmark==0.9.0
 docloud==1.0.369
 docutils==0.14
+expects==0.9.0
 future==0.17.1
 idna==2.8
 imagesize==1.1.0
@@ -38,6 +39,7 @@ requests==2.21.0
 six==1.12.0
 snowballstemmer==1.2.1
 Sphinx==2.1.0
+sphinx_rtd_theme==0.4.3
 sphinxcontrib-applehelp==1.0.1
 sphinxcontrib-devhelp==1.0.1
 sphinxcontrib-htmlhelp==1.0.2
@@ -48,4 +50,3 @@ tornado==6.0.2
 urllib3==1.24.1
 wcwidth==0.1.7
 zipp==0.5.1
-sphinx_rtd_theme==0.4.3

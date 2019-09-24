@@ -1,7 +1,8 @@
 import os
+import numpy as np
 from random import random, gauss, shuffle
 
-from ..preferences import Ordinal
+from ..preferences import Ordinal, Approval
 
 image_import_fail = False
 try:
@@ -10,11 +11,11 @@ except (ImportError, NameError):
     print("PIL module is not available. Pictures will not be generated.")
     image_import_fail = True
 
+
 # GENERATE POINTS
 
 
 def generate_from_image(filename, x1, y1, x2, y2, n, party):
-
     img = Image.open(os.path.join(filename))
     rgb_im = img.convert('RGB')
 
@@ -72,4 +73,15 @@ def impartial(m, n):
         shuffle(x)
         voters += [x]
     preferences = [Ordinal(voter) for voter in voters]
+    return candidates, voters, preferences
+
+
+def p_impartial(p, m, n):
+    approval_probabilities = np.random.rand(n, m)
+    candidates = list(range(m))
+
+    voters = [
+        [i+1 for i in range(m) if probabilities[i] <= p] for probabilities in approval_probabilities
+    ]
+    preferences = [Approval(voter) for voter in voters]
     return candidates, voters, preferences

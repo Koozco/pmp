@@ -1,5 +1,5 @@
 import cplex
-from .ilp import Objective, VariableTypes
+from .ilp import Objective, VariableTypes, SolutionType
 from .solver_wrapper import SolverWrapper
 
 
@@ -63,7 +63,22 @@ class CplexWrapper(SolverWrapper):
         self.model.write(name)
 
     def get_solution_status(self):
-        return self.model.solution.get_status(), self.model.solution.status[self.model.solution.get_status()]
+        """
+        cplex SolutionType:
+        https://www.ibm.com/support/knowledgecenter/SSSA5P_12.6.3/ilog.odms.cplex.help/refpythoncplex/html/frames.html
+        :type solution_type: SolutionType
+        :type additional_data: Dict[{'status', 'status_str'}]
+        :return solution_type, additional_data:
+        """
+        cplex_solution_type = self.model.solution.get_solution_type()
+        solution_type = SolutionType.feasible if cplex_solution_type != 0 else SolutionType.infeasible
+
+        additional_data = {
+            'status': self.model.solution.get_status(),
+            'status_str': self.model.solution.status[self.model.solution.get_status()]
+        }
+
+        return solution_type, additional_data
 
     def get_objective_value(self):
         return self.model.solution.get_objective_value()

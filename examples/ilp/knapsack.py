@@ -85,8 +85,9 @@ if __name__ == '__main__':
     model = knapsack_model()
     model.solve()
 
-    status, status_str = model.get_solution_status()
-    print('Solution status: ' + status_str)
+    solution_type, additional_data = model.get_solution_status()
+    print('Solution type: ' + str(solution_type))
+    print('Solution status: ' + additional_data['status_str'])
 
     max_val = model.get_objective_value()
     print('Maximal value: ' + str(max_val))

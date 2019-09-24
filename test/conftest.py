@@ -1,5 +1,5 @@
 import pytest
-from pmp.preferences import Ordinal
+from pmp.preferences import Ordinal, Approval
 
 
 @pytest.fixture
@@ -7,6 +7,21 @@ def ordinal():
     order = [5, 4, 3, 2, 1]
     weights = [1, 2, 3, 4, 5]
     return Ordinal(order, weights)
+
+
+@pytest.fixture
+def approval():
+    approved = set([1, 2, 3, 4, 5])
+    return Approval(approved)
+
+
+@pytest.fixture
+def approval_factory():
+    def _approval(size):
+        approved = set([i + 1 for i in range(size)])
+        return Approval(approved)
+
+    return _approval
 
 
 @pytest.fixture

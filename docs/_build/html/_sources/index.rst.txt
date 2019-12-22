@@ -8,6 +8,7 @@
    :maxdepth: 2
    :caption: Contents:
 
+   source/quick_start
    source/ilp
    source/usage
    source/about

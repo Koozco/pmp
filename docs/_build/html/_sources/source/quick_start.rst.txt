@@ -8,4 +8,4 @@ Basics - classes, methods, parameters.
 
 .. mdinclude:: quick_start/basics.md
 
-For more detailed information we encourage to further reading next sections.
+For more detailed information we encourage to further reading next sections or go straight to :ref:`examples`.

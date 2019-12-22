@@ -13,16 +13,29 @@ algorithm = solve_methods_registry()
 
 
 class ChamberlinCourant(Rule):
-    """Chamberlin-Courant vote scoring rule."""
+    """Chamberlin-Courant vote scoring rule"""
 
     methods = algorithm.registry
 
     def __init__(self, weights=None):
+        """
+        :param weights: Vector of weights used while computing single voter satisfaction
+        :type weights: List[Number]
+        """
         Rule.__init__(self)
         self.weights = weights
         self.scores = {}
 
     def find_committee(self, k, profile, method=None):
+        """
+        :param k: size of committee to find
+        :type k: String
+        :param profile: preferences profile object
+        :type profile: Profile
+        :param method: Method of computation - Bruteforce/ILP
+        :type method: String
+        :return: committee winning under given rule
+        """
         self.scores = {}
         if self.weights is None:
             self.weights = self._borda_weights(len(profile.candidates))

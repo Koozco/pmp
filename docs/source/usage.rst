@@ -9,4 +9,8 @@ Developing pmp
 
 During development of your projects you may need to extend or modify pmp code.
 
-.. mdinclude:: usage.md
+.. mdinclude:: usage/usage.md
+
+Working with docs
+-----------------
+.. mdinclude:: usage/docs.md

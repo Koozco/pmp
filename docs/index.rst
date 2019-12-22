@@ -9,6 +9,7 @@
    :caption: Contents:
 
    source/quick_start
+   source/rules
    source/ilp
    source/usage
    source/about

@@ -4,9 +4,17 @@ from itertools import combinations
 
 
 class WeaklySeparable(Rule):
-    """ Weakly Separable scoring rule """
+    """
+    Weakly Separable scoring rule
+    This is base class for all weakly separable scoring rules
+    """
 
     def __init__(self, weights=None, tie_break=random_winner):
+        """
+        :param weights: List of weights that single voter assigns to the corresponding candidates
+        :type weights: List
+        :param tie_break: Function
+        """
         Rule.__init__(self, tie_break)
         self.weights = weights
 
@@ -29,6 +37,15 @@ class WeaklySeparable(Rule):
         return score
 
     def get_committees(self, k, candidates_with_score):
+        """
+        :param k: size of committee
+        :type k: Number
+        :param candidates_with_score: dictionary with lists of candidates who achieved given score
+        :type candidates_with_score: Dict[Number, List[Number]]
+        :return: List[List]
+
+        Find all winning committees
+        """
         all_scores = candidates_with_score.keys()
         decreasing_scores = sorted(all_scores, reverse=True)
         committees = []

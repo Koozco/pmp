@@ -14,5 +14,3 @@ During development of your projects you may need to extend or modify pmp code.
 Working with docs
 -----------------
 .. mdinclude:: usage/docs.md
-
-.. function:: enumerate(sequence[, start=0])

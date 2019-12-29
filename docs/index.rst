@@ -10,6 +10,7 @@
 
    source/quick_start
    source/rules
+   source/preferences
    source/ilp
    source/usage
    source/examples

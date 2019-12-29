@@ -22,6 +22,15 @@ class PAV(Rule):
         self.alpha = alpha if alpha is not None else self._harmonic_alpha
 
     def find_committee(self, k, profile, method=None):
+        """
+        :param k: size of committee to find
+        :type k: String
+        :param profile: preferences profile object
+        :type profile: Profile
+        :param method: Method of computation - Bruteforce/ILP
+        :type method: String
+        :return: committee winning under given rule
+        """
         self.scores = {}
         if method is None:
             method = algorithm.registry.default

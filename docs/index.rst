@@ -8,8 +8,12 @@
    :maxdepth: 2
    :caption: Contents:
 
+   source/quick_start
+   source/rules
+   source/preferences
    source/ilp
    source/usage
+   source/examples
    source/about
 
 .. Indices and tables

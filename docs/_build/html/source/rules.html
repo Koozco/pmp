@@ -1,0 +1,675 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Rules Module &mdash; pmp  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Preferences Module" href="preferences.html" />
+    <link rel="prev" title="Quick Start" href="quick_start.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pmp
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Rules Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#rule">Rule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#weaklyseparable">WeaklySeparable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sntv">SNTV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bloc">Bloc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#borda">Borda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#chamberlincourant">ChamberlinCourant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pav">PAV</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="preferences.html">Preferences Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ilp.html">Integer linear programming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Using pmp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pmp</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Rules Module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/source/rules.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pmp.rules">
+<span id="rules-module"></span><h1>Rules Module<a class="headerlink" href="#module-pmp.rules" title="Permalink to this headline">¶</a></h1>
+<p>Module containing classes representing all supported voting rules.
+For a genereal rule interface see Rule class.</p>
+<dl class="data">
+<dt id="pmp.rules.rules_list">
+<code class="sig-prename descclassname">pmp.rules.</code><code class="sig-name descname">rules_list</code><em class="property"> = ['Bloc', 'Borda', 'ChamberlinCourant', 'PAV', 'Rule', 'SNTV', 'WeaklySeparable']</em><a class="headerlink" href="#pmp.rules.rules_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variable containing names of all provided rules. Initialized during import.</p>
+</dd></dl>
+
+<div class="section" id="rule">
+<h2>Rule<a class="headerlink" href="#rule" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pmp.rules.Rule">
+<em class="property">class </em><code class="sig-prename descclassname">pmp.rules.</code><code class="sig-name descname">Rule</code><span class="sig-paren">(</span><em class="sig-param">tie_break=&lt;function random_winner&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.Rule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scoring rule class.</p>
+<dl class="method">
+<dt id="pmp.rules.Rule.compute_candidate_scores">
+<code class="sig-name descname">compute_candidate_scores</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.Rule.compute_candidate_scores" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+</dl>
+<p>If it is possible, fill profile.scores member dictionary with scores of all committees</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.rules.Rule.compute_committee_score">
+<code class="sig-name descname">compute_committee_score</code><span class="sig-paren">(</span><em class="sig-param">committee</em>, <em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.Rule.compute_committee_score" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>committee</strong> (<em>List</em>) – list of candidates</p></li>
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+</dl>
+<p>Find score assigned to given committee</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.rules.Rule.find_committee">
+<code class="sig-name descname">find_committee</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.Rule.find_committee" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>committee winning under given rule</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="weaklyseparable">
+<h2>WeaklySeparable<a class="headerlink" href="#weaklyseparable" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pmp.rules.WeaklySeparable">
+<em class="property">class </em><code class="sig-prename descclassname">pmp.rules.</code><code class="sig-name descname">WeaklySeparable</code><span class="sig-paren">(</span><em class="sig-param">weights=None</em>, <em class="sig-param">tie_break=&lt;function random_winner&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.WeaklySeparable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Weakly Separable scoring rule
+This is base class for all weakly separable scoring rules</p>
+<dl class="method">
+<dt id="pmp.rules.WeaklySeparable.compute_candidate_scores">
+<code class="sig-name descname">compute_candidate_scores</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.WeaklySeparable.compute_candidate_scores" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+</dl>
+<p>If it is possible, fill profile.scores member dictionary with scores of all committees</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.rules.WeaklySeparable.compute_committee_score">
+<code class="sig-name descname">compute_committee_score</code><span class="sig-paren">(</span><em class="sig-param">committee</em>, <em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.WeaklySeparable.compute_committee_score" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>committee</strong> (<em>List</em>) – list of candidates</p></li>
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+</dl>
+<p>Find score assigned to given committee</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.rules.WeaklySeparable.find_committee">
+<code class="sig-name descname">find_committee</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.WeaklySeparable.find_committee" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>committee winning under given rule</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.rules.WeaklySeparable.get_committees">
+<code class="sig-name descname">get_committees</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">candidates_with_score</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.WeaklySeparable.get_committees" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>Number</em>) – size of committee</p></li>
+<li><p><strong>candidates_with_score</strong> (<em>Dict</em><em>[</em><em>Number</em><em>, </em><em>List</em><em>[</em><em>Number</em><em>]</em><em>]</em>) – dictionary with lists of candidates who achieved given score</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List[List]</p>
+</dd>
+</dl>
+<p>Find all winning committees</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="sntv">
+<h2>SNTV<a class="headerlink" href="#sntv" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pmp.rules.SNTV">
+<em class="property">class </em><code class="sig-prename descclassname">pmp.rules.</code><code class="sig-name descname">SNTV</code><span class="sig-paren">(</span><em class="sig-param">tie_break=&lt;function random_winner&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.SNTV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Single non-transferable vote scoring rule</p>
+<dl class="method">
+<dt id="pmp.rules.SNTV.compute_candidate_scores">
+<code class="sig-name descname">compute_candidate_scores</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.SNTV.compute_candidate_scores" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+</dl>
+<p>If it is possible, fill profile.scores member dictionary with scores of all committees</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.rules.SNTV.compute_committee_score">
+<code class="sig-name descname">compute_committee_score</code><span class="sig-paren">(</span><em class="sig-param">committee</em>, <em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.SNTV.compute_committee_score" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>committee</strong> (<em>List</em>) – list of candidates</p></li>
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+</dl>
+<p>Find score assigned to given committee</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.rules.SNTV.find_committee">
+<code class="sig-name descname">find_committee</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.SNTV.find_committee" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>committee winning under given rule</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.rules.SNTV.get_committees">
+<code class="sig-name descname">get_committees</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">candidates_with_score</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.SNTV.get_committees" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>Number</em>) – size of committee</p></li>
+<li><p><strong>candidates_with_score</strong> (<em>Dict</em><em>[</em><em>Number</em><em>, </em><em>List</em><em>[</em><em>Number</em><em>]</em><em>]</em>) – dictionary with lists of candidates who achieved given score</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List[List]</p>
+</dd>
+</dl>
+<p>Find all winning committees</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="bloc">
+<h2>Bloc<a class="headerlink" href="#bloc" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pmp.rules.Bloc">
+<em class="property">class </em><code class="sig-prename descclassname">pmp.rules.</code><code class="sig-name descname">Bloc</code><span class="sig-paren">(</span><em class="sig-param">weights=None</em>, <em class="sig-param">tie_break=&lt;function random_winner&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.Bloc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bloc vote scoring rule</p>
+<dl class="method">
+<dt id="pmp.rules.Bloc.compute_candidate_scores">
+<code class="sig-name descname">compute_candidate_scores</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.Bloc.compute_candidate_scores" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+</dl>
+<p>If it is possible, fill profile.scores member dictionary with scores of all committees</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.rules.Bloc.compute_committee_score">
+<code class="sig-name descname">compute_committee_score</code><span class="sig-paren">(</span><em class="sig-param">committee</em>, <em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.Bloc.compute_committee_score" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>committee</strong> (<em>List</em>) – list of candidates</p></li>
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+</dl>
+<p>Find score assigned to given committee</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.rules.Bloc.find_committee">
+<code class="sig-name descname">find_committee</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.Bloc.find_committee" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>committee winning under given rule</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.rules.Bloc.get_committees">
+<code class="sig-name descname">get_committees</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">candidates_with_score</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.Bloc.get_committees" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>Number</em>) – size of committee</p></li>
+<li><p><strong>candidates_with_score</strong> (<em>Dict</em><em>[</em><em>Number</em><em>, </em><em>List</em><em>[</em><em>Number</em><em>]</em><em>]</em>) – dictionary with lists of candidates who achieved given score</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List[List]</p>
+</dd>
+</dl>
+<p>Find all winning committees</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="borda">
+<h2>Borda<a class="headerlink" href="#borda" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pmp.rules.Borda">
+<em class="property">class </em><code class="sig-prename descclassname">pmp.rules.</code><code class="sig-name descname">Borda</code><span class="sig-paren">(</span><em class="sig-param">weights=None</em>, <em class="sig-param">tie_break=&lt;function random_winner&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.Borda" title="Permalink to this definition">¶</a></dt>
+<dd><p>Borda vote scoring rule</p>
+<dl class="method">
+<dt id="pmp.rules.Borda.compute_candidate_scores">
+<code class="sig-name descname">compute_candidate_scores</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.Borda.compute_candidate_scores" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+</dl>
+<p>If it is possible, fill profile.scores member dictionary with scores of all committees</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.rules.Borda.compute_committee_score">
+<code class="sig-name descname">compute_committee_score</code><span class="sig-paren">(</span><em class="sig-param">committee</em>, <em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.Borda.compute_committee_score" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>committee</strong> (<em>List</em>) – list of candidates</p></li>
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+</dl>
+<p>Find score assigned to given committee</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.rules.Borda.find_committee">
+<code class="sig-name descname">find_committee</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.Borda.find_committee" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>committee winning under given rule</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.rules.Borda.get_committees">
+<code class="sig-name descname">get_committees</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">candidates_with_score</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.Borda.get_committees" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>Number</em>) – size of committee</p></li>
+<li><p><strong>candidates_with_score</strong> (<em>Dict</em><em>[</em><em>Number</em><em>, </em><em>List</em><em>[</em><em>Number</em><em>]</em><em>]</em>) – dictionary with lists of candidates who achieved given score</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List[List]</p>
+</dd>
+</dl>
+<p>Find all winning committees</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="chamberlincourant">
+<h2>ChamberlinCourant<a class="headerlink" href="#chamberlincourant" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pmp.rules.ChamberlinCourant">
+<em class="property">class </em><code class="sig-prename descclassname">pmp.rules.</code><code class="sig-name descname">ChamberlinCourant</code><span class="sig-paren">(</span><em class="sig-param">weights=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.ChamberlinCourant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Chamberlin-Courant vote scoring rule</p>
+<dl class="method">
+<dt id="pmp.rules.ChamberlinCourant.compute_candidate_scores">
+<code class="sig-name descname">compute_candidate_scores</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.ChamberlinCourant.compute_candidate_scores" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+</dl>
+<p>If it is possible, fill profile.scores member dictionary with scores of all committees</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.rules.ChamberlinCourant.compute_committee_score">
+<code class="sig-name descname">compute_committee_score</code><span class="sig-paren">(</span><em class="sig-param">committee</em>, <em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.ChamberlinCourant.compute_committee_score" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>committee</strong> (<em>List</em>) – list of candidates</p></li>
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+</dl>
+<p>Find score assigned to given committee</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.rules.ChamberlinCourant.find_committee">
+<code class="sig-name descname">find_committee</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">profile</em>, <em class="sig-param">method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.ChamberlinCourant.find_committee" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+<li><p><strong>method</strong> (<em>String</em>) – Method of computation - Bruteforce/ILP</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>committee winning under given rule</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="pav">
+<h2>PAV<a class="headerlink" href="#pav" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pmp.rules.PAV">
+<em class="property">class </em><code class="sig-prename descclassname">pmp.rules.</code><code class="sig-name descname">PAV</code><span class="sig-paren">(</span><em class="sig-param">alpha=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.PAV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proportional Approval Voting scoring rule.</p>
+<dl class="method">
+<dt id="pmp.rules.PAV.compute_candidate_scores">
+<code class="sig-name descname">compute_candidate_scores</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.PAV.compute_candidate_scores" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+</dl>
+<p>If it is possible, fill profile.scores member dictionary with scores of all committees</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.rules.PAV.compute_committee_score">
+<code class="sig-name descname">compute_committee_score</code><span class="sig-paren">(</span><em class="sig-param">committee</em>, <em class="sig-param">k</em>, <em class="sig-param">profile</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.PAV.compute_committee_score" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>committee</strong> (<em>List</em>) – list of candidates</p></li>
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+</ul>
+</dd>
+</dl>
+<p>Find score assigned to given committee</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.rules.PAV.find_committee">
+<code class="sig-name descname">find_committee</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">profile</em>, <em class="sig-param">method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.rules.PAV.find_committee" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>String</em>) – size of committee to find</p></li>
+<li><p><strong>profile</strong> (<a class="reference internal" href="preferences.html#pmp.preferences.Profile" title="pmp.preferences.Profile"><em>Profile</em></a>) – preferences profile object</p></li>
+<li><p><strong>method</strong> (<em>String</em>) – Method of computation - Bruteforce/ILP</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>committee winning under given rule</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="preferences.html" class="btn btn-neutral float-right" title="Preferences Module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="quick_start.html" class="btn btn-neutral float-left" title="Quick Start" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Katarzyna Banaszak, Bartosz Kusek
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

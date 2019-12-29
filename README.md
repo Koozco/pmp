@@ -1,8 +1,8 @@
 # Python Multiwinner Package
 
 # Installation
-`pip install git+https://github.com/Koozco/pmp.git`
+`pip install python-multiwinner-package`
 
 # Wiki
 
-If you want to learn more go [here](https://github.com/Koozco/pmp/wiki).
+If you want to learn more go [here](https://pmp.readthedocs.io/).

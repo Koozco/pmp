@@ -86,6 +86,7 @@
 <li class="toctree-l1"><a class="reference internal" href="rules.html">Rules Module</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Integer linear programming</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#gurobi-instalation-tips">Gurobi instalation tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cplex-instalation-tips">Cplex instalation tips</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Using pmp</a></li>
@@ -163,11 +164,22 @@
 <p>Visit <a class="reference external" href="http://www.gurobi.com">official Gurobi site</a>, get proper license and download installator
 dedicated for your operating system.</p>
 <p>In order to install required python interface <code class="docutils literal notranslate"><span class="pre">gurobipy</span></code> run it’s setup script:</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">GUROBI_INSTALATION_DIR</span>
-<span class="n">python</span> <span class="n">setup</span><span class="p">.</span><span class="n">py</span> <span class="n">install</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">GUROBI_INSTALATION_DIR</span>
+<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 <p>Please note it is important to run this script inside gurobi’s directory.</p>
+</div>
+<div class="section" id="cplex-instalation-tips">
+<h2>Cplex instalation tips<a class="headerlink" href="#cplex-instalation-tips" title="Permalink to this headline">¶</a></h2>
+<p>Visit <a class="reference external" href="https://www.ibm.com/products/ilog-cplex-optimization-studio">official IBM Cplex site</a>, get proper license and download installator
+dedicated for your operating system.</p>
+<p>Now install Cplex python interface.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">cplex</span>
+</pre></div>
+</div>
+<p>Please note:
+<strong>If you are using virtualenv, you may need to recreate your venv after installing this dependencies.</strong></p>
 </div>
 </div>
 

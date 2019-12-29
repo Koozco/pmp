@@ -3,7 +3,7 @@ from .tie_breaking import random_winner
 
 
 class SNTV(WeaklySeparable):
-    """Single non-transferable vote scoring rule."""
+    """Single non-transferable vote scoring rule"""
 
     def __init__(self, tie_break=random_winner):
         WeaklySeparable.__init__(self, [1], tie_break)

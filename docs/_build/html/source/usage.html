@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="About" href="about.html" />
+    <link rel="next" title="Examples" href="examples.html" />
     <link rel="prev" title="Integer linear programming" href="ilp.html" /> 
 </head>
 
@@ -82,11 +82,16 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rules.html">Rules Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preferences.html">Preferences Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ilp.html">Integer linear programming</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Using pmp</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#developing-pmp">Developing pmp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#working-with-docs">Working with docs</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
 </ul>
 
@@ -157,9 +162,9 @@
 <p>You can use pmp twofold. If core functionalities satisfy your needs, simply install pmp with pip.
 Use it as other python modules. For more details please check instructions.</p>
 <div class="section" id="developing-pmp">
-<h2>Developing pmp<a class="headerlink" href="#developing-pmp" title="Permalink to this headline">¶</a></h2>
+<span id="dev-install"></span><h2>Developing pmp<a class="headerlink" href="#developing-pmp" title="Permalink to this headline">¶</a></h2>
 <p>During development of your projects you may need to extend or modify pmp code.</p>
-<p><strong>We strongly encourage you to use ``virtualenv`` during development.</strong></p>
+<p><strong>We strongly encourage you to use virtualenv during development.</strong></p>
 <p>Install <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code> and test installation.</p>
 <div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">virtualenv</span>
 <span class="n">virtualenv</span> <span class="c1">--version</span>
@@ -181,6 +186,20 @@ Use it as other python modules. For more details please check instructions.</p>
 <p>Virtual env will allow you to separate this installation and it’s dependencies from your globaly installed python.</p>
 <p>Enjoy!</p>
 </div>
+<div class="section" id="working-with-docs">
+<h2>Working with docs<a class="headerlink" href="#working-with-docs" title="Permalink to this headline">¶</a></h2>
+<p>As a documentation tool we use Sphinx, however we stay open for any ideas suggestions,
+which may improve our current setup.
+Main file format of Sphinx is <em>reStructuredText</em>, but it is also possible to render <em>Markdown</em> in .rst files.</p>
+<p>If you want to extend documentation, a place to start is  <code class="docutils literal notranslate"><span class="pre">docs/source</span></code>, where are stored all sources.
+After adding sources, compile them with Sphinx Makefile.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">docs</span>
+<span class="n">make</span> <span class="n">clean</span> <span class="n">html</span>
+</pre></div>
+</div>
+<p>Check the result in <code class="docutils literal notranslate"><span class="pre">_build/html/index.html</span></code></p>
+<p>Note: <strong>Depending on your OS it may be necessary not only to install sphinx by pip, but also by OS package manager.</strong></p>
+</div>
 </div>
 
 
@@ -191,7 +210,7 @@ Use it as other python modules. For more details please check instructions.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="about.html" class="btn btn-neutral float-right" title="About" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="ilp.html" class="btn btn-neutral float-left" title="Integer linear programming" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

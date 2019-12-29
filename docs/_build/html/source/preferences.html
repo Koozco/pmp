@@ -1,0 +1,325 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Preferences Module &mdash; pmp  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Integer linear programming" href="ilp.html" />
+    <link rel="prev" title="Rules Module" href="rules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pmp
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rules.html">Rules Module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Preferences Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#preference">Preference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#profile">Profile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ordinal">Ordinal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#approval">Approval</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ilp.html">Integer linear programming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Using pmp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pmp</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Preferences Module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/source/preferences.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pmp.preferences">
+<span id="preferences-module"></span><h1>Preferences Module<a class="headerlink" href="#module-pmp.preferences" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="preference">
+<h2>Preference<a class="headerlink" href="#preference" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pmp.preferences.Preference">
+<em class="property">class </em><code class="sig-prename descclassname">pmp.preferences.</code><code class="sig-name descname">Preference</code><span class="sig-paren">(</span><em class="sig-param">order=[]</em>, <em class="sig-param">weights=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.preferences.Preference" title="Permalink to this definition">¶</a></dt>
+<dd><p>Single voter preference.</p>
+<dl class="method">
+<dt id="pmp.preferences.Preference.is_valid">
+<code class="sig-name descname">is_valid</code><span class="sig-paren">(</span><em class="sig-param">num_cand</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.preferences.Preference.is_valid" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>num_cand</strong> (<em>Number</em>) – Number of candidates</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Boolean</p>
+</dd>
+</dl>
+<p>Check if Preference is valid under profile with given candidates number</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="profile">
+<h2>Profile<a class="headerlink" href="#profile" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pmp.preferences.Profile">
+<em class="property">class </em><code class="sig-prename descclassname">pmp.preferences.</code><code class="sig-name descname">Profile</code><span class="sig-paren">(</span><em class="sig-param">candidates=None</em>, <em class="sig-param">preferences=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.preferences.Profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Profile of voters’ preferences</p>
+<dl class="method">
+<dt id="pmp.preferences.Profile.add_preference">
+<code class="sig-name descname">add_preference</code><span class="sig-paren">(</span><em class="sig-param">preference</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.preferences.Profile.add_preference" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>preference</strong> (<a class="reference internal" href="#pmp.preferences.Preference" title="pmp.preferences.Preference"><em>Preference</em></a>) – Added preference</p>
+</dd>
+</dl>
+<p>Add single preference to the profile. Works only if preference is valid.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.preferences.Profile.add_preferences">
+<code class="sig-name descname">add_preferences</code><span class="sig-paren">(</span><em class="sig-param">preferences</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.preferences.Profile.add_preferences" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>preferences</strong> (<em>List</em><em>(</em><a class="reference internal" href="#pmp.preferences.Preference" title="pmp.preferences.Preference"><em>Preference</em></a><em>)</em>) – Added preferences</p>
+</dd>
+</dl>
+<p>Add preferences to the profile. Adds only the valid ones.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.preferences.Profile.clean_scores">
+<code class="sig-name descname">clean_scores</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pmp.preferences.Profile.clean_scores" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear candidates scores cached in profile</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ordinal">
+<h2>Ordinal<a class="headerlink" href="#ordinal" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pmp.preferences.Ordinal">
+<em class="property">class </em><code class="sig-prename descclassname">pmp.preferences.</code><code class="sig-name descname">Ordinal</code><span class="sig-paren">(</span><em class="sig-param">order</em>, <em class="sig-param">weights=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.preferences.Ordinal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ordinal preference profile.</p>
+<dl class="method">
+<dt id="pmp.preferences.Ordinal.better_candidates_count">
+<code class="sig-name descname">better_candidates_count</code><span class="sig-paren">(</span><em class="sig-param">candidate</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.preferences.Ordinal.better_candidates_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Candidate’s rank - from how many candidates the candidate is worse.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.preferences.Ordinal.compare_candidates">
+<code class="sig-name descname">compare_candidates</code><span class="sig-paren">(</span><em class="sig-param">candidate_a</em>, <em class="sig-param">candidate_b</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.preferences.Ordinal.compare_candidates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the better one.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmp.preferences.Ordinal.worse_candidates_count">
+<code class="sig-name descname">worse_candidates_count</code><span class="sig-paren">(</span><em class="sig-param">candidate</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.preferences.Ordinal.worse_candidates_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Candidate’s rank - from how many candidates the candidate is better.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="approval">
+<h2>Approval<a class="headerlink" href="#approval" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pmp.preferences.Approval">
+<em class="property">class </em><code class="sig-prename descclassname">pmp.preferences.</code><code class="sig-name descname">Approval</code><span class="sig-paren">(</span><em class="sig-param">approved</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.preferences.Approval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Approval preference profile.</p>
+<dl class="method">
+<dt id="pmp.preferences.Approval.is_valid">
+<code class="sig-name descname">is_valid</code><span class="sig-paren">(</span><em class="sig-param">num_cand</em><span class="sig-paren">)</span><a class="headerlink" href="#pmp.preferences.Approval.is_valid" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>num_cand</strong> (<em>Number</em>) – Number of candidates</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Boolean</p>
+</dd>
+</dl>
+<p>Check if Preference is valid under profile with given candidates number</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ilp.html" class="btn btn-neutral float-right" title="Integer linear programming" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="rules.html" class="btn btn-neutral float-left" title="Rules Module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Katarzyna Banaszak, Bartosz Kusek
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

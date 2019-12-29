@@ -188,15 +188,16 @@ Use it as other python modules. For more details please check instructions.</p>
 <div class="section" id="working-with-docs">
 <h2>Working with docs<a class="headerlink" href="#working-with-docs" title="Permalink to this headline">¶</a></h2>
 <p>As a documentation tool we use Sphinx, however we stay open for any ideas suggestions,
-which may improve our current setup.<span class="raw-html-m2r"><br></span>
+which may improve our current setup.
 Main file format of Sphinx is <em>reStructuredText</em>, but it is also possible to render <em>Markdown</em> in .rst files.</p>
 <p>If you want to extend documentation, a place to start is  <code class="docutils literal notranslate"><span class="pre">docs/source</span></code>, where are stored all sources.
 After adding sources, compile them with Sphinx Makefile.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> docs
-make clean html
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">docs</span>
+<span class="n">make</span> <span class="n">clean</span> <span class="n">html</span>
 </pre></div>
 </div>
 <p>Check the result in <code class="docutils literal notranslate"><span class="pre">_build/html/index.html</span></code></p>
+<p>Note: <strong>Depending on your OS it may be necessary not only to install sphinx by pip, but also by OS package manager.</strong></p>
 </div>
 </div>
 

@@ -35,7 +35,7 @@ def print_or_save(object_id, value, data_out=None):
 
 
 # read in the data in our format
-# m n  (number of candidates and voters)
+# m n k  (number of candidates and voters, committee size)
 # x  y (m candidates in m lines)
 # ...
 # x  y (n voters in n lines)
@@ -48,13 +48,24 @@ def read_data(f):
     candidates = []
     voters = []
     lines = f.readlines()
-    (m, n) = lines[0].split()
+    parameters = lines[0].split()
+    k = 0
+    if len(parameters) == 2:
+        with_winners = False
+        m, n = parameters
+    elif len(parameters) == 3:
+        with_winners = True
+        m, n, k = parameters
+    else:
+        raise Exception('Invalid .win file format!')
+
     m = int(m)
     n = int(n)
+    k = int(k)
 
     for l in lines[1:m + 1]:
         row = l.split()
-        candidates.append(tuple(map(float, row[:-1])) + (row[-1], ))
+        candidates.append(tuple(map(float, row[:-1])) + (row[-1],))
 
     dim = len(candidates[0])
     if isinstance(candidates[0], str):
@@ -66,4 +77,12 @@ def read_data(f):
         preferences.append(list(map(float, preference)))
         voters.append(voter)
 
-    return candidates, voters, preferences
+    if with_winners:
+        winners = []
+        for l in lines[1 + n + m: 1 + n + m + k]:
+            row = l.split()
+            winners.append(int(row[0]))
+
+        return candidates, voters, preferences, winners
+    else:
+        return candidates, voters, preferences

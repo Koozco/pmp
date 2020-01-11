@@ -1,5 +1,4 @@
 from random import seed
-# from sys import *
 
 from .saving_files import save_to_file, FileType, filename_stamped
 from ..preferences.ordinal import Ordinal

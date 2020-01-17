@@ -5,7 +5,8 @@ from sys import *
 try:
     from pmp.experiments.experiment import Experiment
     from pmp.experiments.experiment_config import ExperimentConfig
-    from pmp.experiments import generating_functions, ElectionConfig
+    from pmp.experiments.election_config import ElectionConfig
+    from pmp.experiments import generating_functions
     from pmp.experiments.helpers import Command
     from pmp.rules import *
 except (ImportError, NameError) as e:

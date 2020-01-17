@@ -1,4 +1,7 @@
-class Ordinal:
+from .preference import Preference
+
+
+class Ordinal(Preference):
     """Ordinal preference profile."""
 
     def __init__(self, order, weights=None):

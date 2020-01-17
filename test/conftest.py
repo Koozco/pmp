@@ -1,13 +1,13 @@
 import pytest
 
-from pmp.preferences import Ordinal, Approval
-from pmp.experiments import Experiment
+from pmp.preferences import Ordinal, Approval, Profile
 
 
 @pytest.fixture
-def experiment():
-    experiment = Experiment()
-    return experiment
+def approval_profile(approval_factory):
+    candidates = [0, 1, 2]
+    preferences = [approval_factory(size=2) for _ in range(3)]
+    return Profile(candidates, preferences)
 
 
 @pytest.fixture
@@ -19,7 +19,7 @@ def ordinal():
 
 @pytest.fixture
 def approval():
-    approved = set([1, 2, 3, 4, 5])
+    approved = {1, 2, 3, 4, 5}
     return Approval(approved)
 
 

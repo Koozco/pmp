@@ -7,8 +7,9 @@ from ..rules.borda import Borda
 
 from . import helpers
 from .experiment_config import ExperimentConfig
+from .election_config import ElectionConfig
 from .generating_functions import impartial
-from .helpers import Command, ExperimentElectionConfig
+from .helpers import Command
 from .visualize import *
 
 image_import_fail = False
@@ -104,7 +105,7 @@ class Experiment:
         :param log_on:
         :type log_on: Boolean
         :param elect_configs: Election configs. If given, experiment ignores it's one-rule configuration
-        :type elect_configs: List[ExperimentElectionConfig]
+        :type elect_configs: List[ElectionConfig]
 
         Run experiment. By default use it's 'one-rule' setup. Override this behaviour by providing election configs.
         """
@@ -123,7 +124,7 @@ class Experiment:
             candidates, voters, preferences = self.__execute_commands()
 
             if elect_configs is None:
-                elect_configs = [ExperimentElectionConfig(self.rule, self.k, self.result_filename)]
+                elect_configs = [ElectionConfig(self.rule, self.k, self.result_filename)]
 
             for elect_config in elect_configs:
                 self.set_result_filename(elect_config.filename)

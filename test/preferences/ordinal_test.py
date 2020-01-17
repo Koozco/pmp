@@ -1,4 +1,5 @@
 import pytest
+
 from expects import *
 from pmp.preferences import Ordinal
 

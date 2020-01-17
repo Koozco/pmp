@@ -22,9 +22,13 @@ except (ImportError, NameError):
 class Experiment:
     """Experiment to run"""
 
-    def __init__(self, conf=None):
-        self.__config = conf
-        if conf is None:
+    def __init__(self, config=None):
+        """
+        :param config: Experiment's configuration
+        :type config: ExperimentConfig
+        """
+        self.__config = config
+        if config is None:
             self.__config = ExperimentConfig()
         self.__generated_dir_path = "generated"  # default directory path for generated files
         self.k = 1
@@ -35,32 +39,75 @@ class Experiment:
         self.__generate_inout = False
 
     def set_generated_dir_path(self, dir_path):
-        """Set a path to the directory where files are generated"""
+        """
+        :param dir_path: Path to the root directory where files are generated
+        :type dir_path: String
+        """
         if not os.path.isabs(dir_path):
             dir_path = os.path.join(os.path.curdir, dir_path)
         self.__generated_dir_path = dir_path
 
     def get_generated_dir_path(self):
-        """Get a path to the directory where files are generated"""
+        """
+        :returns: Path to the root directory where files are generated
+        :rtype: String
+        """
         return self.__generated_dir_path
 
     def set_election(self, rule, k):
-        """Set election parameters: the rule and the size of the committee"""
+        """
+        :param rule: Scoring rule being set
+        :type rule: Rule
+        :param k: Size of the committee being set
+        :type k: Integer
+
+        Set election parameters the rule and the size of the committee.
+        Overrides previous experiment setup. Only for setting up one-rule experiments.
+        """
         self.rule = rule
         self.k = int(k)
 
     def set_result_filename(self, name):
-        """Set filename of result file."""
+        """
+        :param name: Result filename
+        :type name: String
+
+        Set result name. It builds up first part of names of all files being generated during experiment.
+        Overrides previous value. Only for setting up one-rule experiments.
+        """
         self.result_filename = name
 
     def set_inout_filename(self, name):
-        """Set filename of files containing generated candidates and voters"""
+        """
+        :param name: Inout filename
+        :type name: String
+
+        Set filename of files containing generated candidates and voters.
+        Overrides previous value. Only for setting up one-rule experiments.
+        """
         self.__generate_inout = True
         self.inout_filename = name
 
     def run(self, visualization=False, n=1, save_win=False, save_in=False, save_out=False, log_on=True,
             elect_configs=None):
-        """Run experiment"""
+        """
+        :param visualization:
+        :type visualization: Boolean
+        :param n:
+        :type n: Integer
+        :param save_win:
+        :type save_win: Boolean
+        :param save_in:
+        :type save_in: Boolean
+        :param save_out:
+        :type save_out: Boolean
+        :param log_on:
+        :type log_on: Boolean
+        :param elect_configs: Election configs. If given, experiment ignores it's one-rule configuration
+        :type elect_configs: List[ExperimentElectionConfig]
+
+        Run experiment. By default use it's 'one-rule' setup. Override this behaviour by providing election configs.
+        """
         dir_path = self.__generated_dir_path
         if self.__generate_inout:
             save_in = True
@@ -124,9 +171,15 @@ class Experiment:
             self.two_dimensional = False
         return candidates, voters, preferences
 
-    # run election, compute winners
     def __run_election(self, candidates, preferences):
-        """Run election"""
+        """
+        :param candidates:
+        :type candidates: List
+        :param preferences:
+        :type preferences: List[Preference]
+
+        Run election, compute winners
+        """
         seed()
 
         profile = Profile(candidates, preferences)
@@ -137,7 +190,18 @@ class Experiment:
         return self.rule().find_committee(self.k, profile)
 
     def __visualize(self, candidates, voters, winners, iteration):
-        """Visualize winners from two-dimensional candidates and voters space"""
+        """
+        :param candidates:
+        :type candidates: List[Tuple[Number]]
+        :param voters:
+        :type voters: List[Tuple[Number]]
+        :param winners: Winning candidates id's
+        :type winners: List[Integer]
+        :param iteration:
+        :type iteration: Integer
+
+        Visualize winners from two-dimensional candidates and voters space
+        """
         if self.two_dimensional:
             if image_import_fail:
                 print("Cannot visualize results because of PIL import fail.")
@@ -150,16 +214,31 @@ class Experiment:
 
 
 def compute_dist(v, candidates):
-    """Compute the distances of voter v from the candidates in set C
+    """
+    :param v: voter
+    :type v: Tuple[Number]
+    :param candidates:
+    :type candidates: List[Tuple[Number]]
+
+    Compute the distances of voter v from the candidates in set C
     outputs a list of the format (i, d) where i is the candidate
-    name and d is the distance"""
+    name and d is the distance.
+    """
     m = len(candidates)
     d = [(j, dist(v, candidates[j])) for j in range(m)]
     return d
 
 
 def preference_orders(candidates, voters):
-    """Create Ordinal preferences list from candidates and voters"""
+    """
+    :param candidates:
+    :type candidates: List[Tuple[Number]]
+    :param voters:
+    :type voters: List[Tuple[Number]]
+    :rtype: List[Ordinal]
+
+    Create Ordinal preferences list from n-dimensional candidates and voters.
+    """
     preferences = []
 
     for v in voters:

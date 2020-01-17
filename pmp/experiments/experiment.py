@@ -1,6 +1,7 @@
 from random import seed
 
 from .saving_files import save_to_file, FileType, filename_stamped
+from ..preferences import Preference
 from ..preferences.ordinal import Ordinal
 from ..preferences.profile import Profile
 from ..rules.borda import Borda
@@ -34,10 +35,92 @@ class Experiment:
         self.__generated_dir_path = "generated"  # default directory path for generated files
         self.k = 1
         self.rule = Borda
+        self.election_configs = []
         self.inout_filename = "input-data"
         self.result_filename = "default"
         self.two_dimensional = True
         self.__generate_inout = False
+
+    def run(self, visualization=False, n=1, save_win=False, save_in=False, save_out=False, log_on=True,
+            elect_configs=None):
+        """
+        :param visualization:
+        :type visualization: Boolean
+        :param n:
+        :type n: Integer
+        :param save_win:
+        :type save_win: Boolean
+        :param save_in:
+        :type save_in: Boolean
+        :param save_out:
+        :type save_out: Boolean
+        :param log_on:
+        :type log_on: Boolean
+        :param elect_configs: Election configs. If given, experiment ignores it's one-rule configuration
+        :type elect_configs: List[ElectionConfig]
+
+        Run experiment. Experiment runs elections configured in following precedence:
+        * from elect_configs parameter, if present
+        * set up from election_configurations added by add_election, if added
+        * set up from set_election
+        """
+        dir_path = self.__generated_dir_path
+        if self.__generate_inout:
+            save_in = True
+            save_out = True
+
+        try:
+            helpers.make_dirs(dir_path, exist_ok=True)
+        except OSError as e:
+            if not os.path.isdir(dir_path):
+                raise e
+
+        for i in range(n):
+            candidates, voters, preferences = self.__execute_commands()
+
+            election_configurations = []
+            if elect_configs is not None:
+                election_configurations = elect_configs
+            elif len(self.election_configs) > 0:
+                election_configurations = self.election_configs
+            else:
+                election_configurations = [ElectionConfig(self.rule, self.k, self.result_filename)]
+
+            for elect_config in election_configurations:
+                self.set_result_filename(elect_config.id)
+                self.set_election(elect_config.rule, elect_config.k)
+
+                if log_on:
+                    print('Candidates', candidates)
+                    print('Voters', voters)
+
+                if save_in:
+                    save_to_file(self, FileType.IN_FILE, i, candidates, voters)
+                if save_out:
+                    save_to_file(self, FileType.OUT_FILE, i, candidates, voters, preferences)
+
+                winners = self.__run_election(candidates, preferences)
+                if log_on:
+                    print('Winners', winners)
+
+                if save_win:
+                    save_to_file(self, FileType.WIN_FILE, i, candidates, voters, preferences, winners)
+
+                if visualization:
+                    self.__visualize(candidates, voters, winners, i)
+
+    def add_election(self, rule, k, id):
+        """
+        :param rule: Scoring rule for added election
+        :type rule: Rule
+        :param k: Size of the winning committee for added election
+        :type k: Integer
+        :param id: Text id for the election. Builds up first part of output filenames
+        :type id: String
+
+        For multi-rule experiments. It's preferred way of defining elections in experiments.
+        """
+        self.election_configs.append(ElectionConfig(rule, k, id))
 
     def set_generated_dir_path(self, dir_path):
         """
@@ -62,6 +145,7 @@ class Experiment:
         :param k: Size of the committee being set
         :type k: Integer
 
+        [Deprecated]
         Set election parameters the rule and the size of the committee.
         Overrides previous experiment setup. Only for setting up one-rule experiments.
         """
@@ -73,6 +157,7 @@ class Experiment:
         :param name: Result filename
         :type name: String
 
+        [Deprecated]
         Set result name. It builds up first part of names of all files being generated during experiment.
         Overrides previous value. Only for setting up one-rule experiments.
         """
@@ -88,66 +173,6 @@ class Experiment:
         """
         self.__generate_inout = True
         self.inout_filename = name
-
-    def run(self, visualization=False, n=1, save_win=False, save_in=False, save_out=False, log_on=True,
-            elect_configs=None):
-        """
-        :param visualization:
-        :type visualization: Boolean
-        :param n:
-        :type n: Integer
-        :param save_win:
-        :type save_win: Boolean
-        :param save_in:
-        :type save_in: Boolean
-        :param save_out:
-        :type save_out: Boolean
-        :param log_on:
-        :type log_on: Boolean
-        :param elect_configs: Election configs. If given, experiment ignores it's one-rule configuration
-        :type elect_configs: List[ElectionConfig]
-
-        Run experiment. By default use it's 'one-rule' setup. Override this behaviour by providing election configs.
-        """
-        dir_path = self.__generated_dir_path
-        if self.__generate_inout:
-            save_in = True
-            save_out = True
-
-        try:
-            helpers.make_dirs(dir_path, exist_ok=True)
-        except OSError as e:
-            if not os.path.isdir(dir_path):
-                raise e
-
-        for i in range(n):
-            candidates, voters, preferences = self.__execute_commands()
-
-            if elect_configs is None:
-                elect_configs = [ElectionConfig(self.rule, self.k, self.result_filename)]
-
-            for elect_config in elect_configs:
-                self.set_result_filename(elect_config.filename)
-                self.set_election(elect_config.rule, elect_config.k)
-
-                if log_on:
-                    print('Candidates', candidates)
-                    print('Voters', voters)
-
-                if save_in:
-                    save_to_file(self, FileType.IN_FILE, i, candidates, voters)
-                if save_out:
-                    save_to_file(self, FileType.OUT_FILE, i, candidates, voters, preferences)
-
-                winners = self.__run_election(candidates, preferences)
-                if log_on:
-                    print('Winners', winners)
-
-                if save_win:
-                    save_to_file(self, FileType.WIN_FILE, i, candidates, voters, preferences, winners)
-
-                if visualization:
-                    self.__visualize(candidates, voters, winners, i)
 
     def __execute_commands(self):
         """Execute commands from config to compute candidates, voters and preferences"""
@@ -167,7 +192,10 @@ class Experiment:
             elif command_type == Command.IMPARTIAL:
                 candidates, voters, preferences = impartial(*args)
         if not preferences:
-            preferences = preference_orders(candidates, voters)
+            if isinstance(voters[0], Preference):
+                preferences = voters
+            else:
+                preferences = preference_orders(candidates, voters)
         if any(isinstance(candidate, int) or len(candidate) != 3 for candidate in candidates):
             self.two_dimensional = False
         return candidates, voters, preferences

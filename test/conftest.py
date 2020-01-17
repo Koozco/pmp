@@ -1,5 +1,13 @@
 import pytest
+
 from pmp.preferences import Ordinal, Approval
+from pmp.experiments import Experiment
+
+
+@pytest.fixture
+def experiment():
+    experiment = Experiment()
+    return experiment
 
 
 @pytest.fixture

@@ -16,7 +16,7 @@ def make_dirs(dir_path, exist_ok=False):
             os.makedirs(dir_path)
     else:
         if path_exists:
-            raise OSError("Directory already exists.")
+            raise OSError('Directory already exists.')
 
 
 def print_or_save(object_id, value, data_out=None):

@@ -5,18 +5,35 @@ from .helpers import Command
 
 
 class ExperimentConfig:
-    def __init__(self):
+    def __init__(self, id=''):
+        """
+        :param id: configuration id, used in generation of filenames
+        :type id: String
+        """
+        self.id = id
         self.__candidates = []
         self.__voters = []
         self.__commands = []
 
     def get_candidates(self):
+        """
+        :return: Copy of candidates
+        :rtype: List
+        """
         return copy.copy(self.__candidates)
 
     def set_candidates(self, list_of_candidates):
+        """
+        :param list_of_candidates: List of candidates
+        :type list_of_candidates: List
+        """
         self.__candidates = list_of_candidates
 
     def add_candidates(self, list_of_candidates):
+        """
+        :param list_of_candidates: List of candidates
+        :type list_of_candidates: List
+        """
         if inspect.isfunction(list_of_candidates):
             self.__commands.append((Command.GEN_CANDIDATES, list_of_candidates))
         else:

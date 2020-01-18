@@ -34,7 +34,7 @@ def test_run_experiment_set_election_precedence(experiment, tmpdir):
     experiment.set_generated_dir_path(tmpdir)
     experiment.set_election(Bloc, 2)
     experiment.set_result_filename('bloc')
-    experiment.run(n=1, log_on=False, save_win=True)
+    experiment.run(n=1, log_on=False, save_win=True, split_dirs=False)
 
     files = generated_files(tmpdir)
     expect(len(files)).to(equal(1))
@@ -47,7 +47,7 @@ def test_run_experiment_add_election_precedence(experiment, tmpdir):
     experiment.set_election(Bloc, 2)
     experiment.set_result_filename('bloc')
     experiment.add_election(Bloc, 1, 'other')
-    experiment.run(n=1, log_on=False, save_win=True)
+    experiment.run(n=1, log_on=False, save_win=True, split_dirs=False)
 
     files = generated_files(tmpdir)
     expect(len(files)).to(equal(1))
@@ -61,7 +61,7 @@ def test_run_experiment_elect_configs_precedence(experiment, tmpdir):
     experiment.set_result_filename('bloc')
     experiment.add_election(Bloc, 1, 'other')
     election_configs = [ElectionConfig(Bloc, 1, 'moreOther')]
-    experiment.run(n=1, log_on=False, save_win=True, elect_configs=election_configs)
+    experiment.run(n=1, log_on=False, save_win=True, elect_configs=election_configs, split_dirs=False)
 
     files = generated_files(tmpdir)
     expect(len(files)).to(equal(1))

@@ -42,7 +42,7 @@ class Experiment:
         self.__generate_inout = False
 
     def run(self, visualization=False, n=1, save_win=False, save_in=False, save_out=False, log_on=True,
-            elect_configs=None):
+            elect_configs=None, split_dirs=True):
         """
         :param visualization:
         :type visualization: Boolean
@@ -58,6 +58,8 @@ class Experiment:
         :type log_on: Boolean
         :param elect_configs: Election configs. If given, experiment ignores it's one-rule configuration
         :type elect_configs: List[ElectionConfig]
+        :param split_dirs: When True create separate directory for each election related files
+        :type split_dirs: Boolean
 
         Run experiment. Experiment runs elections configured in following precedence:
         * from elect_configs parameter, if present
@@ -75,16 +77,26 @@ class Experiment:
             if not os.path.isdir(dir_path):
                 raise e
 
-        for i in range(n):
-            candidates, voters, preferences = self.__execute_commands()
+        election_configurations = []
+        if elect_configs is not None:
+            election_configurations = elect_configs
+        elif len(self.election_configs) > 0:
+            election_configurations = self.election_configs
+        else:
+            election_configurations = [ElectionConfig(self.rule, self.k, self.result_filename)]
 
-            election_configurations = []
-            if elect_configs is not None:
-                election_configurations = elect_configs
-            elif len(self.election_configs) > 0:
-                election_configurations = self.election_configs
-            else:
-                election_configurations = [ElectionConfig(self.rule, self.k, self.result_filename)]
+        if split_dirs:
+            for config in election_configurations:
+                path = os.path.join(dir_path, config.id)
+                try:
+                    helpers.make_dirs(path, exist_ok=True)
+                except OSError as e:
+                    if not os.path.isdir(path):
+                        raise e
+
+        for i in range(n):
+            print('{}/{}'.format(i+1, n))
+            candidates, voters, preferences = self.__execute_commands()
 
             for elect_config in election_configurations:
                 self.set_result_filename(elect_config.id)
@@ -95,16 +107,18 @@ class Experiment:
                     print('Voters', voters)
 
                 if save_in:
-                    save_to_file(self, FileType.IN_FILE, i, candidates, voters)
+                    save_to_file(self, FileType.IN_FILE, i, candidates, voters, subdir=split_dirs)
                 if save_out:
-                    save_to_file(self, FileType.OUT_FILE, i, candidates, voters, preferences)
+                    save_to_file(self, FileType.OUT_FILE, i, candidates, voters, preferences, subdir=split_dirs)
 
                 winners = self.__run_election(candidates, preferences)
                 if log_on:
                     print('Winners', winners)
 
                 if save_win:
-                    save_to_file(self, FileType.WIN_FILE, i, candidates, voters, preferences, winners)
+                    save_to_file(
+                        self, FileType.WIN_FILE, i, candidates, voters, preferences, winners, subdir=split_dirs
+                    )
 
                 if visualization:
                     self.__visualize(candidates, voters, winners, i)
@@ -173,6 +187,9 @@ class Experiment:
         """
         self.__generate_inout = True
         self.inout_filename = name
+
+    def get_config_id(self):
+        return self.__config.id
 
     def __execute_commands(self):
         """Execute commands from config to compute candidates, voters and preferences"""

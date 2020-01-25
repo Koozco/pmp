@@ -5,10 +5,14 @@ from .helpers import Command
 
 
 class ExperimentConfig:
+    """Store candidates and voters configuration.
+    Above properties can be stored as static values or generating functions,
+    so different setup is generated each time."""
+
     def __init__(self, id=''):
         """
         :param id: configuration id, used in generation of filenames
-        :type id: String
+        :type id: str
         """
         self.id = id
         self.__candidates = []
@@ -30,10 +34,6 @@ class ExperimentConfig:
         self.__candidates = list_of_candidates
 
     def add_candidates(self, list_of_candidates):
-        """
-        :param list_of_candidates: List of candidates
-        :type list_of_candidates: List
-        """
         if inspect.isfunction(list_of_candidates):
             self.__commands.append((Command.GEN_CANDIDATES, list_of_candidates))
         else:
@@ -67,6 +67,6 @@ class ExperimentConfig:
     def get_commands(self):
         return self.__commands
 
-    # candidates in impartial only as a list of consecutive integers starting from 0
     def impartial(self, m, n):
+        """Candidates in impartial only as a list of consecutive integers starting from 0"""
         self.__commands.append((Command.IMPARTIAL, (m, n)))

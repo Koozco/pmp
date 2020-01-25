@@ -9,6 +9,8 @@
    :caption: Contents:
 
    source/quick_start
+   source/experiment_tutorial
+   source/experiment
    source/rules
    source/preferences
    source/ilp

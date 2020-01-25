@@ -17,7 +17,7 @@ image_import_fail = False
 try:
     from PIL import Image
 except (ImportError, NameError):
-    print("PIL module is not available. Pictures will not be generated.")
+    print('PIL module is not available. Pictures will not be generated.')
     image_import_fail = True
 
 
@@ -32,12 +32,12 @@ class Experiment:
         self.__config = config
         if config is None:
             self.__config = ExperimentConfig()
-        self.__generated_dir_path = "generated"  # default directory path for generated files
+        self.__generated_dir_path = 'generated'  # default directory path for generated files
         self.k = 1
         self.rule = Borda
         self.election_configs = []
-        self.inout_filename = "input-data"
-        self.result_filename = "default"
+        self.inout_filename = 'input-data'
+        self.result_filename = 'default'
         self.two_dimensional = True
         self.__generate_inout = False
 
@@ -45,21 +45,21 @@ class Experiment:
             elect_configs=None, split_dirs=True):
         """
         :param visualization:
-        :type visualization: Boolean
+        :type visualization: bool
         :param n:
-        :type n: Integer
+        :type n: int
         :param save_win:
-        :type save_win: Boolean
+        :type save_win: bool
         :param save_in:
-        :type save_in: Boolean
+        :type save_in: bool
         :param save_out:
-        :type save_out: Boolean
+        :type save_out: bool
         :param log_on:
-        :type log_on: Boolean
+        :type log_on: bool
         :param elect_configs: Election configs. If given, experiment ignores it's one-rule configuration
         :type elect_configs: List[ElectionConfig]
         :param split_dirs: When True create separate directory for each election related files
-        :type split_dirs: Boolean
+        :type split_dirs: bool
 
         Run experiment. Experiment runs elections configured in following precedence:
         * from elect_configs parameter, if present
@@ -128,9 +128,9 @@ class Experiment:
         :param rule: Scoring rule for added election
         :type rule: Rule
         :param k: Size of the winning committee for added election
-        :type k: Integer
+        :type k: int
         :param id: Text id for the election. Builds up first part of output filenames
-        :type id: String
+        :type id: str
 
         For multi-rule experiments. It's preferred way of defining elections in experiments.
         """
@@ -139,7 +139,7 @@ class Experiment:
     def set_generated_dir_path(self, dir_path):
         """
         :param dir_path: Path to the root directory where files are generated
-        :type dir_path: String
+        :type dir_path: str
         """
         if not os.path.isabs(dir_path):
             dir_path = os.path.join(os.path.curdir, dir_path)
@@ -148,7 +148,7 @@ class Experiment:
     def get_generated_dir_path(self):
         """
         :returns: Path to the root directory where files are generated
-        :rtype: String
+        :rtype: str
         """
         return self.__generated_dir_path
 
@@ -157,7 +157,7 @@ class Experiment:
         :param rule: Scoring rule being set
         :type rule: Rule
         :param k: Size of the committee being set
-        :type k: Integer
+        :type k: int
 
         [Deprecated]
         Set election parameters the rule and the size of the committee.
@@ -169,7 +169,7 @@ class Experiment:
     def set_result_filename(self, name):
         """
         :param name: Result filename
-        :type name: String
+        :type name: str
 
         [Deprecated]
         Set result name. It builds up first part of names of all files being generated during experiment.
@@ -180,7 +180,7 @@ class Experiment:
     def set_inout_filename(self, name):
         """
         :param name: Inout filename
-        :type name: String
+        :type name: str
 
         Set filename of files containing generated candidates and voters.
         Overrides previous value. Only for setting up one-rule experiments.
@@ -242,9 +242,9 @@ class Experiment:
         :param voters:
         :type voters: List[Tuple[Number]]
         :param winners: Winning candidates id's
-        :type winners: List[Integer]
+        :type winners: List[int]
         :param iteration:
-        :type iteration: Integer
+        :type iteration: int
 
         Visualize winners from two-dimensional candidates and voters space
         """

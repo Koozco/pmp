@@ -79,3 +79,24 @@ def read_data(f):
         return candidates, voters, preferences, winners
     else:
         return candidates, voters, preferences
+
+
+def process_win_dir(path, strategy):
+    """
+    :param path: path of processed directory
+    :type path: str
+    :param strategy: Run with (candidates, voters, winners, election)
+    :type strategy: Callable
+    """
+    for root, dirs, file_names in os.walk(path):
+        depth = len(root.split('/'))
+
+        if depth == 2:
+            win_files = [fname for fname in file_names if fname.split('.')[-1] == 'win']
+            election = root.split('/')[-1]
+
+            for fname in win_files:
+                f = open(os.path.join(root, fname), 'r')
+                candidates_list, voters_list, _, winners_list = read_data(f)
+
+                strategy(candidates=candidates_list, voters=voters_list, winners=winners_list, election=election)

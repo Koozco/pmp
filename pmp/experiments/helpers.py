@@ -58,7 +58,7 @@ def read_data(f):
 
     for l in lines[1:m + 1]:
         row = l.split()
-        candidates.append(tuple(map(float, row[:-1])) + (row[-1],))
+        candidates.append(tuple(map(float, row[1:-1])) + (row[-1],))
 
     dim = len(candidates[0])
     if isinstance(candidates[0], str):
@@ -85,18 +85,22 @@ def process_win_dir(path, strategy):
     """
     :param path: path of processed directory
     :type path: str
-    :param strategy: Run with (candidates, voters, winners, election)
-    :type strategy: Callable
+    :param strategy: Run with {candidates, voters, preferences, winners, election}
+    :type strategy: Callable[List, List, List, List, str]
+
+    Helper for processing experiment-generated directories. Visits all election directories stored in path directory.
+    After loading .win file runs strategy with candidates, voters, preferences, winners, election args.
+    Election is a string id.
     """
     for root, dirs, file_names in os.walk(path):
         depth = len(root.split('/'))
 
         if depth == 2:
             win_files = [fname for fname in file_names if fname.split('.')[-1] == 'win']
-            election = root.split('/')[-1]
 
             for fname in win_files:
                 f = open(os.path.join(root, fname), 'r')
-                candidates_list, voters_list, _, winners_list = read_data(f)
+                candidates_list, voters_list, preferences_list, winners_list = read_data(f)
 
-                strategy(candidates=candidates_list, voters=voters_list, winners=winners_list, election=election)
+                strategy(candidates=candidates_list, voters=voters_list, preferences=preferences_list,
+                         winners=winners_list, election=fname)

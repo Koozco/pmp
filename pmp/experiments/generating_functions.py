@@ -8,7 +8,7 @@ image_import_fail = False
 try:
     from PIL import Image
 except (ImportError, NameError):
-    print("PIL module is not available. Pictures will not be generated.")
+    print('PIL module is not available. Pictures will not be generated.')
     image_import_fail = True
 
 

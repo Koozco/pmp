@@ -31,12 +31,14 @@ def __file_path_stamped(path, filename, file_extension, number):
     return os.path.join(path, filename_stamped(filename, number) + file_extension)
 
 
-def save_to_file(experiment, file_type, number, candidates, voters, preferences=None, winners=None):
+def save_to_file(experiment, file_type, number, candidates, voters, preferences=None, winners=None, subdir=False):
     """Save relevant structures to file depending on file type."""
     filename = experiment.inout_filename
     if file_type == FileType.WIN_FILE:
         filename = experiment.result_filename
     path = experiment.get_generated_dir_path()
+    if subdir:
+        path = os.path.join(path, experiment.result_filename)
     k = experiment.k
     file_extension = __get_extension(file_type)
 

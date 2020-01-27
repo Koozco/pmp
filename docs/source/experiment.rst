@@ -7,23 +7,30 @@ Experiment is a convenient way to configure and run your computations.
 Experiment
 ----------
 .. autoclass:: pmp.experiments.Experiment
-   :members:
-
+    :members:
 
 ExperimentConfig
 ----------------
 .. autoclass:: pmp.experiments.ExperimentConfig
-   :members:
-
+    :members:
 
 ElectionConfig
 --------------
 .. autoclass:: pmp.experiments.ElectionConfig
-   :members:
+    :members:
 
+Histogram
+---------
+.. autoclass:: pmp.experiments.Histogram
+    :members:
 
 Generaring Functions
 --------------------
 .. automodule:: pmp.experiments.generating_functions
-   :members:
+    :members:
 
+Helpers
+-------
+.. automodule:: pmp.experiments.helpers
+    :members:
+    :exclude-members: Command

@@ -41,7 +41,7 @@ class Profile:
 
     def clean_scores(self):
         """Clear candidates scores cached in profile"""
-        self.scores = {x: 0 for x in self.candidates}
+        self.scores = {x: 0 for x in range(len(self.candidates))}
 
     def __str__(self):
         return 'Profile with %d voters and %d candidates: ' % (len(self.preferences), self.num_cand) + ', '.join(

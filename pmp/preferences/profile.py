@@ -12,7 +12,7 @@ class Profile:
             candidates = []
         if preferences is None:
             preferences = []
-        self.candidates = candidates[:]
+        self.candidates = candidates
         self.num_cand = len(candidates)
         self.preferences = preferences
         self.scores = {}

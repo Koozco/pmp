@@ -16,4 +16,3 @@ class Borda(WeaklySeparable):
 
     def _borda_weights(self, size):
         return [size - i for i in range(1, size + 1)]
-

@@ -1,6 +1,10 @@
 import random
 
 
+def any_winner(committees):
+    return committees[0]
+
+
 def random_winner(committees):
     return random.choice(committees)
 

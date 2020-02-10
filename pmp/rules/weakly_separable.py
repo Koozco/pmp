@@ -23,7 +23,9 @@ class WeaklySeparable(Rule):
         for pref in profile.preferences:
             for n in range(len(pref.order)):
                 candidate = pref.order[n]
-                weight = self.weights[n] if n < len(self.weights) else 0
+                if n >= len(self.weights):
+                    break
+                weight = self.weights[n]
                 if candidate in profile.scores:
                     profile.scores[candidate] += weight
                 else:

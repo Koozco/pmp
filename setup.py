@@ -8,10 +8,10 @@ def readme():
 
 
 setup(name='python-multiwinner-package',
-      version='1.5.1',
+      version='1.5.2',
       description='Python Multiwinner Package',
       url='https://github.com/Koozco/pmp',
-      download_url='https://github.com/Koozco/pmp/archive/v1.5.1.tar.gz',
+      download_url='https://github.com/Koozco/pmp/archive/v1.5.2.tar.gz',
       author='Katarzyna Banaszak, Bartosz Kusek',
       author_email='kussy.kusy@gmail.com',
       license='MIT',

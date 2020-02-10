@@ -34,7 +34,7 @@ class Experiment:
             self.__config = ExperimentConfig()
         self.__generated_dir_path = 'generated'  # default directory path for generated files
         self.k = 1
-        self.rule = Borda
+        self.rule = Borda()
         self.election_configs = []
         self.inout_filename = 'input-data'
         self.result_filename = 'default'
@@ -233,7 +233,7 @@ class Experiment:
             print("k is too big. Not enough candidates to find k winners.")
             return
 
-        return self.rule().find_committee(self.k, profile)
+        return self.rule.find_committee(self.k, profile)
 
     def __visualize(self, candidates, voters, winners, iteration):
         """

@@ -60,7 +60,7 @@ Last step is to run the experiment itself. Please notice how looks structure of 
 
         for rule in rules:
             election_name = "{}-{}".format(config.id, rule.__name__)
-            experiment.add_election(rule(), k, election_name)
+            experiment.add_election(rule, k, election_name)
 
         experiment.run(n=experiments_num, save_win=True, log_on=False)
 

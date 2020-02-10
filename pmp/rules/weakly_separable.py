@@ -1,6 +1,7 @@
-from .rule import Rule
-from .tie_breaking import random_winner
 from itertools import combinations
+
+from .tie_breaking import any_winner
+from .rule import Rule
 
 
 class WeaklySeparable(Rule):
@@ -9,11 +10,11 @@ class WeaklySeparable(Rule):
     This is base class for all weakly separable scoring rules
     """
 
-    def __init__(self, weights=None, tie_break=random_winner):
+    def __init__(self, weights=None, tie_break=any_winner):
         """
         :param weights: List of weights that single voter assigns to the corresponding candidates
         :type weights: List
-        :param tie_break: Function
+        :param tie_break: Callable
         """
         Rule.__init__(self, tie_break)
         self.weights = weights
@@ -38,9 +39,9 @@ class WeaklySeparable(Rule):
 
     def get_committees(self, k, candidates_with_score):
         """
-        :param k: size of committee
+        :param k: Size of committee
         :type k: Number
-        :param candidates_with_score: dictionary with lists of candidates who achieved given score
+        :param candidates_with_score: Dictionary with lists of candidates who achieved given score
         :type candidates_with_score: Dict[Number, List[Number]]
         :return: List[List]
 
@@ -55,16 +56,21 @@ class WeaklySeparable(Rule):
         committee_size = 0
         while committee_size < k:
             score = decreasing_scores[score_index]
-            if committee_size + len(candidates_with_score[score]) <= k:
+            if committee_size + len(candidates_with_score[score]) < k:
                 committee += candidates_with_score[score]
                 committee_size += len(candidates_with_score[score])
             else:
                 complement_size = k - committee_size
-                complements = list(combinations(candidates_with_score[score], complement_size))
+                if self.tie_break == any_winner:
+                    complement = candidates_with_score[score][:complement_size]
+                    committee += complement
+                    committee_size += complement_size
+                else:
+                    complements = list(combinations(candidates_with_score[score], complement_size))
 
-                for complement in complements:
-                    committees.append(committee + list(complement))
-                committee_size += complement_size
+                    for complement in complements:
+                        committees.append(committee + list(complement))
+                    committee_size += complement_size
 
             score_index += 1
 

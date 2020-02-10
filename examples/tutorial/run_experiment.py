@@ -6,15 +6,15 @@ n = 200
 m = 200
 k = 20
 
-unifrom_config = ExperimentConfig('uniform')
-unifrom_config.add_candidates(lambda: generate_uniform(-3, -3, 3, 3, m, 'None'))
-unifrom_config.add_voters(lambda: generate_uniform(-3, -3, 3, 3, n, 'None'))
+uniform_config = ExperimentConfig('uniform')
+uniform_config.add_candidates(lambda: generate_uniform(-3, -3, 3, 3, m, 'None'))
+uniform_config.add_voters(lambda: generate_uniform(-3, -3, 3, 3, n, 'None'))
 
 gaussian_config = ExperimentConfig('gaussian')
 gaussian_config.add_candidates(lambda: generate_gauss(0.0, 0.0, 1.0, m, 'None'))
 gaussian_config.add_voters(lambda: generate_gauss(0.0, 0.0, 1.0, n, 'None'))
 
-configs = [unifrom_config, gaussian_config]
+configs = [uniform_config, gaussian_config]
 
 rules = [Bloc, Borda]
 

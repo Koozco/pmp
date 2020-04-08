@@ -41,3 +41,7 @@ tmtagsHistory
 .bundle
 
 docs/_build/**
+
+
+pmp_venv/
+python_multiwinner_package.egg-info/

@@ -1,0 +1,4 @@
+"--number-of-elections", "10",
+"--distributions", "gauss1",
+"--number-voters-and-candidates", "12",
+NearestUniform(min=1, max=max_number_of_candidates)

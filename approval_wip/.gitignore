@@ -1,0 +1,31 @@
+# Compiled Python files
+*.pyc
+
+# PyCharm project's files
+.idea
+
+# Output dir for throwaway data
+target
+
+# Local experiment output
+local_output_dir
+
+## Other:
+
+# nimrod
+/gurobi.log
+/BudgetingHistograms.zip
+/nimrod_src/plots*
+
+#mw2d
+/pmp.zip
+*.win
+*.png
+*.tar.gz
+phrag_lpex1.lp
+cplex_demo.lp
+/cplex-examples-symlink
+
+
+
+

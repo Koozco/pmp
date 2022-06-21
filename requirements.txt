@@ -22,7 +22,7 @@ MarkupSafe==1.1.1
 mistune==0.8.4
 mkdocs==1.0.4
 more-itertools==7.0.0
-numpy==1.16.2
+numpy==1.22.0
 packaging==19.0
 pdoc==0.3.2
 pdoc3==0.6.2
